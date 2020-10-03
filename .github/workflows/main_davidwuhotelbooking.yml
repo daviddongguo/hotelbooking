@@ -5,6 +5,7 @@ name: Build and deploy ASP.Net Core app to Azure Web App - davidwuhotelbooking
 
 on:
   push:
+    paths: ./david.hotelbooking.api
     branches:
       - main
 
