@@ -2,6 +2,7 @@ using david.hotelbooking.domain.Abstract;
 using david.hotelbooking.domain.Concretes;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -22,8 +23,8 @@ namespace david.hotelbooking.api
         {
             // services.AddDbContext<EFDbContext>( x => x.UseSqlite(Configuration.GetConnectionString("SqliteConnection"),
             //     b => b.MigrationsAssembly("david.hotelbooking.api")));
-            //services.AddDbContext<EFDbContext>(x => x.UseMySql(Configuration.GetConnectionString("SqliteConnection"),
-            //   b => b.MigrationsAssembly("david.hotelbooking.api")));
+            services.AddDbContext<EFDbContext>(x => x.UseMySql(Configuration.GetConnectionString("MySqlConnection"),
+               b => b.MigrationsAssembly("david.hotelbooking.api")));
             services.AddControllers();
             services.AddScoped<IUserRepository, EFUserRepository>();
         }
