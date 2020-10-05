@@ -9,6 +9,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "david.hotelbooking.UnitTest
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "david.hotelbooking.domain", "david.hotelbooking.domain\david.hotelbooking.domain.csproj", "{13533169-3D9D-47FC-8137-FD0384CF6BBE}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "david.hotelbooking.debugConsole", "david.hotelbooking.debugConsole\david.hotelbooking.debugConsole.csproj", "{C299C310-3EFB-4ABC-8F25-A15FE923BA04}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "david.hotelbooking.mvc", "david.hotelbooking.mvc\david.hotelbooking.mvc.csproj", "{01A2275F-E2BC-4636-A55B-89DEE2998039}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -55,6 +59,30 @@ Global
 		{13533169-3D9D-47FC-8137-FD0384CF6BBE}.Release|x64.Build.0 = Release|Any CPU
 		{13533169-3D9D-47FC-8137-FD0384CF6BBE}.Release|x86.ActiveCfg = Release|Any CPU
 		{13533169-3D9D-47FC-8137-FD0384CF6BBE}.Release|x86.Build.0 = Release|Any CPU
+		{C299C310-3EFB-4ABC-8F25-A15FE923BA04}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C299C310-3EFB-4ABC-8F25-A15FE923BA04}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C299C310-3EFB-4ABC-8F25-A15FE923BA04}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{C299C310-3EFB-4ABC-8F25-A15FE923BA04}.Debug|x64.Build.0 = Debug|Any CPU
+		{C299C310-3EFB-4ABC-8F25-A15FE923BA04}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{C299C310-3EFB-4ABC-8F25-A15FE923BA04}.Debug|x86.Build.0 = Debug|Any CPU
+		{C299C310-3EFB-4ABC-8F25-A15FE923BA04}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C299C310-3EFB-4ABC-8F25-A15FE923BA04}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C299C310-3EFB-4ABC-8F25-A15FE923BA04}.Release|x64.ActiveCfg = Release|Any CPU
+		{C299C310-3EFB-4ABC-8F25-A15FE923BA04}.Release|x64.Build.0 = Release|Any CPU
+		{C299C310-3EFB-4ABC-8F25-A15FE923BA04}.Release|x86.ActiveCfg = Release|Any CPU
+		{C299C310-3EFB-4ABC-8F25-A15FE923BA04}.Release|x86.Build.0 = Release|Any CPU
+		{01A2275F-E2BC-4636-A55B-89DEE2998039}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{01A2275F-E2BC-4636-A55B-89DEE2998039}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{01A2275F-E2BC-4636-A55B-89DEE2998039}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{01A2275F-E2BC-4636-A55B-89DEE2998039}.Debug|x64.Build.0 = Debug|Any CPU
+		{01A2275F-E2BC-4636-A55B-89DEE2998039}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{01A2275F-E2BC-4636-A55B-89DEE2998039}.Debug|x86.Build.0 = Debug|Any CPU
+		{01A2275F-E2BC-4636-A55B-89DEE2998039}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{01A2275F-E2BC-4636-A55B-89DEE2998039}.Release|Any CPU.Build.0 = Release|Any CPU
+		{01A2275F-E2BC-4636-A55B-89DEE2998039}.Release|x64.ActiveCfg = Release|Any CPU
+		{01A2275F-E2BC-4636-A55B-89DEE2998039}.Release|x64.Build.0 = Release|Any CPU
+		{01A2275F-E2BC-4636-A55B-89DEE2998039}.Release|x86.ActiveCfg = Release|Any CPU
+		{01A2275F-E2BC-4636-A55B-89DEE2998039}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

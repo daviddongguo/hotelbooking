@@ -1,5 +1,6 @@
 ﻿using david.hotelbooking.domain.Abstract;
 using david.hotelbooking.domain.Entities.RBAC;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,9 +17,9 @@ namespace david.hotelbooking.domain.Concretes
             _context = context;
         }
 
-       public IQueryable<User> GetAll()
+        public IQueryable<UserRole> GetAll()
         {
-            return _context.Users.AsQueryable();
+            return _context.UserRoles.AsQueryable();
         }
     }
 }
