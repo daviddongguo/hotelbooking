@@ -26,6 +26,10 @@ namespace david.hotelbooking.api
             services.AddDbContext<EFDbContext>(x => x.UseMySql(Configuration.GetConnectionString("MySqlConnection"),
                b => b.MigrationsAssembly("david.hotelbooking.api")));
             services.AddControllers();
+            services.AddControllers().AddNewtonsoftJson(
+                options => options.SerializerSettings.ReferenceLoopHandling
+                    = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+
             services.AddScoped<IUserRepository, EFUserRepository>();
         }
 

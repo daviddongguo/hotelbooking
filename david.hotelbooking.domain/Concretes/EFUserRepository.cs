@@ -19,7 +19,8 @@ namespace david.hotelbooking.domain.Concretes
 
         public IQueryable<UserRole> GetAll()
         {
-            return _context.UserRoles.AsQueryable();
+            return _context.UserRoles
+                .Include(u => u.User).AsQueryable();
         }
     }
 }
