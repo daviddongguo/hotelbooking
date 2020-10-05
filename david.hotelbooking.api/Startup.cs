@@ -1,18 +1,11 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using david.hotelbooking.domain.Abstract;
 using david.hotelbooking.domain.Concretes;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 
 namespace david.hotelbooking.api
 {
@@ -28,8 +21,10 @@ namespace david.hotelbooking.api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<EFDbContext>( x => x.UseSqlite(Configuration.GetConnectionString("SqliteConnection"),
-                b => b.MigrationsAssembly("david.hotelbooking.api")));
+            // services.AddDbContext<EFDbContext>( x => x.UseSqlite(Configuration.GetConnectionString("SqliteConnection"),
+            //     b => b.MigrationsAssembly("david.hotelbooking.api")));
+            services.AddDbContext<EFDbContext>(x => x.UseMySql(Configuration.GetConnectionString("MySqlConnection"),
+               b => b.MigrationsAssembly("david.hotelbooking.api")));
             services.AddControllers();
             services.AddScoped<IUserRepository, EFUserRepository>();
         }
