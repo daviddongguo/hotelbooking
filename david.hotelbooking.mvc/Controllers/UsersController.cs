@@ -12,9 +12,9 @@ namespace david.hotelbooking.mvc.Controllers
 {
     public class UsersController : Controller
     {
-        private readonly EFDbContext _context;
+        private readonly UserContext _context;
 
-        public UsersController(EFDbContext context)
+        public UsersController(UserContext context)
         {
             _context = context;
         }

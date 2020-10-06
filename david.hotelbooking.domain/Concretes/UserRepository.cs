@@ -8,11 +8,11 @@ using System.Text;
 
 namespace david.hotelbooking.domain.Concretes
 {
-    public class EFUserRepository : IUserRepository
+    public class UserRepository : IUserRepository
     {
-        private readonly EFDbContext _context;
+        private readonly UserContext _context;
 
-        public EFUserRepository(EFDbContext context)
+        public UserRepository(UserContext context)
         {
             _context = context;
         }
