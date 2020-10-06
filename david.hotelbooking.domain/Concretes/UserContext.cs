@@ -3,17 +3,17 @@ using Microsoft.EntityFrameworkCore;
 
 namespace david.hotelbooking.domain.Concretes
 {
-    public class EFDbContext : DbContext
+    public class UserContext : DbContext
     {
-        public EFDbContext(DbContextOptions<EFDbContext> options) : base(options)
+        public UserContext(DbContextOptions<UserContext> options) : base(options)
         {
         }
 
-        public DbSet<User> Users { get; set; }
-        public DbSet<UserRole> UserRoles { get; set; }
-        public DbSet<Role> Roles { get; set; }
-        public DbSet<RolePermission> RolePermissions { get; set; }
-        public DbSet<Permission> Permissions { get; set; }
+        public virtual DbSet<User> Users { get; set; }
+        public virtual DbSet<UserRole> UserRoles { get; set; }
+        public virtual DbSet<Role> Roles { get; set; }
+        public virtual DbSet<RolePermission> RolePermissions { get; set; }
+        public virtual DbSet<Permission> Permissions { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -23,7 +23,7 @@ namespace david.hotelbooking.domain.Concretes
                 .HasKey(u => new { u.UserId, u.RoleId });
             modelBuilder.Entity<RolePermission>()
                 .HasKey(r => new { r.RoleId, r.PermissionId });
-     
+
             // Seeding
             modelBuilder.Entity<User>().HasData(
                 new User { Id = 1, Email = "Admin@hotel.com", Password = "aaa" },
@@ -40,12 +40,12 @@ namespace david.hotelbooking.domain.Concretes
                 new Role { Id = 4, Name = "customer", Description = "" }
                 );
             modelBuilder.Entity<RolePermission>().HasData(
-                new RolePermission { RoleId = 1, PermissionId = 1 }, 
-                new RolePermission { RoleId = 1, PermissionId = 2 }, 
-                new RolePermission { RoleId = 1, PermissionId = 3 }, 
-                new RolePermission { RoleId = 1, PermissionId = 4 }, 
-                new RolePermission { RoleId = 4, PermissionId = 3 }, 
-                new RolePermission { RoleId = 4, PermissionId = 4 } 
+                new RolePermission { RoleId = 1, PermissionId = 1 },
+                new RolePermission { RoleId = 1, PermissionId = 2 },
+                new RolePermission { RoleId = 1, PermissionId = 3 },
+                new RolePermission { RoleId = 1, PermissionId = 4 },
+                new RolePermission { RoleId = 4, PermissionId = 3 },
+                new RolePermission { RoleId = 4, PermissionId = 4 }
                 );
 
             modelBuilder.Entity<Permission>().HasData(

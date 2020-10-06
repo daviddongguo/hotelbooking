@@ -6,7 +6,7 @@ using david.hotelbooking.domain.Concretes;
 
 namespace david.hotelbooking.mvc.Migrations
 {
-    [DbContext(typeof(EFDbContext))]
+    [DbContext(typeof(UserContext))]
     partial class EFDbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
