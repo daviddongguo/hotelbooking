@@ -2,7 +2,7 @@ using NUnit.Framework;
 
 namespace david.hotelbooking.UnitTests
 {
-    public class Pass
+    public class TestTest
     {
         [SetUp]
         public void Setup()
@@ -10,7 +10,7 @@ namespace david.hotelbooking.UnitTests
         }
 
         [Test]
-        public void TestEverPass()
+        public void TestPassed()
         {
             Assert.Pass();
         }
