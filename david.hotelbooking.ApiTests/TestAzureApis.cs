@@ -28,7 +28,7 @@ namespace david.hotelbooking.ApiTests
             // Assert
 
             Assert.That((int)response.StatusCode == expectedstatusCoode);
-            System.Console.WriteLine(response.Content);
+            System.Console.WriteLine(Utilities.PrettyJson(response.Content));
             Assert.That(response.Content, Is.Not.Null);
         }
     }
