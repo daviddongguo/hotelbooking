@@ -10,10 +10,10 @@ using JsonSerializer = System.Text.Json.JsonSerializer;
 namespace david.hotelbooking.domain.Services.Tests
 {
     [TestFixture()]
-    public class UserServiceTests
+    public class UserServiceLocalInMemoryDbTest
     {
         private UserService _service;
-
+        
         [SetUp]
         public void SetUp()
         {
