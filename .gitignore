@@ -351,3 +351,4 @@ MigrationBackup/
 david.hotelbooking.api/hotelbooking.db-shm
 david.hotelbooking.api/hotelbooking.db-wal
 david.hotelbooking.api/Migrations/
+david.hotelbooking.mvc/Migrations/

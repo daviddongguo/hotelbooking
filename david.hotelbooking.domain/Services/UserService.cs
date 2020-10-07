@@ -20,14 +20,22 @@ namespace david.hotelbooking.domain.Services
             return (await _context.Users
             .Include(u => u.UserRoles)
             .ThenInclude(uu => uu.Role)
+            .ThenInclude(r => r.RolePermissions)
+            .ThenInclude(rr => rr.Permission)
             .ToListAsync())
             .AsQueryable();
         }
 
-        public async Task<User> GetSingleUser(string email = "", int id = 0)
+        public async Task<User> GetSingleUser(string email)
         {
             return await _context.Users.FirstOrDefaultAsync(u =>
-               id == u.Id || email == u.Email
+               email.ToLower().Equals(u.Email.ToLower())
+            );
+        }
+        public async Task<User> GetSingleUser(int id)
+        {
+            return await _context.Users.FirstOrDefaultAsync(u =>
+               id == u.Id
             );
         }
 
@@ -49,11 +57,11 @@ namespace david.hotelbooking.domain.Services
             await _context.SaveChangesAsync();
             return newUser;
         }
-        public async Task<UserRole> AddRole(User toUpdateUser, Role toAddRole)
+        public async Task<UserRole> AddUserRole(User toUpdateUser, Role toAddRole)
         {
-            var dbUser = await GetSingleUser("", toUpdateUser.Id);
+            var dbUser = await GetSingleUser(toUpdateUser.Id);
             var dbRole = await _context.Roles.FirstOrDefaultAsync(r => r.Id == toAddRole.Id);
-            var dbUserRole = await _context.UserRoles.FirstOrDefaultAsync( 
+            var dbUserRole = await _context.UserRoles.FirstOrDefaultAsync(
                 r => r.UserId == toUpdateUser.Id && r.RoleId == toAddRole.Id);
             if (dbUser == null || dbRole == null || dbUserRole != null)
             {
