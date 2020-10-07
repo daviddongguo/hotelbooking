@@ -12,9 +12,9 @@ namespace david.hotelbooking.mvc.Controllers
 {
     public class RolePermissionsController : Controller
     {
-        private readonly UserContext _context;
+        private readonly UserDbContext _context;
 
-        public RolePermissionsController(UserContext context)
+        public RolePermissionsController(UserDbContext context)
         {
             _context = context;
         }

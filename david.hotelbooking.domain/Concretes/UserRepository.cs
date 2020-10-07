@@ -10,9 +10,9 @@ namespace david.hotelbooking.domain.Concretes
 {
     public class UserRepository : IUserRepository
     {
-        private readonly UserContext _context;
+        private readonly UserDbContext _context;
 
-        public UserRepository(UserContext context)
+        public UserRepository(UserDbContext context)
         {
             _context = context;
         }

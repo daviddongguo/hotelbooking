@@ -3,9 +3,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace david.hotelbooking.domain.Concretes
 {
-    public class UserContext : DbContext
+    public class UserDbContext : DbContext
     {
-        public UserContext(DbContextOptions<UserContext> options) : base(options)
+        public UserDbContext() : base()
+        {
+
+        }
+        public UserDbContext(DbContextOptions<UserDbContext> options) : base(options)
         {
         }
 

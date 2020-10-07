@@ -2,7 +2,7 @@ using NUnit.Framework;
 
 namespace david.hotelbooking.UnitTests
 {
-    public class Tests
+    public class Pass
     {
         [SetUp]
         public void Setup()
