@@ -26,7 +26,7 @@ namespace david.hotelbooking.domain.Services.Tests
             // Arrange
             // Act
             var result = _service.GetAllUsers().GetAwaiter().GetResult();
-            var userResult = result.Select( r => new 
+            var userResults = result.Select( r => new 
             {
                 Name = r.Email,
                 Roles = r.UserRoles.Select( rr => new
@@ -39,13 +39,36 @@ namespace david.hotelbooking.domain.Services.Tests
                 })
             });
             // Assert
-            System.Console.WriteLine(Utilities.PrettyJson(JsonSerializer.Serialize(userResult)));
+            System.Console.WriteLine(Utilities.PrettyJson(JsonSerializer.Serialize(userResults)));
             Assert.That(result.LastOrDefault().Id >= 2);
             Assert.That(result.FirstOrDefault()
                 .UserRoles.FirstOrDefault()
                 .Role.RolePermissions.FirstOrDefault()
                 .Permission.Name, Is.Not.Empty);
         }
+
+        [TestCase("admin@hotel.com", true)]
+        [TestCase("ADMIN@hotel.com", true)]
+        [TestCase("xxxxx@hotel.com", false)]
+        public void GetSingleUser_WhenCalled_RetunUserOrNull(string emailStr, bool expectedResult)
+        {
+            var result = _service.GetSingleUser(emailStr).GetAwaiter().GetResult();
+
+            Assert.That(result?.Email != null, Is.EqualTo(expectedResult));
+        }
+
+        [TestCase(1, true)]
+        [TestCase(2, true)]
+        [TestCase(3, true)]
+        [TestCase(0, false)]
+        [TestCase(-1, false)]
+        public void GetSingleUser_WhenCalled_RetunUserOrNull(int id, bool expectedResult)
+        {
+            var result = _service.GetSingleUser(id).GetAwaiter().GetResult();
+
+            Assert.That(result?.Id != null, Is.EqualTo(expectedResult));
+        }
+
 
         [TestCase("unique@email.com")]
         [TestCase("uniquee@email.com")]
