@@ -1,8 +1,11 @@
 ﻿using david.hotelbooking.domain.Entities.RBAC;
+using david.hotelbooking.UnitTests;
 using david.hotelbooking.UnitTests.Services;
+using Newtonsoft.Json;
 using NUnit.Framework;
 using System.Linq;
 using System.Text.Json;
+using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace david.hotelbooking.domain.Services.Tests
 {
@@ -36,10 +39,12 @@ namespace david.hotelbooking.domain.Services.Tests
                 })
             });
             // Assert
-            System.Console.WriteLine(JsonSerializer.Serialize(userResult));
+            System.Console.WriteLine(Utilities.PrettyJson(JsonSerializer.Serialize(userResult)));
             Assert.That(result.LastOrDefault().Id >= 2);
-            Assert.That(result.FirstOrDefault().UserRoles.FirstOrDefault().Role.RolePermissions.FirstOrDefault().Permission.Name, Is.Not.Empty);
-
+            Assert.That(result.FirstOrDefault()
+                .UserRoles.FirstOrDefault()
+                .Role.RolePermissions.FirstOrDefault()
+                .Permission.Name, Is.Not.Empty);
         }
 
         [TestCase("unique@email.com")]
@@ -69,5 +74,6 @@ namespace david.hotelbooking.domain.Services.Tests
             System.Console.WriteLine($"{result.Id} : {result.Email }");
             Assert.That(repeat, Is.Null);
         }
+
     }
 }
