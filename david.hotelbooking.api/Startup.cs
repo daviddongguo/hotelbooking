@@ -23,10 +23,14 @@ namespace david.hotelbooking.api
         {
             // services.AddDbContext<EFDbContext>( x => x.UseSqlite(Configuration.GetConnectionString("SqliteConnection"),
             //     b => b.MigrationsAssembly("david.hotelbooking.api")));
-            services.AddDbContext<EFDbContext>(x => x.UseMySql(Configuration.GetConnectionString("MySqlConnection"),
+            services.AddDbContext<UserDbContext>(x => x.UseMySql(Configuration.GetConnectionString("MySqlConnection"),
                b => b.MigrationsAssembly("david.hotelbooking.api")));
             services.AddControllers();
-            services.AddScoped<IUserRepository, EFUserRepository>();
+            services.AddControllers().AddNewtonsoftJson(
+                options => options.SerializerSettings.ReferenceLoopHandling
+                    = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+
+            services.AddScoped<IUserRepository, UserRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

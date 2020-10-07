@@ -22,7 +22,7 @@ namespace david.hotelbooking.mvc
         {
             //services.AddDbContext<EFDbContext>(x => x.UseMySql(Configuration.GetConnectionString("SqliteConnection"),
             //   b => b.MigrationsAssembly("david.hotelbooking.api")));
-            services.AddDbContext<EFDbContext>(x => x.UseMySql(Configuration.GetConnectionString("MySqlConnection"),
+            services.AddDbContext<UserDbContext>(x => x.UseMySql(Configuration.GetConnectionString("MySqlConnection"),
                 b => b.MigrationsAssembly("david.hotelbooking.mvc")));
             services.AddControllersWithViews();
         }

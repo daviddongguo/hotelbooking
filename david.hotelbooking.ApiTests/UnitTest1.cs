@@ -1,6 +1,6 @@
 using NUnit.Framework;
 
-namespace david.hotelbooking.UnitTests
+namespace david.hotelbooking.ApiTests
 {
     public class Tests
     {
@@ -10,7 +10,7 @@ namespace david.hotelbooking.UnitTests
         }
 
         [Test]
-        public void TestEverPass()
+        public void Test1()
         {
             Assert.Pass();
         }

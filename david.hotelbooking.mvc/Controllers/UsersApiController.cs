@@ -14,9 +14,9 @@ namespace david.hotelbooking.mvc.Controllers
     [ApiController]
     public class UsersApiController : ControllerBase
     {
-        private readonly EFDbContext _context;
+        private readonly UserDbContext _context;
 
-        public UsersApiController(EFDbContext context)
+        public UsersApiController(UserDbContext context)
         {
             _context = context;
         }

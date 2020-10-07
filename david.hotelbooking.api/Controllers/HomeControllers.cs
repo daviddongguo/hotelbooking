@@ -26,10 +26,24 @@ namespace david.hotelbooking.api.Controllers
 
 
 
-        [HttpGet("/users")]
+        [HttpGet("/testusers")]
         public IActionResult GetAll()
         {
-            var result = _userRep.GetAll();
+            var result = _userRep.GetAllUsers().Select(r => new
+            {
+                Id = r.Id,
+                Name = r.Email,
+                Roles = r.UserRoles.Select(rr => new
+                {
+                    Id = rr.Role.Id,
+                    Role = rr.Role.Name,
+                    Permissions = rr.Role.RolePermissions.Select(rrr => new
+                    {
+                        Id = rrr.Permission.Id,
+                        Permission = rrr.Permission.Name
+                    })
+                })
+            });
             return Ok(result);
         }
 

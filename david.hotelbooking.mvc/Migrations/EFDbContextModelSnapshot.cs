@@ -6,7 +6,7 @@ using david.hotelbooking.domain.Concretes;
 
 namespace david.hotelbooking.mvc.Migrations
 {
-    [DbContext(typeof(EFDbContext))]
+    [DbContext(typeof(UserDbContext))]
     partial class EFDbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
@@ -140,12 +140,12 @@ namespace david.hotelbooking.mvc.Migrations
                         new
                         {
                             RoleId = 4,
-                            PermissionId = 3
+                            PermissionId = 1
                         },
                         new
                         {
                             RoleId = 4,
-                            PermissionId = 4
+                            PermissionId = 3
                         });
                 });
 
