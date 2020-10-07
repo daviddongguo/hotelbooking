@@ -1,30 +1,35 @@
-﻿using NUnit.Framework;
+﻿using david.hotelbooking.domain.Entities.RBAC;
+using NUnit.Framework;
 using RestSharp;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using RestSharp.Serialization.Json;
 
 namespace david.hotelbooking.ApiTests
 {
     [TestFixture]
     public class TestAzureApis
     {
-        private IClient _client;
+        private RestClient _client;
         private readonly string baseUsrl = "https://davidwuhotelbooking.azurewebsites.net/";
-        [SetUp]
+        [OneTimeSetUp]
         public void SetUp()
         {
             _client = new RestClient(baseUsrl);
+            _client.AddHandler("application/json", () => new JsonSerializer());
         }
-        [Test]
-        public void TestMethod()
+        [TestCase(200)]
+        public void TestUsers(int expectedstatusCoode)
         {
-            // TODO: Add your test code here
-            var answer = 42;
-            Assert.That(answer, Is.EqualTo(42), "Some useful error message");
+            // Arrange
+            var request = new RestRequest("testusers", Method.GET);
+
+            // Act
+            var response = _client.ExecuteGetAsync(request).GetAwaiter().GetResult();
+
+            // Assert
+
+            Assert.That((int)response.StatusCode == expectedstatusCoode);
+            System.Console.WriteLine(response.Content);
+            Assert.That(response.Content, Is.Not.Null);
         }
     }
 }
