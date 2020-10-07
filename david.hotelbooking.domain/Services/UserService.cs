@@ -20,6 +20,8 @@ namespace david.hotelbooking.domain.Services
             return (await _context.Users
             .Include(u => u.UserRoles)
             .ThenInclude(uu => uu.Role)
+            .ThenInclude(r => r.RolePermissions)
+            .ThenInclude(rr => rr.Permission)
             .ToListAsync())
             .AsQueryable();
         }
@@ -53,7 +55,7 @@ namespace david.hotelbooking.domain.Services
         {
             var dbUser = await GetSingleUser("", toUpdateUser.Id);
             var dbRole = await _context.Roles.FirstOrDefaultAsync(r => r.Id == toAddRole.Id);
-            var dbUserRole = await _context.UserRoles.FirstOrDefaultAsync( 
+            var dbUserRole = await _context.UserRoles.FirstOrDefaultAsync(
                 r => r.UserId == toUpdateUser.Id && r.RoleId == toAddRole.Id);
             if (dbUser == null || dbRole == null || dbUserRole != null)
             {
