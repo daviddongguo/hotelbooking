@@ -140,12 +140,12 @@ namespace david.hotelbooking.mvc.Migrations
                         new
                         {
                             RoleId = 4,
-                            PermissionId = 3
+                            PermissionId = 1
                         },
                         new
                         {
                             RoleId = 4,
-                            PermissionId = 4
+                            PermissionId = 3
                         });
                 });
 

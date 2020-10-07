@@ -48,8 +48,8 @@ namespace david.hotelbooking.domain.Concretes
                 new RolePermission { RoleId = 1, PermissionId = 2 },
                 new RolePermission { RoleId = 1, PermissionId = 3 },
                 new RolePermission { RoleId = 1, PermissionId = 4 },
-                new RolePermission { RoleId = 4, PermissionId = 3 },
-                new RolePermission { RoleId = 4, PermissionId = 4 }
+                new RolePermission { RoleId = 4, PermissionId = 1 },
+                new RolePermission { RoleId = 4, PermissionId = 3 }
                 );
 
             modelBuilder.Entity<Permission>().HasData(
