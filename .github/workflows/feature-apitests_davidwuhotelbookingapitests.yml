@@ -24,7 +24,7 @@ jobs:
       run: dotnet build --configuration Release
 
     - name: dotnet Test
-      run: dotnet watch test -l "console;verbosity=detailed"
+      run: dotnet test -l "console;verbosity=detailed"
       working-directory: david.hotelbooking.ApiTests
       
 
