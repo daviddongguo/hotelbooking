@@ -7,7 +7,7 @@ using david.hotelbooking.domain.Concretes;
 
 namespace david.hotelbooking.mvc.Migrations
 {
-    [DbContext(typeof(UserContext))]
+    [DbContext(typeof(UserDbContext))]
     [Migration("20201005163218_intial")]
     partial class intial
     {

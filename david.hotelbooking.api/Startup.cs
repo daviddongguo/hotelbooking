@@ -23,7 +23,7 @@ namespace david.hotelbooking.api
         {
             // services.AddDbContext<EFDbContext>( x => x.UseSqlite(Configuration.GetConnectionString("SqliteConnection"),
             //     b => b.MigrationsAssembly("david.hotelbooking.api")));
-            services.AddDbContext<UserContext>(x => x.UseMySql(Configuration.GetConnectionString("MySqlConnection"),
+            services.AddDbContext<UserDbContext>(x => x.UseMySql(Configuration.GetConnectionString("MySqlConnection"),
                b => b.MigrationsAssembly("david.hotelbooking.api")));
             services.AddControllers();
             services.AddControllers().AddNewtonsoftJson(
