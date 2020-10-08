@@ -1,12 +1,10 @@
 ﻿using david.hotelbooking.domain.Entities.RBAC;
 using david.hotelbooking.UnitTests;
 using david.hotelbooking.UnitTests.Services;
-using Newtonsoft.Json;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.Json;
 using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace david.hotelbooking.domain.Services.Tests

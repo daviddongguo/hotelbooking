@@ -1,10 +1,9 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using david.hotelbooking.domain.Concretes;
 using david.hotelbooking.domain.Entities.RBAC;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace david.hotelbooking.domain.Services
 {

@@ -1,7 +1,5 @@
 using david.hotelbooking.domain.Abstract;
-using david.hotelbooking.domain.Concretes;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
 
