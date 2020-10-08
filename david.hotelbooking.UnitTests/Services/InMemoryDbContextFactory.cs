@@ -29,7 +29,7 @@ namespace david.hotelbooking.UnitTests.Services
 
             var userAdmin = new User { Email = "Admin@hotel.com", Password = "aaa" };
             var userAdminn = new User { Email = "nn@hotel.com", Password = "aaa" };
-            var userAdminnn = new User { Email = "ninn@hotel.com", Password = "aaa" };
+            var userAdminnn = new User { Email = "nnn@hotel.com", Password = "aaa" };
             var userSis = new User { Email = "Sis@s.s", Password = "aaa" };
             dbContext.Users.Add(userAdmin);
             dbContext.Users.Add(userAdminn);

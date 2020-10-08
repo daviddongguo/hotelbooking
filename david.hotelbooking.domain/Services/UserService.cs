@@ -28,16 +28,22 @@ namespace david.hotelbooking.domain.Services
             .AsQueryable();
         }
 
-        public async Task<Role> GetSingleRole(string roleName)
-        {
-            return await _context.Roles.FirstOrDefaultAsync(u =>
-               roleName.ToLower().Equals(u.Name.ToLower())
-            );
-        }
+
         public async Task<User> GetSingleUser(string email)
         {
             return await _context.Users.FirstOrDefaultAsync(u =>
                email.ToLower().Equals(u.Email.ToLower())
+            );
+        }
+        public async Task<bool> IsEmailExisted(string email)
+        {
+            var dbUser = await GetSingleUser(email);
+            return dbUser != null;      // returns true when user exists
+        }
+        public async Task<Role> GetSingleRole(string roleName)
+        {
+            return await _context.Roles.FirstOrDefaultAsync(u =>
+               roleName.ToLower().Equals(u.Name.ToLower())
             );
         }
         public async Task<User> GetSingleUser(int id)
@@ -49,8 +55,7 @@ namespace david.hotelbooking.domain.Services
 
         public async Task<User> AddUser(User inputUser)
         {
-            var dbUser = await GetSingleUser(inputUser.Email);
-            if (dbUser != null)
+            if (IsEmailExisted(inputUser.Email).GetAwaiter().GetResult())
             {
                 return null;
             }
@@ -68,12 +73,18 @@ namespace david.hotelbooking.domain.Services
         public async Task<List<UserRole>> UpdateUserRoles(int toUpdateUserId, List<int> toAddOrUpdateRoleIds)
         {
             var dbUser = await GetSingleUser(toUpdateUserId);
-            if (dbUser == null || toAddOrUpdateRoleIds == null || toAddOrUpdateRoleIds.Count() == 0)
+            if (dbUser == null)
             {
                 return null;
             }
 
-            var resultList = new List<UserRole>();
+            var oldUserRolesList = _context.UserRoles.Where(u => u.UserId == dbUser.Id).ToListAsync().GetAwaiter().GetResult();
+            if (toAddOrUpdateRoleIds == null) // do nothing, just show existed info.
+            {
+                return oldUserRolesList;
+            }
+
+            var newUsersRoleList = new List<UserRole>();
             foreach (var roleId in toAddOrUpdateRoleIds)
             {
                 var dbRole = await _context.Roles.FirstOrDefaultAsync(r => r.Id == roleId);
@@ -82,29 +93,20 @@ namespace david.hotelbooking.domain.Services
                     continue;
                 }
 
-                var dbUserRole = await _context.UserRoles.FirstOrDefaultAsync(
-                    r => r.UserId == dbUser.Id && r.RoleId == dbRole.Id);
-                if (dbUserRole != null)
-                {
-                    continue;
-                }
                 var newUserRole = new UserRole
                 {
                     UserId = dbUser.Id,
                     RoleId = dbRole.Id
                 };
-                resultList.Add(newUserRole);
+                newUsersRoleList.Add(newUserRole);
             }
 
-            var toRemoveList = _context.UserRoles.Where(u => u.UserId == dbUser.Id);
 
-            _context.UserRoles.RemoveRange(toRemoveList);
-            await _context.SaveChangesAsync();
-            _context.UserRoles.AddRange(resultList);
+            _context.UserRoles.RemoveRange(oldUserRolesList);
+            _context.UserRoles.AddRange(newUsersRoleList);
             await _context.SaveChangesAsync();
 
-
-            return resultList;
+            return newUsersRoleList;
 
             // var toRemoveList = _context.UserRoles.Where(u => u.UserId == dbUser.Id);
             // using (var transaction = _context.Database.BeginTransaction())
@@ -123,8 +125,6 @@ namespace david.hotelbooking.domain.Services
             //         return null;
             //     }
             // };
-
-
         }
     }
 
