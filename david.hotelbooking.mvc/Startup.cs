@@ -1,4 +1,5 @@
 using david.hotelbooking.domain.Concretes;
+using david.hotelbooking.domain.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -24,6 +25,7 @@ namespace david.hotelbooking.mvc
             //   b => b.MigrationsAssembly("david.hotelbooking.api")));
             services.AddDbContext<UserDbContext>(x => x.UseMySql(Configuration.GetConnectionString("MySqlConnection"),
                 b => b.MigrationsAssembly("david.hotelbooking.mvc")));
+            services.AddScoped<IUserService, UserService>();
             services.AddControllersWithViews();
         }
 

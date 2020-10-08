@@ -71,8 +71,8 @@ namespace david.hotelbooking.domain.Services.Tests
         {
             // Arrange
             // Act
-            var result = _service.AddUser(new User { Email = emailStr }).GetAwaiter().GetResult();
-            var repeat = _service.AddUser(new User { Email = emailStr }).GetAwaiter().GetResult();
+            var result = _service.AddOrUpdateUser(new User { Email = emailStr }).GetAwaiter().GetResult();
+            var repeat = _service.AddOrUpdateUser(new User { Email = emailStr }).GetAwaiter().GetResult();
 
             // Assert
             System.Console.WriteLine($"{result.Id} : {result.Email }");
@@ -85,7 +85,7 @@ namespace david.hotelbooking.domain.Services.Tests
         public void AddUser_WhenNameIsUnique_ReturnAddedUser(string emailstr)
         {
             // Act
-            var result = _service.AddUser(new User { Email = emailstr }).GetAwaiter().GetResult();
+            var result = _service.AddOrUpdateUser(new User { Email = emailstr }).GetAwaiter().GetResult();
 
             // Assert
             System.Console.WriteLine($"{result.Id} : {result.Email }");

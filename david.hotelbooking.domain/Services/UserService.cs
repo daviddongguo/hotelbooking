@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace david.hotelbooking.domain.Services
 {
-    public class UserService
+    public class UserService : IUserService
     {
         private UserDbContext _context;
 
@@ -45,30 +45,76 @@ namespace david.hotelbooking.domain.Services
                roleName.ToLower().Equals(u.Name.ToLower())
             );
         }
-        public async Task<User> GetSingleUser(int id)
+        public async Task<User> GetSingleUser(int? id)
         {
-            return await _context.Users.FirstOrDefaultAsync(u =>
+            return await _context.Users
+                .Include( u => u.UserRoles)
+                .ThenInclude( uu => uu.Role)
+                .FirstOrDefaultAsync(u =>
                id == u.Id
             );
         }
 
-        public async Task<User> AddUser(User inputUser)
+        public async Task<User> AddOrUpdateUser(User inputUser)
         {
-            if (IsEmailExisted(inputUser.Email).GetAwaiter().GetResult())
+            if (inputUser == null)
             {
                 return null;
             }
 
-            var newUser = new User
+            // Add When User's Id is null or 0
+            if (inputUser?.Id == null || inputUser.Id == 0)
             {
-                Email = inputUser.Email,
-                Password = inputUser.Password
-            };
+                if (IsEmailExisted(inputUser.Email).GetAwaiter().GetResult())
+                {
+                    return null;
+                }
 
-            _context.Users.Add(newUser);
-            await _context.SaveChangesAsync();
-            return newUser;
+                var newUser = new User
+                {
+                    Email = inputUser.Email,
+                    Password = inputUser.Password
+                };
+
+                _context.Users.Add(newUser);
+                await _context.SaveChangesAsync();
+                return newUser;
+            }
+            else // Update when User's Id exists
+            {
+                var toUpdateDbUser = GetSingleUser(inputUser.Id).GetAwaiter().GetResult();
+                if (toUpdateDbUser == null)
+                {
+                    return null;
+                }
+
+                toUpdateDbUser.Password = inputUser.Password;
+
+                await _context.SaveChangesAsync();
+                return toUpdateDbUser;
+            }
         }
+
+        public async Task<bool> DeleteUser(int? id)
+        {
+            var toDeleteDbUser = await GetSingleUser(id);
+            if (toDeleteDbUser == null)
+            {
+                return false;
+            }
+            try
+            {
+                _context.Users.Remove(toDeleteDbUser);
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch (System.Exception e)
+            {
+                throw e;
+            }
+
+        }
+
         public async Task<List<UserRole>> UpdateUserRoles(int toUpdateUserId, List<int> toAddOrUpdateRoleIds)
         {
             var dbUser = await GetSingleUser(toUpdateUserId);
