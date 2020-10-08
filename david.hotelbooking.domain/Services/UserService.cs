@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using david.hotelbooking.domain.Concretes;
@@ -26,6 +28,12 @@ namespace david.hotelbooking.domain.Services
             .AsQueryable();
         }
 
+        public async Task<Role> GetSingleRole(string roleName)
+        {
+            return await _context.Roles.FirstOrDefaultAsync(u =>
+               roleName.ToLower().Equals(u.Name.ToLower())
+            );
+        }
         public async Task<User> GetSingleUser(string email)
         {
             return await _context.Users.FirstOrDefaultAsync(u =>
@@ -57,25 +65,66 @@ namespace david.hotelbooking.domain.Services
             await _context.SaveChangesAsync();
             return newUser;
         }
-        public async Task<UserRole> AddUserRole(User toUpdateUser, Role toAddRole)
+        public async Task<List<UserRole>> UpdateUserRoles(int toUpdateUserId, List<int> toAddOrUpdateRoleIds)
         {
-            var dbUser = await GetSingleUser(toUpdateUser.Id);
-            var dbRole = await _context.Roles.FirstOrDefaultAsync(r => r.Id == toAddRole.Id);
-            var dbUserRole = await _context.UserRoles.FirstOrDefaultAsync(
-                r => r.UserId == toUpdateUser.Id && r.RoleId == toAddRole.Id);
-            if (dbUser == null || dbRole == null || dbUserRole != null)
+            var dbUser = await GetSingleUser(toUpdateUserId);
+            if (dbUser == null || toAddOrUpdateRoleIds == null || toAddOrUpdateRoleIds.Count() == 0)
             {
                 return null;
             }
 
-            var newUserRole = new UserRole
+            var resultList = new List<UserRole>();
+            foreach (var roleId in toAddOrUpdateRoleIds)
             {
-                UserId = dbUser.Id,
-                RoleId = dbRole.Id
-            };
-            _context.UserRoles.Add(newUserRole);
+                var dbRole = await _context.Roles.FirstOrDefaultAsync(r => r.Id == roleId);
+                if (dbRole == null)
+                {
+                    continue;
+                }
+
+                var dbUserRole = await _context.UserRoles.FirstOrDefaultAsync(
+                    r => r.UserId == dbUser.Id && r.RoleId == dbRole.Id);
+                if (dbUserRole != null)
+                {
+                    continue;
+                }
+                var newUserRole = new UserRole
+                {
+                    UserId = dbUser.Id,
+                    RoleId = dbRole.Id
+                };
+                resultList.Add(newUserRole);
+            }
+
+            var toRemoveList = _context.UserRoles.Where(u => u.UserId == dbUser.Id);
+
+            _context.UserRoles.RemoveRange(toRemoveList);
             await _context.SaveChangesAsync();
-            return newUserRole;
+            _context.UserRoles.AddRange(resultList);
+            await _context.SaveChangesAsync();
+
+
+            return resultList;
+
+            // var toRemoveList = _context.UserRoles.Where(u => u.UserId == dbUser.Id);
+            // using (var transaction = _context.Database.BeginTransaction())
+            // {
+            //     try
+            //     {
+            //         _context.UserRoles.RemoveRange(toRemoveList);
+            //         await _context.SaveChangesAsync();
+            //         _context.UserRoles.AddRange(resultList);
+            //         await _context.SaveChangesAsync();
+
+            //         transaction.Commit();
+            //     }
+            //     catch (Exception)
+            //     {
+            //         return null;
+            //     }
+            // };
+
+
         }
     }
 
