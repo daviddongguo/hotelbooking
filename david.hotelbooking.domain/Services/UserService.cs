@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using david.hotelbooking.domain.Concretes;
@@ -26,10 +28,22 @@ namespace david.hotelbooking.domain.Services
             .AsQueryable();
         }
 
+
         public async Task<User> GetSingleUser(string email)
         {
             return await _context.Users.FirstOrDefaultAsync(u =>
                email.ToLower().Equals(u.Email.ToLower())
+            );
+        }
+        public async Task<bool> IsEmailExisted(string email)
+        {
+            var dbUser = await GetSingleUser(email);
+            return dbUser != null;      // returns true when user exists
+        }
+        public async Task<Role> GetSingleRole(string roleName)
+        {
+            return await _context.Roles.FirstOrDefaultAsync(u =>
+               roleName.ToLower().Equals(u.Name.ToLower())
             );
         }
         public async Task<User> GetSingleUser(int id)
@@ -41,8 +55,7 @@ namespace david.hotelbooking.domain.Services
 
         public async Task<User> AddUser(User inputUser)
         {
-            var dbUser = await GetSingleUser(inputUser.Email);
-            if (dbUser != null)
+            if (IsEmailExisted(inputUser.Email).GetAwaiter().GetResult())
             {
                 return null;
             }
@@ -57,25 +70,61 @@ namespace david.hotelbooking.domain.Services
             await _context.SaveChangesAsync();
             return newUser;
         }
-        public async Task<UserRole> AddUserRole(User toUpdateUser, Role toAddRole)
+        public async Task<List<UserRole>> UpdateUserRoles(int toUpdateUserId, List<int> toAddOrUpdateRoleIds)
         {
-            var dbUser = await GetSingleUser(toUpdateUser.Id);
-            var dbRole = await _context.Roles.FirstOrDefaultAsync(r => r.Id == toAddRole.Id);
-            var dbUserRole = await _context.UserRoles.FirstOrDefaultAsync(
-                r => r.UserId == toUpdateUser.Id && r.RoleId == toAddRole.Id);
-            if (dbUser == null || dbRole == null || dbUserRole != null)
+            var dbUser = await GetSingleUser(toUpdateUserId);
+            if (dbUser == null)
             {
                 return null;
             }
 
-            var newUserRole = new UserRole
+            var oldUserRolesList = _context.UserRoles.Where(u => u.UserId == dbUser.Id).ToListAsync().GetAwaiter().GetResult();
+            if (toAddOrUpdateRoleIds == null) // do nothing, just show existed info.
             {
-                UserId = dbUser.Id,
-                RoleId = dbRole.Id
-            };
-            _context.UserRoles.Add(newUserRole);
+                return oldUserRolesList;
+            }
+
+            var newUsersRoleList = new List<UserRole>();
+            foreach (var roleId in toAddOrUpdateRoleIds)
+            {
+                var dbRole = await _context.Roles.FirstOrDefaultAsync(r => r.Id == roleId);
+                if (dbRole == null)
+                {
+                    continue;
+                }
+
+                var newUserRole = new UserRole
+                {
+                    UserId = dbUser.Id,
+                    RoleId = dbRole.Id
+                };
+                newUsersRoleList.Add(newUserRole);
+            }
+
+
+            _context.UserRoles.RemoveRange(oldUserRolesList);
+            _context.UserRoles.AddRange(newUsersRoleList);
             await _context.SaveChangesAsync();
-            return newUserRole;
+
+            return newUsersRoleList;
+
+            // var toRemoveList = _context.UserRoles.Where(u => u.UserId == dbUser.Id);
+            // using (var transaction = _context.Database.BeginTransaction())
+            // {
+            //     try
+            //     {
+            //         _context.UserRoles.RemoveRange(toRemoveList);
+            //         await _context.SaveChangesAsync();
+            //         _context.UserRoles.AddRange(resultList);
+            //         await _context.SaveChangesAsync();
+
+            //         transaction.Commit();
+            //     }
+            //     catch (Exception)
+            //     {
+            //         return null;
+            //     }
+            // };
         }
     }
 
