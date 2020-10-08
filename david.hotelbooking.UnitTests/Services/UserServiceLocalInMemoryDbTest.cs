@@ -140,7 +140,7 @@ namespace david.hotelbooking.domain.Services.Tests
             // Assert  show the older userroles
             PrintOut(secondResult);
             Assert.That(result.Count == expectedResult);
-            Assert.That(secondResult.All(result.Contains));
+            Assert.That(secondResult.All(result.Contains) && secondResult.Count == result.Count);
         }
 
         // 3 userroles has wrong id
