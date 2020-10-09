@@ -81,7 +81,9 @@ namespace david.hotelbooking.mvc.Controllers
             var roles = await _service.GetAllRoles();
             return View(new UserRolesViewModel
             {
-                User = user,
+                UserId = user.Id,
+                UserEmail = user.Email,
+                UserRoleIds = user.UserRoles.Select(u => u.RoleId).ToList(),
                 Roles = roles.ToList()
             });
         }
@@ -91,9 +93,9 @@ namespace david.hotelbooking.mvc.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Email,Password")] User user)
+        public async Task<IActionResult> Edit(int id, [Bind("UserId, UserRoleIds")] UserRolesViewModel model)
         {
-            if (id != user.Id)
+            if (id != model.UserId)
             {
                 return NotFound();
             }
@@ -102,11 +104,11 @@ namespace david.hotelbooking.mvc.Controllers
             {
                 try
                 {
-                    await _service.AddOrUpdateUser(user);
+                    await _service.UpdateUserRoles(id, model.UserRoleIds);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!UserExists(user.Id))
+                    if (!UserExists(model.UserId))
                     {
                         return NotFound();
                     }
@@ -117,10 +119,14 @@ namespace david.hotelbooking.mvc.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+
+            var user = await _service.GetSingleUser(id);
             var roles = await _service.GetAllRoles();
             return View(new UserRolesViewModel
-            { 
-                User = user,
+            {
+                UserId = user.Id,
+                UserEmail = user.Email,
+                UserRoleIds = user.UserRoles.Select(u => u.RoleId).ToList(),
                 Roles = roles.ToList()
             });
         }

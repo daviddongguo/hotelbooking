@@ -9,7 +9,7 @@ namespace david.hotelbooking.domain.Services
 {
     public class UserService : IUserService
     {
-        private UserDbContext _context;
+        private readonly UserDbContext _context;
 
         public UserService(UserDbContext context)
         {
@@ -29,7 +29,10 @@ namespace david.hotelbooking.domain.Services
 
         public async Task<IQueryable<Role>> GetAllRoles()
         {
-            return (await _context.Roles.ToListAsync()).AsQueryable();
+            return (await _context.Roles
+                .Include(r => r.RolePermissions)
+                .ThenInclude(rp => rp.Permission)
+                .ToListAsync()).AsQueryable();
         }
 
 

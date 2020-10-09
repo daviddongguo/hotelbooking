@@ -1,5 +1,6 @@
 using david.hotelbooking.domain.Abstract;
 using david.hotelbooking.domain.Concretes;
+using david.hotelbooking.domain.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -31,6 +32,7 @@ namespace david.hotelbooking.api
                     = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
 
             services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IUserService, UserService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
