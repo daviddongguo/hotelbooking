@@ -8,22 +8,41 @@
 
 <h4>@Model.UserEmail</h4>
 <hr />
-<form method="post">
-            <input type="hidden" asp-for="UserId" />
+
+<form method="post" id="user_roles_form">
+    <input type="hidden" asp-for="UserId" />
+</form>
+<table>
+    <tr>
+        <th>Roles</th>
+        <th>Permissions</th>
+    </tr>
     @foreach (var role in Model.Roles)
     {
-            <input
-                name="UserRoleIds"
-                checked="@Model.UserRoleIds.Contains(role.Id)"
-                type="checkbox"
-                value="@role.Id" /> @role.Name<br />
-            @foreach (var itemPermission in role.RolePermissions)
-            {
+        <tr>
+            <td>
+                <input name="UserRoleIds"
+                       checked="@Model.UserRoleIds.Contains(role.Id)"
+                       type="checkbox"
+                       form="user_roles_form"
+                       value="@role.Id" />
+                @role.Name
+            </td>
+            <td></td>
+        </tr>
+
+        @foreach (var itemPermission in role.RolePermissions)
+        {
+            <tr>
+                <td></td>
+                <td>
                     @Html.DisplayFor(modelitem => itemPermission.Permission.Name)
-            }
+                </td>
+            </tr>
+        }
     }
-    <input type="submit"/>
-</form>
+</table>
+<input type="submit" form="user_roles_form" />
 
 
 <div>
