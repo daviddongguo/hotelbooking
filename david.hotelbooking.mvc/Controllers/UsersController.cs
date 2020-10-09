@@ -1,6 +1,7 @@
 ﻿using david.hotelbooking.domain.Concretes;
 using david.hotelbooking.domain.Entities.RBAC;
 using david.hotelbooking.domain.Services;
+using david.hotelbooking.mvc.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
@@ -77,7 +78,12 @@ namespace david.hotelbooking.mvc.Controllers
             {
                 return NotFound();
             }
-            return View(user);
+            var roles = await _service.GetAllRoles();
+            return View(new UserRolesViewModel
+            {
+                User = user,
+                Roles = roles.ToList()
+            });
         }
 
         // POST: Users/Edit/5
@@ -111,7 +117,12 @@ namespace david.hotelbooking.mvc.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(user);
+            var roles = await _service.GetAllRoles();
+            return View(new UserRolesViewModel
+            { 
+                User = user,
+                Roles = roles.ToList()
+            });
         }
 
         // GET: Users/Delete/5

@@ -9,6 +9,7 @@ namespace david.hotelbooking.domain.Services
     {
         Task<User> AddOrUpdateUser(User inputUser);
         Task<bool> DeleteUser(int? id);
+        Task<IQueryable<Role>> GetAllRoles();
         Task<IQueryable<User>> GetAllUsers();
         Task<Role> GetSingleRole(string roleName);
         Task<User> GetSingleUser(int? id);

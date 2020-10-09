@@ -27,6 +27,11 @@ namespace david.hotelbooking.domain.Services
             .AsQueryable();
         }
 
+        public async Task<IQueryable<Role>> GetAllRoles()
+        {
+            return (await _context.Roles.ToListAsync()).AsQueryable();
+        }
+
 
         public async Task<User> GetSingleUser(string email)
         {
