@@ -16,18 +16,23 @@
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Email)
         </dd>
-
+    </dl>
+    
         @foreach (var item in Model.UserRoles)
         {
-            <dt class="col-sm-2">
-                @Html.DisplayNameFor(modelitem => item.Role.Name)
-            </dt>
-            <dd class="col-sm-10">
-                @Html.DisplayFor(modelitem => item.Role.Name)
-            </dd>
+            <dl>
+                <dt class="col-sm-10">
+                    @Html.DisplayFor(modelitem => item.Role.Name)
+                 </dt>            
+                @foreach (var it in item.Role.RolePermissions)
+                {
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(modelitem => it.Permission.Name)
+                </dd>
+                }
+            </dl>
         }
 
-    </dl>
 </div>
 <div>
     <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |

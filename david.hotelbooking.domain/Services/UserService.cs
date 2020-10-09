@@ -48,11 +48,11 @@ namespace david.hotelbooking.domain.Services
         public async Task<User> GetSingleUser(int? id)
         {
             return await _context.Users
-                .Include( u => u.UserRoles)
-                .ThenInclude( uu => uu.Role)
-                .FirstOrDefaultAsync(u =>
-               id == u.Id
-            );
+                .Include(u => u.UserRoles)
+                .ThenInclude(uu => uu.Role)
+                .ThenInclude(r => r.RolePermissions)
+                .ThenInclude(rr => rr.Permission)
+                .FirstOrDefaultAsync(u => id == u.Id);
         }
 
         public async Task<User> AddOrUpdateUser(User inputUser)

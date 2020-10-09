@@ -16,7 +16,7 @@
                 @Html.DisplayNameFor(model => model.Email)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Password)
+                Roles
             </th>
             <th></th>
         </tr>
@@ -28,7 +28,12 @@
                 @Html.DisplayFor(modelItem => item.Email)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Password)
+                @foreach (var itemUserRole in item.UserRoles)
+                {
+                    <p>
+                    @itemUserRole.Role.Name
+                    </p>
+                }
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
