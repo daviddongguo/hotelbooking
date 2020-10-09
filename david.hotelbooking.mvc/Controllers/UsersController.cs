@@ -1,5 +1,4 @@
-﻿using david.hotelbooking.domain.Concretes;
-using david.hotelbooking.domain.Entities.RBAC;
+﻿using david.hotelbooking.domain.Entities.RBAC;
 using david.hotelbooking.domain.Services;
 using david.hotelbooking.mvc.Models;
 using Microsoft.AspNetCore.Mvc;

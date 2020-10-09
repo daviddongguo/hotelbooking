@@ -1,6 +1,5 @@
 ﻿using david.hotelbooking.domain.Entities.RBAC;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace david.hotelbooking.mvc.Models
 {
