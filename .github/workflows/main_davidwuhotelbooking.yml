@@ -6,7 +6,7 @@ name: Build and deploy ASP.Net Core app to Azure Web App - davidwuhotelbooking
 on:
   push:
     branches:
-      - main
+      - feature-api
 
 jobs:
   build-and-deploy:
