@@ -11,10 +11,14 @@ namespace david.hotelbooking.domain.Services
         Task<bool> DeleteUser(int? id);
         Task<IQueryable<Role>> GetAllRoles();
         Task<IQueryable<User>> GetAllUsers();
+        Task<IQueryable<Permission>> GetAllPermissions();
+        Task<Role> GetSingleRole(int? id);
         Task<Role> GetSingleRole(string roleName);
         Task<User> GetSingleUser(int? id);
         Task<User> GetSingleUser(string email);
         Task<bool> IsEmailExisted(string email);
+        Task<Role> UpdateRole(Role toUpdateRole);
+        Task<List<RolePermission>> UpdateRolePermissions(int toUpdateRoleId, List<int> toUpdatePermissionIds);
         Task<List<UserRole>> UpdateUserRoles(int toUpdateUserId, List<int> toAddOrUpdateRoleIds);
     }
 }

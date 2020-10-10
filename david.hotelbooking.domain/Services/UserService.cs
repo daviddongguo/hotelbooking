@@ -34,6 +34,10 @@ namespace david.hotelbooking.domain.Services
                 .ThenInclude(rp => rp.Permission)
                 .ToListAsync()).AsQueryable();
         }
+        public async Task<IQueryable<Permission>> GetAllPermissions()
+        {
+            return (await _context.Permissions.ToListAsync()).AsQueryable();
+        }
 
 
         public async Task<User> GetSingleUser(string email)
@@ -47,6 +51,15 @@ namespace david.hotelbooking.domain.Services
             var dbUser = await GetSingleUser(email);
             return dbUser != null;      // returns true when user exists
         }
+        public async Task<Role> GetSingleRole(int? id)
+        {
+            return await _context.Roles
+                .Include(r => r.RolePermissions)
+                .ThenInclude(rr => rr.Permission)
+                .FirstOrDefaultAsync(u =>
+               u.Id == id);
+        }
+
         public async Task<Role> GetSingleRole(string roleName)
         {
             return await _context.Roles.FirstOrDefaultAsync(u =>
@@ -122,7 +135,59 @@ namespace david.hotelbooking.domain.Services
             }
 
         }
+        public async Task<Role> UpdateRole(Role toUpdateRole)
+        {
+            var dbRole = await GetSingleRole(toUpdateRole.Id);
+            if (dbRole == null)
+            {
+                return null;
+            }
+            dbRole.Name = toUpdateRole.Name;
+            dbRole.Description = toUpdateRole.Description;
+            await _context.SaveChangesAsync();
 
+            return dbRole;
+        }
+
+        public async Task<List<RolePermission>> UpdateRolePermissions(int toUpdateRoleId, List<int> toUpdatePermissionIds)
+        {
+            var dbRole = await GetSingleRole(toUpdateRoleId);
+            if (dbRole == null)
+            {
+                return null;
+            }
+
+            var oldRolePermissionsList = await _context.RolePermissions.Where(u => u.RoleId == dbRole.Id).ToListAsync();
+            if (toUpdatePermissionIds == null) // do nothing, just show existed info.
+            {
+                return oldRolePermissionsList;
+            }
+
+            var newRolePermissionsList = new List<RolePermission>();
+            foreach (var permissionId in toUpdatePermissionIds)
+            {
+                var dbPermission = await _context.Permissions.FirstOrDefaultAsync(r => r.Id == permissionId);
+                if (dbRole == null)
+                {
+                    continue;
+                }
+
+                var newRolePermission = new RolePermission
+                {
+                    PermissionId = dbPermission.Id,
+                    RoleId = dbRole.Id
+                };
+                newRolePermissionsList.Add(newRolePermission);
+            }
+
+
+            _context.RolePermissions.RemoveRange(oldRolePermissionsList);
+            _context.RolePermissions.AddRange(newRolePermissionsList);
+            await _context.SaveChangesAsync();
+
+            return newRolePermissionsList;
+
+        }
         public async Task<List<UserRole>> UpdateUserRoles(int toUpdateUserId, List<int> toAddOrUpdateRoleIds)
         {
             var dbUser = await GetSingleUser(toUpdateUserId);
@@ -137,7 +202,7 @@ namespace david.hotelbooking.domain.Services
                 return oldUserRolesList;
             }
 
-            var newUsersRoleList = new List<UserRole>();
+            var newUserRolesList = new List<UserRole>();
             foreach (var roleId in toAddOrUpdateRoleIds)
             {
                 var dbRole = await _context.Roles.FirstOrDefaultAsync(r => r.Id == roleId);
@@ -151,15 +216,15 @@ namespace david.hotelbooking.domain.Services
                     UserId = dbUser.Id,
                     RoleId = dbRole.Id
                 };
-                newUsersRoleList.Add(newUserRole);
+                newUserRolesList.Add(newUserRole);
             }
 
 
             _context.UserRoles.RemoveRange(oldUserRolesList);
-            _context.UserRoles.AddRange(newUsersRoleList);
+            _context.UserRoles.AddRange(newUserRolesList);
             await _context.SaveChangesAsync();
 
-            return newUsersRoleList;
+            return newUserRolesList;
 
             // var toRemoveList = _context.UserRoles.Where(u => u.UserId == dbUser.Id);
             // using (var transaction = _context.Database.BeginTransaction())
@@ -179,6 +244,7 @@ namespace david.hotelbooking.domain.Services
             //     }
             // };
         }
+
     }
 
 

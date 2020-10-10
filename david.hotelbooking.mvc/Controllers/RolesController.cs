@@ -1,5 +1,7 @@
 ﻿using david.hotelbooking.domain.Concretes;
 using david.hotelbooking.domain.Entities.RBAC;
+using david.hotelbooking.domain.Services;
+using david.hotelbooking.mvc.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
@@ -10,10 +12,12 @@ namespace david.hotelbooking.mvc.Controllers
     public class RolesController : Controller
     {
         private readonly UserDbContext _context;
+        private readonly IUserService _service;
 
-        public RolesController(UserDbContext context)
+        public RolesController(UserDbContext context, IUserService service)
         {
             _context = context;
+            _service = service;
         }
 
         // GET: Roles
@@ -30,8 +34,7 @@ namespace david.hotelbooking.mvc.Controllers
                 return NotFound();
             }
 
-            var role = await _context.Roles
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var role = await _service.GetSingleRole(id);
             if (role == null)
             {
                 return NotFound();
@@ -47,7 +50,7 @@ namespace david.hotelbooking.mvc.Controllers
         }
 
         // POST: Roles/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
+        // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -70,22 +73,32 @@ namespace david.hotelbooking.mvc.Controllers
                 return NotFound();
             }
 
-            var role = await _context.Roles.FindAsync(id);
+            var role = await _service.GetSingleRole(id);
             if (role == null)
             {
                 return NotFound();
             }
-            return View(role);
+
+            var permissions = (await _service.GetAllPermissions()).ToList();
+            return View(new RolePermissionViewModel
+            {
+                Role = role,
+                RoleId = role.Id,
+                RoleName = role.Name,
+                RoleDescription = role.Description,
+                RolePermissionIds = role.RolePermissions.Select(r => r.Permission.Id).ToList(),
+                Permissions = permissions
+            });
         }
 
         // POST: Roles/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
+        // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description")] Role role)
+        public async Task<IActionResult> Edit(int id, [Bind("RoleId,RoleName,RoleDescription,RolePermissionIds")] RolePermissionViewModel model)
         {
-            if (id != role.Id)
+            if (id != model.RoleId)
             {
                 return NotFound();
             }
@@ -94,12 +107,17 @@ namespace david.hotelbooking.mvc.Controllers
             {
                 try
                 {
-                    _context.Update(role);
-                    await _context.SaveChangesAsync();
+                    await _service.UpdateRole(new Role
+                    {
+                        Id = model.RoleId,
+                        Name = model.RoleName,
+                        Description = model.RoleDescription
+                    });
+                    await _service.UpdateRolePermissions(model.RoleId, model.RolePermissionIds);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!RoleExists(role.Id))
+                    if (!RoleExists(model.RoleId))
                     {
                         return NotFound();
                     }
@@ -110,7 +128,17 @@ namespace david.hotelbooking.mvc.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(role);
+
+            var role = await _service.GetSingleRole(model.RoleId);
+            return View(new RolePermissionViewModel
+            {
+                Role = role,
+                RoleId = role.Id,
+                RoleName = role.Name,
+                RoleDescription = role.Description,
+                RolePermissionIds = role.RolePermissions.Select(r => r.Permission.Id).ToList(),
+                Permissions = (await _service.GetAllPermissions()).ToList()
+            }); ;
         }
 
         // GET: Roles/Delete/5
