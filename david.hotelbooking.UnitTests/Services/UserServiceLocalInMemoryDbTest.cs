@@ -1,12 +1,10 @@
 ﻿using david.hotelbooking.domain.Entities.RBAC;
 using david.hotelbooking.UnitTests;
 using david.hotelbooking.UnitTests.Services;
-using Newtonsoft.Json;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.Json;
 using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace david.hotelbooking.domain.Services.Tests
@@ -73,8 +71,8 @@ namespace david.hotelbooking.domain.Services.Tests
         {
             // Arrange
             // Act
-            var result = _service.AddUser(new User { Email = emailStr }).GetAwaiter().GetResult();
-            var repeat = _service.AddUser(new User { Email = emailStr }).GetAwaiter().GetResult();
+            var result = _service.AddOrUpdateUser(new User { Email = emailStr }).GetAwaiter().GetResult();
+            var repeat = _service.AddOrUpdateUser(new User { Email = emailStr }).GetAwaiter().GetResult();
 
             // Assert
             System.Console.WriteLine($"{result.Id} : {result.Email }");
@@ -87,7 +85,7 @@ namespace david.hotelbooking.domain.Services.Tests
         public void AddUser_WhenNameIsUnique_ReturnAddedUser(string emailstr)
         {
             // Act
-            var result = _service.AddUser(new User { Email = emailstr }).GetAwaiter().GetResult();
+            var result = _service.AddOrUpdateUser(new User { Email = emailstr }).GetAwaiter().GetResult();
 
             // Assert
             System.Console.WriteLine($"{result.Id} : {result.Email }");
@@ -140,7 +138,7 @@ namespace david.hotelbooking.domain.Services.Tests
             // Assert  show the older userroles
             PrintOut(secondResult);
             Assert.That(result.Count == expectedResult);
-            Assert.That(secondResult.All(result.Contains));
+            Assert.That(secondResult.All(result.Contains) && secondResult.Count == result.Count);
         }
 
         // 3 userroles has wrong id

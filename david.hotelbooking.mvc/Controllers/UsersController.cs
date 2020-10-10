@@ -1,29 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using david.hotelbooking.domain.Entities.RBAC;
+using david.hotelbooking.domain.Services;
+using david.hotelbooking.mvc.Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using david.hotelbooking.domain.Concretes;
-using david.hotelbooking.domain.Entities.RBAC;
 
 namespace david.hotelbooking.mvc.Controllers
 {
     public class UsersController : Controller
     {
-        private readonly UserDbContext _context;
+        //private readonly UserDbContext _context;
+        private readonly IUserService _service;
 
-        public UsersController(UserDbContext context)
+        public UsersController(IUserService service)
         {
-            _context = context;
+            _service = service;
         }
 
         // GET: Users
         public async Task<IActionResult> Index()
         {
-            var data = await _context.Users.Include(u => u.UserRoles).ToListAsync();
-            return View(data);
+            var data = await _service.GetAllUsers();
+            return View(data.ToList());
         }
 
         // GET: Users/Details/5
@@ -34,8 +33,7 @@ namespace david.hotelbooking.mvc.Controllers
                 return NotFound();
             }
 
-            var user = await _context.Users
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var user = await _service.GetSingleUser(id);
             if (user == null)
             {
                 return NotFound();
@@ -51,16 +49,16 @@ namespace david.hotelbooking.mvc.Controllers
         }
 
         // POST: Users/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
+        // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Email,Password")] User user)
+        public async Task<IActionResult> Create([Bind("Email,Password")] User user)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(user);
-                await _context.SaveChangesAsync();
+                user.Id = 0;
+                await _service.AddOrUpdateUser(user);
                 return RedirectToAction(nameof(Index));
             }
             return View(user);
@@ -74,22 +72,29 @@ namespace david.hotelbooking.mvc.Controllers
                 return NotFound();
             }
 
-            var user = await _context.Users.FindAsync(id);
+            var user = await _service.GetSingleUser(id);
             if (user == null)
             {
                 return NotFound();
             }
-            return View(user);
+            var roles = await _service.GetAllRoles();
+            return View(new UserRolesViewModel
+            {
+                UserId = user.Id,
+                UserEmail = user.Email,
+                UserRoleIds = user.UserRoles.Select(u => u.RoleId).ToList(),
+                Roles = roles.ToList()
+            });
         }
 
         // POST: Users/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
+        // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Email,Password")] User user)
+        public async Task<IActionResult> Edit(int id, [Bind("UserId, UserRoleIds")] UserRolesViewModel model)
         {
-            if (id != user.Id)
+            if (id != model.UserId)
             {
                 return NotFound();
             }
@@ -98,12 +103,11 @@ namespace david.hotelbooking.mvc.Controllers
             {
                 try
                 {
-                    _context.Update(user);
-                    await _context.SaveChangesAsync();
+                    await _service.UpdateUserRoles(id, model.UserRoleIds);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!UserExists(user.Id))
+                    if (!UserExists(model.UserId))
                     {
                         return NotFound();
                     }
@@ -114,7 +118,16 @@ namespace david.hotelbooking.mvc.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(user);
+
+            var user = await _service.GetSingleUser(id);
+            var roles = await _service.GetAllRoles();
+            return View(new UserRolesViewModel
+            {
+                UserId = user.Id,
+                UserEmail = user.Email,
+                UserRoleIds = user.UserRoles.Select(u => u.RoleId).ToList(),
+                Roles = roles.ToList()
+            });
         }
 
         // GET: Users/Delete/5
@@ -125,8 +138,7 @@ namespace david.hotelbooking.mvc.Controllers
                 return NotFound();
             }
 
-            var user = await _context.Users
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var user = await _service.GetSingleUser(id);
             if (user == null)
             {
                 return NotFound();
@@ -140,15 +152,13 @@ namespace david.hotelbooking.mvc.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var user = await _context.Users.FindAsync(id);
-            _context.Users.Remove(user);
-            await _context.SaveChangesAsync();
+            await _service.DeleteUser(id);
             return RedirectToAction(nameof(Index));
         }
 
         private bool UserExists(int id)
         {
-            return _context.Users.Any(e => e.Id == id);
+            return _service.GetSingleUser(id) != null;
         }
     }
 }

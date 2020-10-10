@@ -1,5 +1,4 @@
-﻿using david.hotelbooking.domain.Entities.RBAC;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using RestSharp;
 using RestSharp.Serialization.Json;
 
