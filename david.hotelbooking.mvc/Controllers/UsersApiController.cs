@@ -1,12 +1,10 @@
-﻿using System;
+﻿using david.hotelbooking.domain.Concretes;
+using david.hotelbooking.domain.Entities.RBAC;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using david.hotelbooking.domain.Concretes;
-using david.hotelbooking.domain.Entities.RBAC;
 
 namespace david.hotelbooking.mvc.Controllers
 {

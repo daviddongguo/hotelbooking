@@ -1,8 +1,6 @@
 ﻿using david.hotelbooking.domain.Concretes;
 using david.hotelbooking.domain.Entities.RBAC;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace david.hotelbooking.UnitTests.Services
 {
