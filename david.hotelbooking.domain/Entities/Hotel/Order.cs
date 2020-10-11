@@ -1,8 +1,6 @@
 ﻿using david.hotelbooking.domain.Entities.RBAC;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Text;
 
 namespace david.hotelbooking.domain.Entities.Hotel
 {

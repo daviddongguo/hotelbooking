@@ -1,8 +1,6 @@
 ﻿using david.hotelbooking.domain.Concretes;
 using david.hotelbooking.domain.Entities.RBAC;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace david.hotelbooking.UnitTests.Services
 {
@@ -28,8 +26,8 @@ namespace david.hotelbooking.UnitTests.Services
 
 
             var userAdmin = new User { Email = "Admin@hotel.com", Password = "aaa" };
-            var userAdminn = new User { Email = "Adminn@hotel.com", Password = "aaa" };
-            var userAdminnn = new User { Email = "Adminnn@hotel.com", Password = "aaa" };
+            var userAdminn = new User { Email = "nn@hotel.com", Password = "aaa" };
+            var userAdminnn = new User { Email = "nnn@hotel.com", Password = "aaa" };
             var userSis = new User { Email = "Sis@s.s", Password = "aaa" };
             dbContext.Users.Add(userAdmin);
             dbContext.Users.Add(userAdminn);
@@ -37,15 +35,15 @@ namespace david.hotelbooking.UnitTests.Services
             dbContext.Users.Add(userSis);
 
             var roleAdmin = new Role { Name = "admin" };
-            var roleMardeting = new Role { Name = "marketing" };
+            var roleMarketing = new Role { Name = "marketing" };
             var roleReceptionist = new Role { Name = "receptionist" };
             var roleCustomer = new Role { Name = "customer" };
             dbContext.Roles.Add(roleAdmin);
-            dbContext.Roles.Add(roleMardeting);
+            dbContext.Roles.Add(roleMarketing);
             dbContext.Roles.Add(roleReceptionist);
             dbContext.Roles.Add(roleCustomer);
 
-            var permissionReadOrder = new Permission { Name ="readOrder" };
+            var permissionReadOrder = new Permission { Name = "readOrder" };
             var permissionWriteOrder = new Permission { Name = "writeOrder" };
             var permissionReadUser = new Permission { Name = "readUser" };
             var permissionWriteUser = new Permission { Name = "writeUser" };

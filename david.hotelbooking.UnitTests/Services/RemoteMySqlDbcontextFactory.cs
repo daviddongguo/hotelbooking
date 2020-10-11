@@ -1,6 +1,5 @@
 ﻿using david.hotelbooking.domain.Concretes;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 
 namespace david.hotelbooking.UnitTests.Services
 {

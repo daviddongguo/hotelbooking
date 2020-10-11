@@ -1,7 +1,6 @@
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace david.hotelbooking.domain.Entities.RBAC
 {

@@ -1,7 +1,6 @@
 using david.hotelbooking.domain.Abstract;
-using david.hotelbooking.domain.Concretes;
+using david.hotelbooking.domain.Services;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
 
@@ -11,10 +10,12 @@ namespace david.hotelbooking.api.Controllers
     public class HomeControllers : ControllerBase
     {
         private readonly IUserRepository _userRep;
+        private readonly IUserService _service;
 
-        public HomeControllers(IUserRepository userRep)
+        public HomeControllers(IUserRepository userRep, IUserService service)
         {
             _userRep = userRep;
+            _service = service;
         }
 
         [HttpGet("/")]
@@ -44,6 +45,14 @@ namespace david.hotelbooking.api.Controllers
                     })
                 })
             });
+            return Ok(result);
+        }
+
+        [HttpGet("/testuser")]
+        public IActionResult GetSingleUser()
+        {
+            var result = _service.GetSingleUser(1).GetAwaiter().GetResult().UserRoles
+            .Select(r => r.RoleId);
             return Ok(result);
         }
 
