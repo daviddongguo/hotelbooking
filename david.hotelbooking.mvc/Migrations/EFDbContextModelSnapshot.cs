@@ -32,12 +32,7 @@ namespace david.hotelbooking.mvc.Migrations
                         .IsRequired()
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
-                    b.Property<int>("RoleId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("RoleId");
 
                     b.ToTable("Group");
                 });
@@ -279,19 +274,10 @@ namespace david.hotelbooking.mvc.Migrations
                         });
                 });
 
-            modelBuilder.Entity("david.hotelbooking.domain.Entities.RBAC.Group", b =>
-                {
-                    b.HasOne("david.hotelbooking.domain.Entities.RBAC.Role", "Role")
-                        .WithMany()
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("david.hotelbooking.domain.Entities.RBAC.GroupRole", b =>
                 {
                     b.HasOne("david.hotelbooking.domain.Entities.RBAC.Group", "Group")
-                        .WithMany()
+                        .WithMany("GroupRoles")
                         .HasForeignKey("GroupId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
