@@ -1,9 +1,8 @@
 
 language: csharp
-dist: trusty
-solution: hotelbooking.sln
 mono: none
-dotnet: 2.2.101
+dist: xenial
+dotnet: 2.2.1011
 
 install:
   - dotnet restore
