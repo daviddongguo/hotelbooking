@@ -245,6 +245,22 @@ namespace david.hotelbooking.domain.Services
             // };
         }
 
+        public async Task<Permission> GetSinglePermission(int permissionId)
+        {
+            return await _context.Permissions.FirstOrDefaultAsync(p => p.Id == permissionId);
+        }
+
+        public async Task<RolePermission> AddRolePermission(RolePermission rolePermission)
+        {
+            await _context.RolePermissions.AddAsync(rolePermission);
+            await _context.SaveChangesAsync();
+            return rolePermission;
+        }
+
+        public async Task<IQueryable<RolePermission>> GetAllRolePermissions()
+        {
+            return (await _context.RolePermissions.Include(r => r.Permission).ToListAsync()).AsQueryable();
+        }
     }
 
 
