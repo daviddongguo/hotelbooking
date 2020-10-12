@@ -1,19 +1,14 @@
 
 language: csharp
+dist: trusty
 solution: hotelbooking.sln
+mono: none
+dotnet: 3.1
 
-jobs:
-  include:
-      - dotnet: 3.1
-        mono: none
-        env: DOTNETCORE=3.1
-      - mono: latest
-
-
-script:
+install:
   - dotnet restore
-  - msbuild /p:Configuration=Release hotelbooking.sln
-  - mono ./testrunner/NUnit.ConsoleRunner.3.12.0/tools/nunit3-console.exe ./david.hotelbooking.UnitTests/bin/Release/MyProject.Tests.dll
+script:
+  - dotnet build
   - dotnet test david.hotelbooking.UnitTests/david.hotelbooking.UnitTests.csproj
 before_deploy: "echo 'ready?'"
 deploy:
