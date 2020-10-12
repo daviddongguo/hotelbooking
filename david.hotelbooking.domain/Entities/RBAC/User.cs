@@ -13,6 +13,7 @@ namespace david.hotelbooking.domain.Entities.RBAC
         public string Email { get; set; }
         [Required]
         public string Password { get; set; }
+        public bool IsActive { get; set; } = true;
 
         public virtual ICollection<UserRole> UserRoles { get; set; }
 
