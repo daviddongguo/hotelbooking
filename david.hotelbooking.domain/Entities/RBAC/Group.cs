@@ -1,23 +1,23 @@
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Text;
 
 namespace david.hotelbooking.domain.Entities.RBAC
 {
-    public class User
+    public class Group
     {
         [Key]
         public int Id { get; set; }
         [Required]
-        [DataType(DataType.EmailAddress)]
-        public string Email { get; set; }
-        [Required]
-        public string Password { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
         public bool IsActive { get; set; } = true;
 
-        public virtual ICollection<UserRole> UserRoles { get; set; }
         public virtual ICollection<UserGroup> UserGroups { get; set; }
-
-
+        public int RoleId { get; set; }
+        [ForeignKey("RoleId")]
+        public virtual Role Role { get; set; }
     }
 }

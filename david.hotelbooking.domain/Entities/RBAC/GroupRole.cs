@@ -1,21 +1,20 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text;
 using System.Text.Json.Serialization;
 
 namespace david.hotelbooking.domain.Entities.RBAC
 {
-    public class RolePermission
+    public class GroupRole
     {
-        [Required]
+        public int GroupId { get; set; }
         public int RoleId { get; set; }
-        [Required]
-        public int PermissionId { get; set; }
-
+        [ForeignKey("GroupId")]
+        [JsonIgnore]
+        public virtual Group Group { get; set; }
         [ForeignKey("RoleId")]
         [JsonIgnore]
         public virtual Role Role { get; set; }
-        [ForeignKey("PermissionId")]
-        [JsonIgnore]
-        public virtual Permission Permission { get; set; }
     }
 }
