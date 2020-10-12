@@ -27,6 +27,10 @@ namespace david.hotelbooking.domain.Concretes
                 .HasKey(u => new { u.UserId, u.RoleId });
             modelBuilder.Entity<RolePermission>()
                 .HasKey(r => new { r.RoleId, r.PermissionId });
+            modelBuilder.Entity<UserGroup>()
+                .HasKey(u => new { u.UserId, u.GroupId });
+            modelBuilder.Entity<GroupRole>()
+                .HasKey(g => new { g.GroupId, g.RoleId });
 
             // Seeding
             modelBuilder.Entity<User>().HasData(

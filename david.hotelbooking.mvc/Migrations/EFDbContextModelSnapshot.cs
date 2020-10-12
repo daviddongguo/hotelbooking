@@ -16,6 +16,47 @@ namespace david.hotelbooking.mvc.Migrations
                 .HasAnnotation("ProductVersion", "3.1.3")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
+            modelBuilder.Entity("david.hotelbooking.domain.Entities.RBAC.Group", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+
+                    b.Property<int>("RoleId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("Group");
+                });
+
+            modelBuilder.Entity("david.hotelbooking.domain.Entities.RBAC.GroupRole", b =>
+                {
+                    b.Property<int>("GroupId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RoleId")
+                        .HasColumnType("int");
+
+                    b.HasKey("GroupId", "RoleId");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("GroupRole");
+                });
+
             modelBuilder.Entity("david.hotelbooking.domain.Entities.RBAC.Permission", b =>
                 {
                     b.Property<int>("Id")
@@ -26,6 +67,7 @@ namespace david.hotelbooking.mvc.Migrations
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
                     b.HasKey("Id");
@@ -68,7 +110,11 @@ namespace david.hotelbooking.mvc.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("tinyint(1)");
+
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
                     b.HasKey("Id");
@@ -80,24 +126,28 @@ namespace david.hotelbooking.mvc.Migrations
                         {
                             Id = 1,
                             Description = "administrator",
+                            IsActive = true,
                             Name = "admin"
                         },
                         new
                         {
                             Id = 2,
                             Description = "",
+                            IsActive = true,
                             Name = "marketing"
                         },
                         new
                         {
                             Id = 3,
                             Description = "",
+                            IsActive = true,
                             Name = "receptionist"
                         },
                         new
                         {
                             Id = 4,
                             Description = "",
+                            IsActive = true,
                             Name = "customer"
                         });
                 });
@@ -159,6 +209,9 @@ namespace david.hotelbooking.mvc.Migrations
                         .IsRequired()
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("tinyint(1)");
+
                     b.Property<string>("Password")
                         .IsRequired()
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
@@ -172,14 +225,31 @@ namespace david.hotelbooking.mvc.Migrations
                         {
                             Id = 1,
                             Email = "Admin@hotel.com",
+                            IsActive = true,
                             Password = "aaa"
                         },
                         new
                         {
                             Id = 2,
                             Email = "Sis@hotel.com",
+                            IsActive = true,
                             Password = "aaa"
                         });
+                });
+
+            modelBuilder.Entity("david.hotelbooking.domain.Entities.RBAC.UserGroup", b =>
+                {
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("GroupId")
+                        .HasColumnType("int");
+
+                    b.HasKey("UserId", "GroupId");
+
+                    b.HasIndex("GroupId");
+
+                    b.ToTable("UserGroup");
                 });
 
             modelBuilder.Entity("david.hotelbooking.domain.Entities.RBAC.UserRole", b =>
@@ -209,6 +279,30 @@ namespace david.hotelbooking.mvc.Migrations
                         });
                 });
 
+            modelBuilder.Entity("david.hotelbooking.domain.Entities.RBAC.Group", b =>
+                {
+                    b.HasOne("david.hotelbooking.domain.Entities.RBAC.Role", "Role")
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("david.hotelbooking.domain.Entities.RBAC.GroupRole", b =>
+                {
+                    b.HasOne("david.hotelbooking.domain.Entities.RBAC.Group", "Group")
+                        .WithMany()
+                        .HasForeignKey("GroupId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("david.hotelbooking.domain.Entities.RBAC.Role", "Role")
+                        .WithMany("GroupRoles")
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("david.hotelbooking.domain.Entities.RBAC.RolePermission", b =>
                 {
                     b.HasOne("david.hotelbooking.domain.Entities.RBAC.Permission", "Permission")
@@ -220,6 +314,21 @@ namespace david.hotelbooking.mvc.Migrations
                     b.HasOne("david.hotelbooking.domain.Entities.RBAC.Role", "Role")
                         .WithMany("RolePermissions")
                         .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("david.hotelbooking.domain.Entities.RBAC.UserGroup", b =>
+                {
+                    b.HasOne("david.hotelbooking.domain.Entities.RBAC.Group", "Group")
+                        .WithMany("UserGroups")
+                        .HasForeignKey("GroupId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("david.hotelbooking.domain.Entities.RBAC.User", "User")
+                        .WithMany("UserGroups")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

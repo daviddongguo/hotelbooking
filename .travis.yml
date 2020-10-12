@@ -1,0 +1,21 @@
+
+language: csharp
+mono: none
+dist: xenial
+dotnet: 2.2.1011
+
+install:
+  - dotnet restore
+script:
+  - dotnet build
+  - dotnet test david.hotelbooking.UnitTests/david.hotelbooking.UnitTests.csproj
+before_deploy: "echo 'ready?'"
+deploy:
+  provider: azure_web_apps
+  on: feature-mvc
+  username: azure_deployment_user       # If AZURE_WA_USERNAME isn't set
+  password: azure_deployment_password   # If AZURE_WA_PASSWORD isn't set
+  site: azure_deployment_sitename       # If AZURE_WA_SITE isn't set
+  verbose: true
+  skip_cleanup: true
+

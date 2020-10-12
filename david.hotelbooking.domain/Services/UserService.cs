@@ -256,6 +256,11 @@ namespace david.hotelbooking.domain.Services
             await _context.SaveChangesAsync();
             return rolePermission;
         }
+
+        public async Task<IQueryable<RolePermission>> GetAllRolePermissions()
+        {
+            return (await _context.RolePermissions.Include(r => r.Permission).ToListAsync()).AsQueryable();
+        }
     }
 
 

@@ -22,5 +22,6 @@ namespace david.hotelbooking.domain.Services
         Task<List<UserRole>> UpdateUserRoles(int toUpdateUserId, List<int> toAddOrUpdateRoleIds);
         Task<Permission> GetSinglePermission(int permissionId);
         Task<RolePermission> AddRolePermission(RolePermission rolePermission);
+        Task<IQueryable<RolePermission>> GetAllRolePermissions();
     }
 }

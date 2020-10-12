@@ -23,9 +23,21 @@ namespace david.hotelbooking.api.Controllers
         }
         // GET: api/<RolePermissionController>
         [HttpGet]
-        public IEnumerable<string> Get()
+        public async Task<ServiceResponse<List<RolePermission>>> GetAll()
         {
-            return new string[] { "value1", "value2" };
+            var response = new ServiceResponse<List<RolePermission>>();
+            try
+            {
+                response.Data = (await _service.GetAllRolePermissions()).ToList();
+
+            }
+            catch (System.Exception ex)
+            {
+                response.Success = false;
+                response.Message = ex.Message;
+            }
+
+            return response;
         }
 
         // GET api/<RolePermissionController>/5
@@ -43,7 +55,7 @@ namespace david.hotelbooking.api.Controllers
             try
             {
                 var role = await _service.GetSingleRole(newRolePermission.RoleId);
-                if(role == null)
+                if (role == null)
                 {
                     response.Success = false;
                     response.Message = $"Role(id={newRolePermission.RoleId}) not found.";
