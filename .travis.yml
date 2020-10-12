@@ -16,9 +16,7 @@ script:
   - dotnet restore
   - msbuild /p:Configuration=Release hotelbooking.sln
   - mono ./testrunner/NUnit.ConsoleRunner.3.12.0/tools/nunit3-console.exe ./david.hotelbooking.UnitTests/bin/Release/MyProject.Tests.dll
-  - david.hotelbooking.UnitTests/dotnet test
-
-
+  - dotnet test david.hotelbooking.UnitTests/david.hotelbooking.UnitTests.csproj
 before_deploy: "echo 'ready?'"
 deploy:
   provider: azure_web_apps
