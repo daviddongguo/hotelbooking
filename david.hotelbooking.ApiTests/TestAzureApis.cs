@@ -8,15 +8,15 @@ namespace david.hotelbooking.ApiTests
     public class TestAzureApis
     {
         private RestClient _client;
-        private readonly string baseUrl = "https://davidwuhotelbooking.azurewebsites.net/";
+        private readonly string baseUsrl = "https://davidwuhotelbooking.azurewebsites.net/";
         [OneTimeSetUp]
         public void SetUp()
         {
-            _client = new RestClient(baseUrl);
+            _client = new RestClient(baseUsrl);
             _client.AddHandler("application/json", () => new JsonSerializer());
         }
         [TestCase(200)]
-        public void TestUsers(int expectedstatusCode)
+        public void TestUsers(int expectedstatusCoode)
         {
             // Arrange
             var request = new RestRequest("testusers", Method.GET);
