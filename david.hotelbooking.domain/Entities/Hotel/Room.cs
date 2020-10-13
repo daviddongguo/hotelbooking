@@ -12,6 +12,7 @@ namespace david.hotelbooking.domain.Entities.Hotel
         public int RoomTypeId { get; set; }
         [ForeignKey("RoomTypeId")]
         public virtual Room RoomType { get; set; }
+        [JsonIgnore]
         public virtual ICollection<RoomBooked>   RoomBookeds { get; set; }
     }
 }
