@@ -18,7 +18,6 @@ namespace david.hotelbooking.domain.Entities.Hotel
 
         public int BookingId { get; set; }
         [ForeignKey("BookingId")]
-        [JsonIgnore]
         public Booking Booking { get; set; }
     }
 }
