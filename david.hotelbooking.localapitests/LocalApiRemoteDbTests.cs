@@ -18,7 +18,6 @@ namespace david.hotelbooking.UnitTests.Apis
             _client.RemoteCertificateValidationCallback = (sender, certificate, chain, sslPolicyErrors) => true;
         }
 
-        [Ignore("")]
         [TestCase(200)]
         public void TestUsers(int expectedstatusCode)
         {
