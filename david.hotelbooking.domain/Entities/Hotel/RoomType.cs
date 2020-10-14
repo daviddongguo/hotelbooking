@@ -1,18 +1,19 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Text;
 using System.Text.Json.Serialization;
 
-namespace david.hotelbooking.domain.Entities.RBAC
+namespace david.hotelbooking.domain.Entities.Hotel
 {
-    public class Permission
+    public class RoomType
     {
         [Key]
         public int Id { get; set; }
         [Required]
         public string Name { get; set; }
         public string Description { get; set; }
-
         [JsonIgnore]
-        public virtual ICollection<RolePermission> RolePermissions { get; set; }
+        public virtual ICollection<Room> Rooms { get; set; }
     }
 }

@@ -1,6 +1,6 @@
 using NUnit.Framework;
 
-namespace david.hotelbooking.ApiTests
+namespace david.hotelbooking.localapitests
 {
     public class Tests
     {
