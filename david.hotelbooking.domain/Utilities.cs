@@ -1,6 +1,9 @@
-﻿using System.Text.Json;
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+using System.Text.Json;
 
-namespace david.hotelbooking.ApiTests
+namespace david.hotelbooking.domain
 {
     public static class Utilities
     {
@@ -17,4 +20,5 @@ namespace david.hotelbooking.ApiTests
         }
 
     }
+
 }

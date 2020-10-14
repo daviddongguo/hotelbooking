@@ -16,8 +16,6 @@ namespace david.hotelbooking.domain.Entities.RBAC
         public bool IsActive { get; set; } = true;
 
         public virtual ICollection<UserGroup> UserGroups { get; set; }
-        public int RoleId { get; set; }
-        [ForeignKey("RoleId")]
-        public virtual Role Role { get; set; }
+        public virtual ICollection<GroupRole> GroupRoles { get; set; }
     }
 }
