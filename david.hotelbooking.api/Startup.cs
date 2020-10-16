@@ -37,8 +37,16 @@ namespace david.hotelbooking.api
             //     b => b.MigrationsAssembly("david.hotelbooking.api")));
             services.AddDbContext<UserDbContext>(x => x.UseMySql(Configuration.GetConnectionString("MySqlConnection"),
                b => b.MigrationsAssembly("david.hotelbooking.api")));
+            services.AddDbContext<BookingDbContext>(x => x.UseMySql(Configuration.GetConnectionString("MySqlConnection"),
+               b => b.MigrationsAssembly("david.hotelbooking.api")));
             //services.AddControllers();
 
+            services.AddControllers()
+                .AddNewtonsoftJson(options =>
+                {                
+                    options.SerializerSettings.ContractResolver 
+                        = new CamelCasePropertyNamesContractResolver();
+                });
             services.AddControllers()
                 .AddNewtonsoftJson(options =>
                 {

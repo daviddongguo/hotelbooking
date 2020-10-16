@@ -1,5 +1,4 @@
 ﻿using david.hotelbooking.domain.Entities.RBAC;
-using david.hotelbooking.UnitTests;
 using david.hotelbooking.UnitTests.Services;
 using NUnit.Framework;
 using System;

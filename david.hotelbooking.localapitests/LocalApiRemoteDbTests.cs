@@ -29,11 +29,29 @@ namespace david.hotelbooking.UnitTests.Apis
 
             // Assert
 
-            //Assert.That((int)response.StatusCode == expectedstatusCode);
-
+            Assert.That((int)response.StatusCode == expectedstatusCode);
             System.Console.WriteLine(response.ResponseUri);
             System.Console.WriteLine(response.StatusCode);
-            System.Console.WriteLine(Utilities.PrettyJson(response.Content));
+            System.Console.WriteLine(Utilities.PrettyJson(response.Content).Substring(0, 800));
+            Assert.That(response.Content, Is.Not.Null);
+        }
+
+        [TestCase(200)]
+        public void GetAllRoomsApi_ReturnsAllRooms(int expectedstatusCode)
+        {
+            // Arrange
+            var request = new RestRequest("api/rooms", Method.GET);
+
+
+            // Act
+            var response = _client.ExecuteGetAsync(request).GetAwaiter().GetResult();
+
+            // Assert
+
+            Assert.That((int)response.StatusCode == expectedstatusCode);
+            System.Console.WriteLine(response.ResponseUri);
+            System.Console.WriteLine(response.StatusCode);
+            System.Console.WriteLine(Utilities.PrettyJson(response.Content).Substring(0, 800));
             Assert.That(response.Content, Is.Not.Null);
         }
     }

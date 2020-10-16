@@ -25,7 +25,7 @@ namespace david.hotelbooking.mvc
             //   b => b.MigrationsAssembly("david.hotelbooking.api")));
             services.AddDbContext<UserDbContext>(x => x.UseMySql(Configuration.GetConnectionString("MySqlConnection"),
                 b => b.MigrationsAssembly("david.hotelbooking.mvc")));
-            services.AddDbContext<BookingDbcontext>(x => x.UseMySql(Configuration.GetConnectionString("MySqlConnection"),
+            services.AddDbContext<BookingDbContext>(x => x.UseMySql(Configuration.GetConnectionString("MySqlConnection"),
                 b => b.MigrationsAssembly("david.hotelbooking.mvc")));
             services.AddScoped<IUserService, UserService>();
             services.AddControllersWithViews();
