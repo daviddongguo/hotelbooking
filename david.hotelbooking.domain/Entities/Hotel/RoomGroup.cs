@@ -4,11 +4,10 @@ using System.Text.Json.Serialization;
 
 namespace david.hotelbooking.domain.Entities.Hotel
 {
-    public class RoomType
+    public class RoomGroup
     {
         [Key]
         public int Id { get; set; }
-        [Required]
         public string Name { get; set; }
         public string Description { get; set; }
         [JsonIgnore]
