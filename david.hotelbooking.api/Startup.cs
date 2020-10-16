@@ -6,7 +6,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Newtonsoft.Json.Serialization;
 
 namespace david.hotelbooking.api
 {
@@ -42,17 +41,13 @@ namespace david.hotelbooking.api
             //services.AddControllers();
 
             services.AddControllers()
-                .AddNewtonsoftJson(options =>
-                {                
-                    options.SerializerSettings.ContractResolver 
-                        = new CamelCasePropertyNamesContractResolver();
-                });
-            services.AddControllers()
-                .AddNewtonsoftJson(options =>
-                {
-                    options.SerializerSettings.ReferenceLoopHandling
-                        = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
-                });
+                .AddJsonOptions(options => options.JsonSerializerOptions.WriteIndented = true);
+            //services.AddControllers()
+            //    .AddNewtonsoftJson(options =>
+            //    {
+            //        options.SerializerSettings.ReferenceLoopHandling
+            //            = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+            //    });
             //services.AddScoped<IUserRepository, UserRepository>();
             //services.AddScoped<IUserService, UserService>();
         }
