@@ -22,7 +22,8 @@ namespace david.hotelbooking.domain.Services
             return (await _context.Rooms
                 .Include(r => r.RoomGroup)
                 .Include(r => r.RoomType)
-                .ToListAsync()).AsQueryable();
+                .ToListAsync())
+                .AsQueryable();
         }
     }
 }
