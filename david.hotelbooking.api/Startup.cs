@@ -2,6 +2,7 @@ using Autofac;
 using david.hotelbooking.domain.Concretes;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -11,6 +12,7 @@ namespace david.hotelbooking.api
 {
     public class Startup
     {
+        readonly string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -32,6 +34,15 @@ namespace david.hotelbooking.api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors(options =>
+            {
+                options.AddPolicy(name: MyAllowSpecificOrigins,
+                                  builder =>
+                                  {
+                                      builder.WithOrigins("http://localhost:3000",
+                                                          "http://www.contoso.com");
+                                  });
+            });
             // services.AddDbContext<EFDbContext>( x => x.UseSqlite(Configuration.GetConnectionString("SqliteConnection"),
             //     b => b.MigrationsAssembly("david.hotelbooking.api")));
             services.AddDbContext<UserDbContext>(x => x.UseMySql(Configuration.GetConnectionString("MySqlConnection"),
@@ -64,11 +75,17 @@ namespace david.hotelbooking.api
 
             app.UseRouting();
 
+            app.UseCors();
+
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllers();
+                endpoints.MapGet("/echo",
+                    context => context.Response.WriteAsync("echo"))
+                    .RequireCors(MyAllowSpecificOrigins);
+
+                endpoints.MapControllers().RequireCors(MyAllowSpecificOrigins);
             });
         }
     }
