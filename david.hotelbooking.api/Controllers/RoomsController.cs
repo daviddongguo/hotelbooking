@@ -40,9 +40,10 @@ namespace david.hotelbooking.api.Controllers
                     };
 
                     var Ids = roomGroupsList.Select(g => g.Id);
-                    if (Ids.Contains(room.RoomGroupId.ToString()))
+                    var roomGroupId = "Group" + room.RoomGroupId.ToString();
+                    if (Ids.Contains(roomGroupId))
                     {
-                        var roomGroup = roomGroupsList.FirstOrDefault(g => g.Id.Equals(room.RoomGroupId.ToString()));
+                        var roomGroup = roomGroupsList.FirstOrDefault(g => g.Id.Equals(roomGroupId));
                         roomGroup.Children.Add(child);
                     }
                     else
@@ -54,7 +55,7 @@ namespace david.hotelbooking.api.Controllers
                                 child
                             },
                             Name = room.RoomGroup.Name,
-                            Id = room.RoomGroupId.ToString()
+                            Id = roomGroupId
                         };
                         roomGroupsList.Add(newRoomGroup);
                     }

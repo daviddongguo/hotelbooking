@@ -1,10 +1,7 @@
 ﻿using david.hotelbooking.domain.Concretes;
 using david.hotelbooking.domain.Entities.Hotel;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace david.hotelbooking.domain.Services
@@ -22,6 +19,14 @@ namespace david.hotelbooking.domain.Services
             return (await _context.Rooms
                 .Include(r => r.RoomGroup)
                 .Include(r => r.RoomType)
+                .ToListAsync())
+                .AsQueryable();
+        }
+
+        public async Task<IQueryable<Booking>> GetAllBookings()
+        {
+            return (await _context.Bookings
+                .Include(b => b.Guest)
                 .ToListAsync())
                 .AsQueryable();
         }

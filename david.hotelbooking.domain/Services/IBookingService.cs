@@ -7,5 +7,6 @@ namespace david.hotelbooking.domain.Services
     public interface IBookingService
     {
         Task<IQueryable<Room>> GetAllRooms();
+        Task<IQueryable<Booking>> GetAllBookings();
     }
 }

@@ -51,12 +51,12 @@ namespace david.hotelbooking.domain.Entities.Hotel
 
         private DateTime DefineCheckInTime(DateTime dateTime)
         {
-            return dateTime + new TimeSpan(14, 0, 0);
+            return dateTime.Date + new TimeSpan(14, 0, 0);
         }
 
         private DateTime DefineCheckOutTime(DateTime dateTime)
         {
-            return dateTime + new TimeSpan(10, 0, 0);
+            return dateTime.Date + new TimeSpan(10, 0, 0);
         }
 
     }
