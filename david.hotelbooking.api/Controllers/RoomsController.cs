@@ -35,25 +35,27 @@ namespace david.hotelbooking.api.Controllers
                 {
                     var child = new Child
                     {
-                        Id = room.Id,
+                        Id = room.Id.ToString(),
                         Name = room.RoomNumber
                     };
 
                     var Ids = roomGroupsList.Select(g => g.Id);
-                    if (Ids.Contains(room.RoomGroupId))
+                    if (Ids.Contains(room.RoomGroupId.ToString()))
                     {
-                        var roomGroup = roomGroupsList.FirstOrDefault(g => g.Id == room.RoomGroupId);
+                        var roomGroup = roomGroupsList.FirstOrDefault(g => g.Id.Equals(room.RoomGroupId.ToString()));
                         roomGroup.Children.Add(child);
                     }
                     else
                     {
-                        var newRoomGroup = new Resource();
-                        newRoomGroup.Children = new List<Child>
+                        var newRoomGroup = new Resource
+                        {
+                            Children = new List<Child>
                             {
                                 child
-                            };
-                        newRoomGroup.Name = room.RoomGroup.Name;
-                        newRoomGroup.Id = room.RoomGroupId;
+                            },
+                            Name = room.RoomGroup.Name,
+                            Id = room.RoomGroupId.ToString()
+                        };
                         roomGroupsList.Add(newRoomGroup);
                     }
                 }
