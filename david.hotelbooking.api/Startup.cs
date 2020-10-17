@@ -40,7 +40,7 @@ namespace david.hotelbooking.api
                                   builder =>
                                   {
                                       builder.WithOrigins("http://localhost:3000",
-                                                          "https://proud-stone-0f1f1d00f.azurestaticapps.net/");
+                                                          "https://proud-stone-0f1f1d00f.azurestaticapps.net");
                                   });
             });
             // services.AddDbContext<EFDbContext>( x => x.UseSqlite(Configuration.GetConnectionString("SqliteConnection"),
