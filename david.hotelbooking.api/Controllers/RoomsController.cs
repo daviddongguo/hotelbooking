@@ -1,4 +1,5 @@
-﻿using david.hotelbooking.domain.Entities;
+﻿using david.hotelbooking.api.SchedulerModels;
+using david.hotelbooking.domain.Entities;
 using david.hotelbooking.domain.Entities.Hotel;
 using david.hotelbooking.domain.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -22,13 +23,41 @@ namespace david.hotelbooking.api.Controllers
         }
         // GET: api/<RoomsController>
         [HttpGet]
-        public async Task<ServiceResponse<List<Room>>> GetAllRooms()
+        public async Task<ServiceResponse<List<Resource>>> GetAllRooms()
         {
 
-            var response = new ServiceResponse<List<Room>>();
+            var response = new ServiceResponse<List<Resource>>();
             try
             {
-                response.Data = (await _service.GetAllRooms()).ToList();
+                var roomGroupsList = new List<Resource>();
+                var rooms = (await _service.GetAllRooms()).ToList();
+                foreach (var room in rooms)
+                {
+                    var child = new Child
+                    {
+                        Id = room.Id,
+                        Name = room.RoomNumber
+                    };
+
+                    var Ids = roomGroupsList.Select(g => g.Id);
+                    if (Ids.Contains(room.RoomGroupId))
+                    {
+                        var roomGroup = roomGroupsList.FirstOrDefault(g => g.Id == room.RoomGroupId);
+                        roomGroup.Children.Add(child);
+                    }
+                    else
+                    {
+                        var newRoomGroup = new Resource();
+                        newRoomGroup.Children = new List<Child>
+                            {
+                                child
+                            };
+                        newRoomGroup.Name = room.RoomGroup.Name;
+                        newRoomGroup.Id = room.RoomGroupId;
+                        roomGroupsList.Add(newRoomGroup);
+                    }
+                }
+                response.Data = roomGroupsList;
 
             }
             catch (System.Exception ex)
