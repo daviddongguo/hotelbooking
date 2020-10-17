@@ -14,7 +14,7 @@ namespace david.hotelbooking.UnitTests.Entities
 
         }
         [Test]
-        public void WhenCalledDefaultFromDate_ReturnNow2PM()
+        public void WhenCalledDefaultFromDate_ReturnNow14()
         {
             // 
             var booking = new Booking();
@@ -22,12 +22,12 @@ namespace david.hotelbooking.UnitTests.Entities
             // Assert
             var fromdate = booking.FromDate;
             System.Console.WriteLine(fromdate);
-            Assert.That(fromdate.ToString().Contains("2:00:00 PM"));
+            Assert.That(fromdate.Hour == 14);
         }
 
         [TestCase("2020.10.16")]
         [TestCase("2020.10.1")]
-        public void WhenSetFromDate_Return2Pm(string dateStr)
+        public void WhenSetFromDate_Return14(string dateStr)
         {
             // Arrange
             var dateTime = DateTime.Parse(dateStr);
@@ -39,12 +39,12 @@ namespace david.hotelbooking.UnitTests.Entities
             // Assert
             var fromdate = booking.FromDate;
             System.Console.WriteLine(fromdate);
-            Assert.That(fromdate.ToString().Contains("2:00:00 PM"));
+            Assert.That(fromdate.Hour == 14);
 
         }
         [TestCase("2020.1.10")]
         [TestCase("2020.10.1")]
-        public void WhenSetToDate_Return2Pm(string dateStr)
+        public void WhenSetToDate_Return10(string dateStr)
         {
             // Arrange
             var dateTime = DateTime.Parse(dateStr);
@@ -56,7 +56,7 @@ namespace david.hotelbooking.UnitTests.Entities
             // Assert
             var fromdate = booking.ToDate;
             System.Console.WriteLine(fromdate);
-            Assert.That(fromdate.ToString().Contains("10:00:00 AM"));
+            Assert.That(fromdate.Hour == 10);
         }
 
         [Ignore("It does not work")]
