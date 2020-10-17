@@ -34,7 +34,7 @@ namespace david.hotelbooking.UnitTests.Apis
 
             System.Console.WriteLine(response.ResponseUri);
             System.Console.WriteLine(response.StatusCode);
-            System.Console.WriteLine(Utilities.PrettyJson(response.Content));
+            Utilities.PrintOut(response.Content);
             Assert.That(response.Content, Is.Not.Null);
         }
     }

@@ -9,7 +9,7 @@ using JsonSerializer = System.Text.Json.JsonSerializer;
 namespace david.hotelbooking.domain.Services.Tests
 {
     [TestFixture]
-    public class UserServiceLocalInMemoryDbTest
+    public class UserServiceLocalDbTest
     {
         private UserService _service;
 
@@ -107,7 +107,7 @@ namespace david.hotelbooking.domain.Services.Tests
             var result = _service.UpdateUserRoles(NoExistedUserId, roleIds).GetAwaiter().GetResult();
 
             // Assert
-            PrintOut(result);
+            Utilities.PrintOut(result);
             Assert.That(result, Is.Null);
         }
 
@@ -128,14 +128,14 @@ namespace david.hotelbooking.domain.Services.Tests
             var result = _service.UpdateUserRoles(user.Id, roleIds).GetAwaiter().GetResult();
 
             // Assert
-            PrintOut(result);
+            Utilities.PrintOut(result);
             Assert.That(result.Count == expectedResult);
 
             // Act Again
             var secondResult = _service.UpdateUserRoles(user.Id, null).GetAwaiter().GetResult();
 
             // Assert  show the older userroles
-            PrintOut(secondResult);
+            Utilities.PrintOut(secondResult);
             Assert.That(result.Count == expectedResult);
             Assert.That(secondResult.All(result.Contains) && secondResult.Count == result.Count);
         }
@@ -154,7 +154,7 @@ namespace david.hotelbooking.domain.Services.Tests
             var result = _service.UpdateUserRoles(user.Id, roleIds).GetAwaiter().GetResult();
 
             // Assert
-            PrintOut(result);
+            Utilities.PrintOut(result);
             Assert.That(result.Count == 2);
         }
 
@@ -180,21 +180,11 @@ namespace david.hotelbooking.domain.Services.Tests
             var result = _service.UpdateUserRoles(user.Id, roleIds).GetAwaiter().GetResult();
 
             // Assert
-            PrintOut(result);
+            Utilities.PrintOut(result);
             Assert.That(result.Count == expectedResult);
         }
 
 
-
-
-
-
-
-        private void PrintOut(Object obj)
-        {
-            System.Console.WriteLine(Utilities.PrettyJson(JsonSerializer.Serialize(obj)));
-
-        }
 
         private void PrintOutUsers(IQueryable<User> users)
         {
@@ -210,7 +200,7 @@ namespace david.hotelbooking.domain.Services.Tests
                     })
                 })
             });
-            PrintOut(userInfo);
+            Utilities.PrintOut(userInfo);
         }
     }
 }

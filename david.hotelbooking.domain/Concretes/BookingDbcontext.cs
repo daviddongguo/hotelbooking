@@ -48,14 +48,14 @@ namespace david.hotelbooking.domain.Concretes
                 );
 
             modelBuilder.Entity<Guest>().HasData(
-                new Guest { Id = 1, Name = "Ava" },
-                new Guest { Id = 2, Name = "Amelia" },
-                new Guest { Id = 3, Name = "Aiden" },
-                new Guest { Id = 4, Name = "Austin" },
-                new Guest { Id = 5, Name = "Aaron" },
-                new Guest { Id = 6, Name = "Axel" },
-                new Guest { Id = 7, Name = "Adam" },
-                new Guest { Id = 8, Name = "Alice" }
+                new Guest { Id = 1, Name = "Ava", Email = "ava@ho.t" },
+                new Guest { Id = 2, Name = "Amelia", Email = "amelia@ho.t" },
+                new Guest { Id = 3, Name = "Aiden", Email = "aiden@ho.t" },
+                new Guest { Id = 4, Name = "Austin", Email = "austin@ho.t" },
+                new Guest { Id = 5, Name = "Aaron", Email = "aaron@ho.t" },
+                new Guest { Id = 6, Name = "Axel", Email = "axel@ho.t" },
+                new Guest { Id = 7, Name = "Adam", Email = "adam@ho.t" },
+                new Guest { Id = 8, Name = "Alice", Email = "alice@ho.t" }
                 );
 
             modelBuilder.Entity<Booking>().HasData(

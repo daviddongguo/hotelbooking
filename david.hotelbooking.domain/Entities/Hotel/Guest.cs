@@ -11,6 +11,9 @@ namespace david.hotelbooking.domain.Entities.Hotel
         public int Id { get; set; }
         [Required]
         public string Name { get; set; }
+        [Required]
+        [DataType(DataType.EmailAddress)]
+        public string Email { get; set; }
         public virtual ICollection<Booking> Bookings { get; set; }
     }
 }

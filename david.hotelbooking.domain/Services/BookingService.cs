@@ -30,5 +30,13 @@ namespace david.hotelbooking.domain.Services
                 .ToListAsync())
                 .AsQueryable();
         }
+
+        public async Task<IQueryable<Guest>> GetGuestByName(string name)
+        {
+            return (await _context.Guests.Where(g => g.Name == name).ToListAsync()).AsQueryable();
+        }
+
+
+
     }
 }

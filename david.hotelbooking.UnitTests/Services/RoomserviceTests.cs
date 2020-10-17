@@ -22,14 +22,8 @@ namespace david.hotelbooking.domain.Services.Tests
             var result = _service.GetAllRooms().GetAwaiter().GetResult();
 
             // Assert
-            PrintOut(result);
+            Utilities.PrintOut(result);
             Assert.That(result, Is.Not.Empty);
-        }
-
-        private void PrintOut(Object obj)
-        {
-            System.Console.WriteLine(Utilities.PrettyJson(JsonSerializer.Serialize(obj)));
-
         }
 
 

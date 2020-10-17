@@ -32,7 +32,7 @@ namespace david.hotelbooking.UnitTests.Apis
             Assert.That((int)response.StatusCode == expectedstatusCode);
             System.Console.WriteLine(response.ResponseUri);
             System.Console.WriteLine(response.StatusCode);
-            System.Console.WriteLine(Utilities.PrettyJson(response.Content).Substring(0, 800));
+            Utilities.PrintOut(response.Content);
             Assert.That(response.Content, Is.Not.Null);
         }
 
@@ -51,12 +51,12 @@ namespace david.hotelbooking.UnitTests.Apis
             Assert.That((int)response.StatusCode == expectedstatusCode);
             System.Console.WriteLine(response.ResponseUri);
             System.Console.WriteLine(response.StatusCode);
-            System.Console.WriteLine(Utilities.PrettyJson(response.Content).Substring(0, 800));
+            Utilities.PrintOut(response.Content);
             Assert.That(response.Content, Is.Not.Null);
         }
 
         [TestCase(200)]
-        public void GetAllBookinsApi_ReturnsAllRooms(int expectedstatusCode)
+        public void GetAllBookinsApi_ReturnsAllBookings(int expectedstatusCode)
         {
             // Arrange
             var request = new RestRequest("api/bookings", Method.GET);
@@ -70,7 +70,7 @@ namespace david.hotelbooking.UnitTests.Apis
             Assert.That((int)response.StatusCode == expectedstatusCode);
             System.Console.WriteLine(response.ResponseUri);
             System.Console.WriteLine(response.StatusCode);
-            System.Console.WriteLine(Utilities.PrettyJson(response.Content).Substring(0, 800));
+            Utilities.PrintOut(response.Content);
             Assert.That(response.Content, Is.Not.Null);
         }
     }

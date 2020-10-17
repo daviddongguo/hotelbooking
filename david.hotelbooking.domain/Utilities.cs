@@ -1,12 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Text.Json;
 
 namespace david.hotelbooking.domain
 {
     public static class Utilities
     {
+        public static void PrintOut(Object obj, int len = 600)
+        {
+            var str = PrettyJson(JsonSerializer.Serialize(obj));
+            str = str.Length > len ? str.Substring(0, len) : str ;
+            System.Console.WriteLine(str) ;
+        }
+
+
         public static string PrettyJson(string unPrettyJson)
         {
             var options = new JsonSerializerOptions()
