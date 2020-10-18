@@ -2,12 +2,13 @@
 using david.hotelbooking.domain.Entities.Hotel;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace david.hotelbooking.domain.Services
 {
-    public class BookingService :  IBookingService
+    public class BookingService : IBookingService
     {
         private readonly BookingDbContext _context;
         public BookingService(BookingDbContext context)
@@ -32,6 +33,17 @@ namespace david.hotelbooking.domain.Services
                 .Include(b => b.Guest)
                 .ToListAsync())
                 .AsQueryable();
+        }
+
+        public Booking OverlappingBookingExist(Booking booking, List<Booking> bookings)
+        {
+            var overlappingBooking = bookings?.Where(b => b.RoomId == booking?.RoomId)
+                    .FirstOrDefault
+                    (b =>
+                        booking?.FromDate < b.ToDate && booking?.ToDate > b.FromDate
+                    );
+
+            return overlappingBooking;
         }
 
         public async Task<IQueryable<Guest>> GetGuestByName(string name)

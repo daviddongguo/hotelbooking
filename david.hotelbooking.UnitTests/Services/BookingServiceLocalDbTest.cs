@@ -3,6 +3,7 @@ using david.hotelbooking.domain.Entities.Hotel;
 using david.hotelbooking.domain.Services;
 using NUnit.Framework;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace david.hotelbooking.UnitTests.Services
@@ -50,14 +51,66 @@ namespace david.hotelbooking.UnitTests.Services
         [TestCase(null, "amelia@ho.t", true)]
         [TestCase(null, "amelia", true)]
         [TestCase(null, "AmElia", true)]
+        [TestCase(-1, null, false)]
+        [TestCase(null, "fake", false)]
         public void GetAllBookings_ReturnsExpecredBookings(int roomId, string emailOrName, bool expected)
         {
             var res = _service.GetAllBookings(roomId, emailOrName).GetAwaiter().GetResult();
 
             // Assert
             Utilities.PrintOut(res);
-            Assert.That(res.Count() >= 1, Is.EqualTo(expected));
+            Assert.That(res?.Count() >= 1, Is.EqualTo(expected));
         }
+
+        [Test]
+        public void Overlopping_NoOverlopping_ReturnsNull()
+        {
+            var booking = new Booking { RoomId = 1 };
+            var bookings = new List<Booking>
+                {
+                    new Booking {RoomId = 3}
+                };
+            Assert.That(_service.OverlappingBookingExist(null, null), Is.Null);
+            Assert.That(_service.OverlappingBookingExist(booking, null), Is.Null);
+            Assert.That(_service.OverlappingBookingExist(null, bookings), Is.Null);
+            Assert.That(_service.OverlappingBookingExist(booking, bookings), Is.Null);
+        }
+
+        [TestCase(-1, 1, true)]
+        [TestCase(-1, -1, true)]
+        [TestCase(0, -1, true)]
+        [TestCase(0, 0, true)]
+        [TestCase(0, 1, true)]
+        [TestCase(1, -1, true)]
+        [TestCase(1, 0, true)]
+        [TestCase(1, 1, true)]
+        [TestCase(-10, -10, false)]
+        [TestCase(10, 10, false)]
+        public void Overlopping_WhenOverlapping_ReturnsExistedBookingR(int arrivalOff, int departualOff, bool expected)
+        {
+            var existingBooking = new Booking
+            {
+                RoomId = 1,
+                FromDate = new DateTime(2020, 09, 09, 14, 0, 0),
+                ToDate = new DateTime(2020, 09, 13, 10, 0, 0),
+            };
+            var bookings = new List<Booking>
+            {
+                existingBooking,
+            };
+            var booking = new Booking
+            {
+                RoomId = 1,
+                FromDate = existingBooking.FromDate.AddDays(arrivalOff),
+                ToDate = existingBooking.ToDate.AddDays(departualOff),
+            };
+
+            var result = _service.OverlappingBookingExist(booking, bookings);
+
+            Assert.That(result != null, Is.EqualTo(expected));
+        }
+
+
 
         [TestCase("Alice", true)]
         [TestCase("li", true)]
