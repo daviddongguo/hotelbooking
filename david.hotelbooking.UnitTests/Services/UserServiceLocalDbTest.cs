@@ -177,7 +177,7 @@ namespace david.hotelbooking.domain.Services.Tests
             var roleIds = new List<int> { role1Id, role2Id };
 
             // Act
-            var result = _service.UpdateUserRoles(user.Id, roleIds).GetAwaiter().GetResult();
+            var result = _service.UpdateUserRoles(userId, roleIds).GetAwaiter().GetResult();
 
             // Assert
             Utilities.PrintOut(result);

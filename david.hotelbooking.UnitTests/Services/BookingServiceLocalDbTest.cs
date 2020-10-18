@@ -14,13 +14,13 @@ namespace david.hotelbooking.UnitTests.Services
     {
         private BookingService _service;
         [SetUp]
-        public void OneTimeSetUp()
+        public void SetUp()
         {
             _service = new BookingService(new InMemoryDbContextFactory().GetBookingContext());
         }
 
         [Test]
-        public void pass()
+        public void Pass()
         {
             Assert.That(true);
         }
@@ -73,10 +73,10 @@ namespace david.hotelbooking.UnitTests.Services
                 };
             var mock = bookings.AsQueryable().BuildMockDbSet();
 
-            Assert.That(_service.OverlappingBookingExist(null, null).GetAwaiter().GetResult(), Is.Null);
-            Assert.That(_service.OverlappingBookingExist(booking, null).GetAwaiter().GetResult(), Is.Null);
-            Assert.That(_service.OverlappingBookingExist(null, mock.Object).GetAwaiter().GetResult(), Is.Null);
-            Assert.That(_service.OverlappingBookingExist(booking, mock.Object).GetAwaiter().GetResult(), Is.Null);
+            Assert.That(_service.SearchOverlappingBooking(null, null).GetAwaiter().GetResult(), Is.Null);
+            Assert.That(_service.SearchOverlappingBooking(booking, null).GetAwaiter().GetResult(), Is.Null);
+            Assert.That(_service.SearchOverlappingBooking(null, mock.Object).GetAwaiter().GetResult(), Is.Null);
+            Assert.That(_service.SearchOverlappingBooking(booking, mock.Object).GetAwaiter().GetResult(), Is.Null);
         }
 
         [TestCase(-1, 1, true)]
@@ -109,7 +109,7 @@ namespace david.hotelbooking.UnitTests.Services
                 ToDate = existingBooking.ToDate.AddDays(ToDateOff),
             };
 
-            var result = _service.OverlappingBookingExist(booking, mock.Object).GetAwaiter().GetResult();
+            var result = _service.SearchOverlappingBooking(booking, mock.Object).GetAwaiter().GetResult();
 
             Assert.That(result != null, Is.EqualTo(expected));
         }
@@ -188,6 +188,32 @@ namespace david.hotelbooking.UnitTests.Services
             // Assert
             Assert.That(res?.Email == email, Is.EqualTo(expectedResult));
         }
+
+        [TestCase(1, 2, 1, "2019-11-18", "2019-11-28", true)]
+        public void AddBooking(int id, int roomId, int guestId, string fromDateStr, string toDateStr, bool expected)
+        {
+            var booking = new Booking
+            {
+                Id = id,
+                RoomId = roomId,
+                GuestId = guestId,
+                FromDate = DateTime.Parse(fromDateStr),
+                ToDate = DateTime.Parse(toDateStr)
+            };
+
+            var res = _service.AddBooking(booking).GetAwaiter().GetResult();
+            Utilities.PrintOut(res);
+            Assert.That(res, Is.Not.Null);
+            Assert.That(res.RoomId == roomId, Is.EqualTo(expected));
+
+            // False When Add Again
+            res = _service.AddBooking(booking).GetAwaiter().GetResult();
+            Assert.That(res, Is.Null);
+
+        }
+
+
+
 
 
 

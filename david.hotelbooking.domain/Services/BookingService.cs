@@ -35,7 +35,7 @@ namespace david.hotelbooking.domain.Services
                 .AsQueryable();
         }
 
-        public async Task<Booking> OverlappingBookingExist(Booking booking, IQueryable<Booking> bookings)
+        public async Task<Booking> SearchOverlappingBooking(Booking booking, IQueryable<Booking> bookings)
         {
             if (booking == null || bookings == null)
             {
@@ -43,16 +43,22 @@ namespace david.hotelbooking.domain.Services
             }
             var overlappingBooking = await bookings
                     .FirstOrDefaultAsync
-                    (b  => b.RoomId == booking.RoomId &&
+                    (b => b.RoomId == booking.RoomId &&
                         booking.FromDate < b.ToDate && booking.ToDate > b.FromDate
                     );
 
             return overlappingBooking;
         }
 
-        public async Task<Booking> OverlappingBookingExist(Booking booking)
+        public async Task<Booking> SearchOverlappingBooking(Booking booking)
         {
-            return await OverlappingBookingExist(booking, _context.Bookings);
+            return await SearchOverlappingBooking(booking, _context.Bookings);
+        }
+
+        public async Task<bool> DoesOverlap(Booking booking)
+        {
+            // true : overlop : overloppingbooking existed
+            return await SearchOverlappingBooking(booking) != null;
         }
 
 
@@ -104,11 +110,36 @@ namespace david.hotelbooking.domain.Services
             {
                 throw e;
             }
-
         }
 
+        public async Task<Booking> AddBooking(Booking toAddBooking)
+        {
+            if (toAddBooking == null )
+            {
+                return null;
+            }
+            var roomDb = await GetRoomById(toAddBooking.RoomId);
+            var guestDb = await GetGuestById(toAddBooking.GuestId);
+            if (roomDb == null || guestDb == null || await DoesOverlap(toAddBooking))
+            {
+                return null;
+            }
+            try
+            {
+                toAddBooking.Id = 0;
+                await _context.Bookings.AddAsync(toAddBooking);
+                await _context.SaveChangesAsync();
+                return toAddBooking;
+            }
+            catch (System.Exception e)
+            {
+                throw e;
+            }
+        }
 
-
-
+        public Task<Room> GetRoomById(int roomId)
+        {
+            return _context.Rooms.FirstOrDefaultAsync(r => r.Id == roomId);
+        }
     }
 }
