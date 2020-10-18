@@ -124,6 +124,9 @@ namespace david.hotelbooking.domain.Services
             {
                 return null;
             }
+            if(toAddBooking.FromDate >= toAddBooking.ToDate){
+                return null;
+            }
             try
             {
                 toAddBooking.Id = 0;

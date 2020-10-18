@@ -190,6 +190,9 @@ namespace david.hotelbooking.UnitTests.Services
         }
 
         [TestCase(1, 2, 1, "2019-11-18", "2019-11-28", true)]
+        [TestCase(1, 2, 1, "2019-11-18", "2019-11-8", false)]
+        [TestCase(1, -2, 1, "2019-11-18", "2019-11-28", false)]
+        [TestCase(1, 2, -1, "2019-11-18", "2019-11-28", false)]
         public void AddBooking(int id, int roomId, int guestId, string fromDateStr, string toDateStr, bool expected)
         {
             var booking = new Booking
@@ -203,13 +206,11 @@ namespace david.hotelbooking.UnitTests.Services
 
             var res = _service.AddBooking(booking).GetAwaiter().GetResult();
             Utilities.PrintOut(res);
-            Assert.That(res, Is.Not.Null);
-            Assert.That(res.RoomId == roomId, Is.EqualTo(expected));
+            Assert.That(res?.RoomId == roomId, Is.EqualTo(expected));
 
             // False When Add Again
             res = _service.AddBooking(booking).GetAwaiter().GetResult();
             Assert.That(res, Is.Null);
-
         }
 
 
