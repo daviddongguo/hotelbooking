@@ -213,6 +213,22 @@ namespace david.hotelbooking.UnitTests.Services
             Assert.That(res, Is.Null);
         }
 
+        [TestCase(1, "2019-11-18", "2019-11-28", true)]
+        [TestCase(-1, "2019-11-18", "2019-11-28", false)]
+        public void UpdateBooking(int id, string fromDateStr, string toDateStr, bool expected)
+        {
+            var booking = new Booking
+            {
+                Id = id,
+                FromDate = DateTime.Parse(fromDateStr),
+                ToDate = DateTime.Parse(toDateStr)
+            };
+
+            var res = _service.UpdateBooking(booking).GetAwaiter().GetResult();
+            Utilities.PrintOut(res);
+            Assert.That(res != null, Is.EqualTo(expected));
+        }
+
 
 
 

@@ -114,7 +114,7 @@ namespace david.hotelbooking.domain.Services
 
         public async Task<Booking> AddBooking(Booking toAddBooking)
         {
-            if (toAddBooking == null )
+            if (toAddBooking == null)
             {
                 return null;
             }
@@ -124,7 +124,8 @@ namespace david.hotelbooking.domain.Services
             {
                 return null;
             }
-            if(toAddBooking.FromDate >= toAddBooking.ToDate){
+            if (toAddBooking.FromDate >= toAddBooking.ToDate)
+            {
                 return null;
             }
             try
@@ -138,6 +139,39 @@ namespace david.hotelbooking.domain.Services
             {
                 throw e;
             }
+        }
+        public async Task<Booking> UpdateBooking(Booking toUpdateBooking)
+        {
+            if (toUpdateBooking == null)
+            {
+                return null;
+            }
+            if (toUpdateBooking.FromDate >= toUpdateBooking.ToDate)
+            {
+                return null;
+            }
+
+            try
+            {
+                var bookingDb = await GetBookingById(toUpdateBooking.Id);
+                if (bookingDb == null)
+                {
+                    return null;
+                }
+                bookingDb.FromDate = toUpdateBooking.FromDate;
+                bookingDb.ToDate = toUpdateBooking.ToDate;
+                await _context.SaveChangesAsync();
+                return bookingDb;
+            }
+            catch (System.Exception e)
+            {
+                throw e;
+            }
+        }
+
+        public Task<Booking> GetBookingById(int bookId)
+        {
+            return _context.Bookings.FirstOrDefaultAsync(r => r.Id == bookId); ;
         }
 
         public Task<Room> GetRoomById(int roomId)
