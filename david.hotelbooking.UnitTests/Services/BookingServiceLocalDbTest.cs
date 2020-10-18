@@ -1,6 +1,7 @@
 ﻿using david.hotelbooking.domain;
 using david.hotelbooking.domain.Entities.Hotel;
 using david.hotelbooking.domain.Services;
+using MockQueryable.Moq;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
@@ -53,7 +54,7 @@ namespace david.hotelbooking.UnitTests.Services
         [TestCase(null, "AmElia", true)]
         [TestCase(-1, null, false)]
         [TestCase(null, "fake", false)]
-        public void GetAllBookings_ReturnsExpecredBookings(int roomId, string emailOrName, bool expected)
+        public void GetAllBookings_ReturnsExpectedBookings(int roomId, string emailOrName, bool expected)
         {
             var res = _service.GetAllBookings(roomId, emailOrName).GetAwaiter().GetResult();
 
@@ -69,11 +70,13 @@ namespace david.hotelbooking.UnitTests.Services
             var bookings = new List<Booking>
                 {
                     new Booking {RoomId = 3}
-                }.AsQueryable();
-            Assert.That(_service.OverlappingBookingExist(null, null), Is.Null);
-            Assert.That(_service.OverlappingBookingExist(booking, null), Is.Null);
-            Assert.That(_service.OverlappingBookingExist(null, bookings), Is.Null);
-            Assert.That(_service.OverlappingBookingExist(booking, bookings), Is.Null);
+                };
+            var mock = bookings.AsQueryable().BuildMockDbSet();
+
+            Assert.That(_service.OverlappingBookingExist(null, null).GetAwaiter().GetResult(), Is.Null);
+            Assert.That(_service.OverlappingBookingExist(booking, null).GetAwaiter().GetResult(), Is.Null);
+            Assert.That(_service.OverlappingBookingExist(null, mock.Object).GetAwaiter().GetResult(), Is.Null);
+            Assert.That(_service.OverlappingBookingExist(booking, mock.Object).GetAwaiter().GetResult(), Is.Null);
         }
 
         [TestCase(-1, 1, true)]
@@ -98,6 +101,7 @@ namespace david.hotelbooking.UnitTests.Services
             {
                 existingBooking,
             }.AsQueryable();
+            var mock = bookings.AsQueryable().BuildMockDbSet();
             var booking = new Booking
             {
                 RoomId = 1,
@@ -105,7 +109,7 @@ namespace david.hotelbooking.UnitTests.Services
                 ToDate = existingBooking.ToDate.AddDays(ToDateOff),
             };
 
-            var result = _service.OverlappingBookingExist(booking, bookings);
+            var result = _service.OverlappingBookingExist(booking, mock.Object).GetAwaiter().GetResult();
 
             Assert.That(result != null, Is.EqualTo(expected));
         }

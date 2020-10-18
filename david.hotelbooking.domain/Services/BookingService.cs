@@ -35,24 +35,26 @@ namespace david.hotelbooking.domain.Services
                 .AsQueryable();
         }
 
-        public Booking OverlappingBookingExist(Booking booking, IQueryable<Booking> bookings)
+        public async Task<Booking> OverlappingBookingExist(Booking booking, IQueryable<Booking> bookings)
         {
-            if(booking == null || bookings == null){
+            if (booking == null || bookings == null)
+            {
                 return null;
             }
-            var overlappingBooking = bookings.Where(b => b.RoomId == booking.RoomId)
-                    .FirstOrDefault
-                    (b =>
+            var overlappingBooking = await bookings
+                    .FirstOrDefaultAsync
+                    (b  => b.RoomId == booking.RoomId &&
                         booking.FromDate < b.ToDate && booking.ToDate > b.FromDate
                     );
 
             return overlappingBooking;
         }
 
-        public Booking OverlappingBookingExist(Booking booking)
+        public async Task<Booking> OverlappingBookingExist(Booking booking)
         {
-            return OverlappingBookingExist(booking, _context.Bookings);
+            return await OverlappingBookingExist(booking, _context.Bookings);
         }
+
 
         public async Task<IQueryable<Guest>> GetGuestByName(string name)
         {
