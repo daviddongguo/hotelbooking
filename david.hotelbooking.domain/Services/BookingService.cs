@@ -151,13 +151,16 @@ namespace david.hotelbooking.domain.Services
                 return null;
             }
 
+            var bookingDb = await GetBookingById(toUpdateBooking.Id);
+            if (bookingDb == null)
+            {
+                return null;
+            }
+
             try
             {
-                var bookingDb = await GetBookingById(toUpdateBooking.Id);
-                if (bookingDb == null)
-                {
-                    return null;
-                }
+
+                //bookingDb.RoomId = toUpdateBooking.RoomId;
                 bookingDb.FromDate = toUpdateBooking.FromDate;
                 bookingDb.ToDate = toUpdateBooking.ToDate;
                 await _context.SaveChangesAsync();
