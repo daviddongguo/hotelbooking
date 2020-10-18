@@ -69,7 +69,7 @@ namespace david.hotelbooking.UnitTests.Services
             var bookings = new List<Booking>
                 {
                     new Booking {RoomId = 3}
-                };
+                }.AsQueryable();
             Assert.That(_service.OverlappingBookingExist(null, null), Is.Null);
             Assert.That(_service.OverlappingBookingExist(booking, null), Is.Null);
             Assert.That(_service.OverlappingBookingExist(null, bookings), Is.Null);
@@ -86,7 +86,7 @@ namespace david.hotelbooking.UnitTests.Services
         [TestCase(1, 1, true)]
         [TestCase(-10, -10, false)]
         [TestCase(10, 10, false)]
-        public void Overlopping_WhenOverlapping_ReturnsExistedBookingR(int arrivalOff, int departualOff, bool expected)
+        public void Overlopping_WhenOverlapping_ReturnsExistedBookingR(int FromDateOff, int ToDateOff, bool expected)
         {
             var existingBooking = new Booking
             {
@@ -97,12 +97,12 @@ namespace david.hotelbooking.UnitTests.Services
             var bookings = new List<Booking>
             {
                 existingBooking,
-            };
+            }.AsQueryable();
             var booking = new Booking
             {
                 RoomId = 1,
-                FromDate = existingBooking.FromDate.AddDays(arrivalOff),
-                ToDate = existingBooking.ToDate.AddDays(departualOff),
+                FromDate = existingBooking.FromDate.AddDays(FromDateOff),
+                ToDate = existingBooking.ToDate.AddDays(ToDateOff),
             };
 
             var result = _service.OverlappingBookingExist(booking, bookings);
