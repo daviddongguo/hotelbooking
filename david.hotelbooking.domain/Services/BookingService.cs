@@ -25,7 +25,27 @@ namespace david.hotelbooking.domain.Services
                 .AsQueryable();
         }
 
-        public async Task<IQueryable<Booking>> GetAllBookings(int roomId = 0, string guestEmailOrName = null)
+        public async Task<Booking> GetBookingsByEmail(string email)
+        {
+            return await _context.Bookings.FirstOrDefaultAsync(b => b.Guest.Email == email);
+        }
+
+        public async Task<Booking> GetBookingsById(int bookingId)
+        {
+            return await _context.Bookings.FirstOrDefaultAsync(b => b.Id == bookingId);
+        }
+
+        public async Task<IQueryable<Booking>> GetAllBookings()
+        {
+            return await GetBookings(0, null);
+        }
+
+        public async Task<IQueryable<Booking>> GetBookingsByGuestName(string name)
+        {
+            return await GetBookings(0, name);
+        }
+
+        public async Task<IQueryable<Booking>> GetBookings(int roomId = 0, string guestEmailOrName = null)
         {
             return (await _context.Bookings
                 .Where(r => roomId == 0 || r.RoomId == roomId)
@@ -34,7 +54,6 @@ namespace david.hotelbooking.domain.Services
                 .ToListAsync())
                 .AsQueryable();
         }
-
         public async Task<Booking> SearchOverlappingBooking(Booking booking, IQueryable<Booking> bookings)
         {
             if (booking == null || bookings == null)
