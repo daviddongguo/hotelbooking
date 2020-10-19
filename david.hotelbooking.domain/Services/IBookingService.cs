@@ -23,6 +23,6 @@ namespace david.hotelbooking.domain.Services
         Task<bool> IsEmailExisted(string email);
         Task<Booking> SearchOverlappingBooking(Booking booking);
         Task<Booking> SearchOverlappingBooking(Booking booking, IQueryable<Booking> bookings);
-        Task<Booking> UpdateBooking(Booking toUpdateBooking);
+        Task<Booking> UpdateBookingRoom(Booking toUpdateBooking);
     }
 }

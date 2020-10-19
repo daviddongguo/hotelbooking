@@ -214,21 +214,38 @@ namespace david.hotelbooking.UnitTests.Services
         }
 
         [TestCase(1, "2019-11-18", "2019-11-28", true)]
+        [TestCase(1, "2019-11-18", "2019-01-01", false)]
         [TestCase(-1, "2019-11-18", "2019-11-28", false)]
-        public void UpdateBooking(int id, string fromDateStr, string toDateStr, bool expected)
+        public void WhenNoGuestOrRoomNeedToChange_UpdateBookingDate(int bookingId, string fromDateStr, string toDateStr, bool expected)
         {
             var booking = new Booking
             {
-                Id = id,
+                Id = bookingId,
                 FromDate = DateTime.Parse(fromDateStr),
                 ToDate = DateTime.Parse(toDateStr)
             };
 
-            var res = _service.UpdateBooking(booking).GetAwaiter().GetResult();
+            var res = _service.UpdateBookingDate(booking).GetAwaiter().GetResult();
             Utilities.PrintOut(res);
             Assert.That(res != null, Is.EqualTo(expected));
         }
 
+        [TestCase(1, 2, 2, true)]
+        [TestCase(1, 2, 929, false)]
+        [TestCase(1, 2, -2, false)]
+        [TestCase(-1, 2, 2, false)]
+        public void WhenRoomNeedToChange_UpdateBookingRoom(int bookingId, int guestId, int roomId, bool expected)
+        {
+            var booking = new Booking
+            {
+                Id = bookingId,
+                RoomId = roomId
+            };
+
+            var res = _service.UpdateBookingRoom(booking).GetAwaiter().GetResult();
+            Utilities.PrintOut(res);
+            Assert.That(res != null, Is.EqualTo(expected));
+        }
 
 
 

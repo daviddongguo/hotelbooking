@@ -1,8 +1,6 @@
 ﻿using david.hotelbooking.domain.Concretes;
 using david.hotelbooking.domain.Entities.Hotel;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -161,7 +159,8 @@ namespace david.hotelbooking.domain.Services
                 throw e;
             }
         }
-        public async Task<Booking> UpdateBooking(Booking toUpdateBooking)
+
+        public async Task<Booking> UpdateBookingDate(Booking toUpdateBooking)
         {
             if (toUpdateBooking == null)
             {
@@ -180,8 +179,6 @@ namespace david.hotelbooking.domain.Services
 
             try
             {
-
-                //bookingDb.RoomId = toUpdateBooking.RoomId;
                 bookingDb.FromDate = toUpdateBooking.FromDate;
                 bookingDb.ToDate = toUpdateBooking.ToDate;
                 await _context.SaveChangesAsync();
@@ -193,9 +190,44 @@ namespace david.hotelbooking.domain.Services
             }
         }
 
+        public async Task<Booking> UpdateBookingRoom(Booking toUpdateBooking)
+        {
+            // Verify input value
+            if (toUpdateBooking == null)
+            {
+                return null;
+            }
+
+            var oldDbBooking = await GetBookingById(toUpdateBooking.Id);
+            var newDbRoom = await GetRoomById(toUpdateBooking.RoomId);
+            if (oldDbBooking == null || newDbRoom == null)
+            {
+                return null;
+            }
+
+            var newBooking = new Booking();
+            try
+            {
+                newBooking.RoomId = newDbRoom.Id;
+                newBooking.GuestId = oldDbBooking.GuestId;
+                newBooking.FromDate = oldDbBooking.FromDate;
+                newBooking.ToDate = oldDbBooking.ToDate;
+
+                _context.Bookings.Remove(oldDbBooking);
+                _context.Bookings.Add(newBooking);
+                await _context.SaveChangesAsync();
+            }
+            catch (System.Exception e)
+            {
+                throw e;
+            }
+
+            return newBooking;
+        }
+
         public Task<Booking> GetBookingById(int bookId)
         {
-            return _context.Bookings.FirstOrDefaultAsync(r => r.Id == bookId); ;
+            return _context.Bookings.Include(r => r.Room).FirstOrDefaultAsync(r => r.Id == bookId); ;
         }
 
         public Task<Room> GetRoomById(int roomId)
