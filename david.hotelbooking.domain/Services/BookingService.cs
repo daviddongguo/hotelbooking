@@ -35,7 +35,11 @@ namespace david.hotelbooking.domain.Services
 
         public async Task<IQueryable<Booking>> GetAllBookings()
         {
-            var result = await _context.Bookings.ToListAsync();
+            var result = await _context.Bookings
+            .Include(b=> b.Guest)
+            .Include(b=> b.Room)
+            .ToListAsync();
+
             return result.AsQueryable();
         }
 
@@ -95,7 +99,7 @@ namespace david.hotelbooking.domain.Services
             {
                 return null;
             }
-            return (await _context.Guests.FirstOrDefaultAsync(g => g.Email.ToLower().Contains(email.ToLower())));
+            return (await _context.Guests.FirstOrDefaultAsync(g => g.Email.ToLower().Equals(email.ToLower())));
         }
 
         public async Task<Guest> GetGuestById(int id)

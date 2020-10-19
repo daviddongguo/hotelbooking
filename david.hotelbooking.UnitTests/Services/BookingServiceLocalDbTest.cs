@@ -132,8 +132,7 @@ namespace david.hotelbooking.UnitTests.Services
 
         }
 
-        [TestCase("Alice", true)]
-        [TestCase("li", true)]
+        [TestCase("Alice@ho.t", true)]
         [TestCase("fake", false)]
         [TestCase("", false)]
         [TestCase("   ", false)]
