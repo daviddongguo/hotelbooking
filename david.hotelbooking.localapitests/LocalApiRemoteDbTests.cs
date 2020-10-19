@@ -18,7 +18,7 @@ namespace david.hotelbooking.UnitTests.Apis
             _client.RemoteCertificateValidationCallback = (sender, certificate, chain, sslPolicyErrors) => true;
         }
 
-        [TestCase(200)]
+        [TestCase(200), Timeout(2000)]
         public void TestUsers(int expectedstatusCode)
         {
             // Arrange
@@ -36,7 +36,7 @@ namespace david.hotelbooking.UnitTests.Apis
             Assert.That(response.Content, Is.Not.Null);
         }
 
-        [TestCase(200)]
+        [TestCase(200), Timeout(2000)]
         public void GetAllRoomsApi_ReturnsAllRooms(int expectedstatusCode)
         {
             // Arrange
@@ -55,7 +55,7 @@ namespace david.hotelbooking.UnitTests.Apis
             Assert.That(response.Content, Is.Not.Null);
         }
 
-        [TestCase(200)]
+        [TestCase(200), Timeout(2000)]
         public void GetAllBookinsApi_ReturnsAllBookings(int expectedstatusCode)
         {
             // Arrange
