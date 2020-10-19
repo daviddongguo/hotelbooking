@@ -37,7 +37,8 @@ namespace david.hotelbooking.domain.Services
 
         public async Task<IQueryable<Booking>> GetAllBookings()
         {
-            return await GetBookings(0, null);
+            var result = await _context.Bookings.ToListAsync();
+            return result.AsQueryable();
         }
 
         public async Task<IQueryable<Booking>> GetBookingsByGuestName(string name)
@@ -47,6 +48,7 @@ namespace david.hotelbooking.domain.Services
 
         public async Task<IQueryable<Booking>> GetBookings(int roomId = 0, string guestEmailOrName = null)
         {
+            // ToDo: Unknown column 'g.Email' in 'field list'",
             return (await _context.Bookings
                 .Where(r => roomId == 0 || r.RoomId == roomId)
                 .Where(r => guestEmailOrName == null || r.Guest.Email.ToLower() == guestEmailOrName.ToLower() || r.Guest.Name.ToLower() == guestEmailOrName.ToLower())
