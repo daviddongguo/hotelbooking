@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using david.hotelbooking.api.SchedulerModels;
 using david.hotelbooking.domain.Entities;
+using david.hotelbooking.domain.Entities.Hotel;
 using david.hotelbooking.domain.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -24,7 +25,7 @@ namespace david.hotelbooking.api.Controllers
         }
         // GET: api/<BookingsController>
         [HttpGet]
-        public async Task<ServiceResponse<List<Event>>> GetAllRooms()
+        public async Task<ServiceResponse<List<Event>>> GetAllBookings()
         {
 
             var response = new ServiceResponse<List<Event>>();
@@ -34,19 +35,9 @@ namespace david.hotelbooking.api.Controllers
                 var bookingsList = (await _service.GetAllBookings()).ToList();
                 foreach (var booking in bookingsList)
                 {
-
-                        var newEvent = new Event
-                        {
-                            Id = booking.Id.ToString(),
-                            Text = booking.Guest.Name,
-                            Start = booking.FromDate.ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss"),
-                            End = booking.ToDate.ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss"),
-                            Resource = booking.RoomId.ToString(),
-                        };
-                        eventsList.Add(newEvent);
-                    }
+                    eventsList.Add(CreateEvent(booking));
+                }
                 response.Data = eventsList;
-
             }
             catch (System.Exception ex)
             {
@@ -56,16 +47,39 @@ namespace david.hotelbooking.api.Controllers
 
             return response;
         }
-        public IEnumerable<string> Get()
+
+        private Event CreateEvent(Booking booking)
         {
-            return new string[] { "value1", "value2" };
+            if(booking == null){
+                return null;
+            }
+            return new Event
+            {
+                Id = booking.Id.ToString(),
+                Text = booking.Guest.Name,
+                Start = booking.FromDate.ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss"),
+                End = booking.ToDate.ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss"),
+                Resource = booking.RoomId.ToString(),
+            };
         }
+
 
         // GET api/<BookingsController>/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public async Task<ServiceResponse<Event>> GetBookingById(int id)
         {
-            return "value";
+            var response = new ServiceResponse<Event>();
+            try
+            {
+                response.Data = CreateEvent(await _service.GetBookingById(id));
+            }
+            catch (System.Exception ex)
+            {
+                response.Success = false;
+                response.Message = ex.Message;
+            }
+
+            return response;
         }
 
         // POST api/<BookingsController>

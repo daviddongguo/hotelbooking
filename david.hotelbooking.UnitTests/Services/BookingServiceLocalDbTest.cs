@@ -56,7 +56,7 @@ namespace david.hotelbooking.UnitTests.Services
         [TestCase(null, "fake", false)]
         public void GetAllBookings_ReturnsExpectedBookings(int roomId, string emailOrName, bool expected)
         {
-            var res = _service.GetAllBookings(roomId, emailOrName).GetAwaiter().GetResult();
+            var res = _service.GetBookings(roomId, emailOrName).GetAwaiter().GetResult();
 
             // Assert
             Utilities.PrintOut(res);
