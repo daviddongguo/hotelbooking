@@ -48,20 +48,6 @@ namespace david.hotelbooking.api.Controllers
             return response;
         }
 
-        private Event CreateEvent(Booking booking)
-        {
-            if(booking == null){
-                return null;
-            }
-            return new Event
-            {
-                Id = booking.Id.ToString(),
-                Text = booking.Guest.Name,
-                Start = booking.FromDate.ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss"),
-                End = booking.ToDate.ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss"),
-                Resource = booking.RoomId.ToString(),
-            };
-        }
 
 
         // GET api/<BookingsController>/5
@@ -84,20 +70,39 @@ namespace david.hotelbooking.api.Controllers
 
         // POST api/<BookingsController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task<string> AddBooking([FromBody] Event newEvent)
         {
+            return await Task.FromResult("Add success");
         }
 
         // PUT api/<BookingsController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        [HttpPatch("{id}")]
+        public async Task<string> UpdateBookingDate(int id, [FromBody] Event toUpdatevalue)
         {
+            return await Task.FromResult("Update success");
         }
 
         // DELETE api/<BookingsController>/5
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
+        }
+
+
+        private Event CreateEvent(Booking booking)
+        {
+            if (booking == null)
+            {
+                return null;
+            }
+            return new Event
+            {
+                Id = booking.Id.ToString(),
+                Text = booking.Guest?.Name,
+                Start = booking.FromDate.ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss"),
+                End = booking.ToDate.ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss"),
+                Resource = booking.RoomId.ToString(),
+            };
         }
     }
 }
