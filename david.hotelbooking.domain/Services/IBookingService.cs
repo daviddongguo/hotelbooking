@@ -16,13 +16,14 @@ namespace david.hotelbooking.domain.Services
         Task<Booking> GetBookingsByEmail(string email);
         Task<IQueryable<Booking>> GetBookingsByGuestName(string name);
         Task<Booking> GetBookingsById(int bookingId);
-        Task<IQueryable<Guest>> GetGuestByEmail(string email);
+        Task<Guest> GetGuestByEmail(string email);
         Task<Guest> GetGuestById(int id);
         Task<IQueryable<Guest>> GetGuestByName(string name);
         Task<Room> GetRoomById(int roomId);
         Task<bool> IsEmailExisted(string email);
         Task<Booking> SearchOverlappingBooking(Booking booking);
         Task<Booking> SearchOverlappingBooking(Booking booking, IQueryable<Booking> bookings);
+        Task<Booking> UpdateBookingDate(Booking toUpdateBooking);
         Task<Booking> UpdateBookingRoom(Booking toUpdateBooking);
     }
 }

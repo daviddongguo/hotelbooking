@@ -142,9 +142,8 @@ namespace david.hotelbooking.UnitTests.Services
             var res = _service.GetGuestByEmail(email).GetAwaiter().GetResult();
 
             // Assert
-            Console.WriteLine(res?.Count());
             Utilities.PrintOut(res);
-            Assert.That(res?.Count() >= 1, Is.EqualTo(expectedResult));
+            Assert.That(res != null, Is.EqualTo(expectedResult));
 
         }
 

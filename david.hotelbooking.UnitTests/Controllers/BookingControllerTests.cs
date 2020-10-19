@@ -19,6 +19,8 @@ namespace Tests
         private BookingsController _controller;
         private Mock<IBookingService> _mockService;
         private IQueryable<Booking> _bookingsList;
+        private Booking _firstBooking;
+        private Booking _secondBooking;
 
 
         [SetUp]
@@ -26,9 +28,14 @@ namespace Tests
         {
             _mockService = new Mock<IBookingService>();
             DateTime firstDay = DateTime.Now.Date + new TimeSpan(14, 0, 0);
+            _firstBooking =
+                new Booking { Id = 1, GuestId = 1, Guest = new Guest { Id = 1, Name = "Alice" }, RoomId = 1, Room = new Room { Id = 1, RoomNumber = "801" }, FromDate = firstDay.AddDays(0), ToDate = firstDay.AddDays(1).Date + new TimeSpan(10, 0, 0) };
+            _secondBooking =
+                new Booking { Id = 0, GuestId = 2, Guest = new Guest { Id = 2, Name = "Alex" }, RoomId = 2, Room = new Room { Id = 2, RoomNumber = "222" }, FromDate = firstDay.AddDays(0), ToDate = firstDay.AddDays(1).Date + new TimeSpan(10, 0, 0) };
+
             _bookingsList = new List<Booking>
             {
-                new Booking { Id = 1, GuestId = 1, Guest = new Guest{ Id = 1, Name = "Alice" }, RoomId = 1, FromDate = firstDay.AddDays(0), ToDate = firstDay.AddDays(1).Date + new TimeSpan(10, 0, 0) },
+                _firstBooking
             }.AsQueryable();
             _controller = new BookingsController(_mockService.Object);
         }
@@ -68,6 +75,26 @@ namespace Tests
             Utilities.PrintOut(response);
         }
 
+        [TestCase("1", "Alice@ho.t", "2020-1-1", "2020-1-2")]
+        public void AddBooking(string roomId, string guestEmail, string fromDateStr, string toDateStr)
+        {
+            var ev = new BookingEvent
+            {
+                Id = roomId,
+                Text = guestEmail,
+                Start = fromDateStr,
+                End = toDateStr,
+            };
+            _mockService.Setup(s => s.GetGuestByEmail(guestEmail)).Returns(
+                Task.FromResult(new Guest { Id = 1, Email = guestEmail }));
+            _mockService.Setup(s => s.AddBooking(It.IsAny<Booking>())).Returns(
+                Task.FromResult(new Booking { Guest = new Guest { Email = guestEmail } }));
 
+            var response = _controller.AddBooking(ev).GetAwaiter().GetResult();
+
+            Assert.That(response, Does.Contain(guestEmail));
+            Utilities.PrintOut(response);
+        }
     }
+
 }

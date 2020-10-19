@@ -89,13 +89,13 @@ namespace david.hotelbooking.domain.Services
             }
             return (await _context.Guests.Where(g => g.Name.ToLower().Contains(name.ToLower())).ToListAsync()).AsQueryable();
         }
-        public async Task<IQueryable<Guest>> GetGuestByEmail(string email)
+        public async Task<Guest> GetGuestByEmail(string email)
         {
             if (string.IsNullOrWhiteSpace(email))
             {
                 return null;
             }
-            return (await _context.Guests.Where(g => g.Email.ToLower().Contains(email.ToLower())).ToListAsync()).AsQueryable();
+            return (await _context.Guests.FirstOrDefaultAsync(g => g.Email.ToLower().Contains(email.ToLower())));
         }
 
         public async Task<Guest> GetGuestById(int id)
@@ -105,7 +105,7 @@ namespace david.hotelbooking.domain.Services
 
         public async Task<bool> IsEmailExisted(string email)
         {
-            return (await GetGuestByEmail(email))?.Count() >= 1;
+            return (await GetGuestByEmail(email)) != null;
         }
 
         public async Task<Guest> AddGuest(Guest toAddGuest)

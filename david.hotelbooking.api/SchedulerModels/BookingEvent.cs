@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace david.hotelbooking.api.SchedulerModels
 {
-    public class Event
+    public class BookingEvent
     {
         public string Id { get; set; }
         public string Text { get; set; }
