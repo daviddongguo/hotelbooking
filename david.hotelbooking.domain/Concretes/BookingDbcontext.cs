@@ -24,8 +24,6 @@ namespace david.hotelbooking.domain.Concretes
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             // composite key
-            modelBuilder.Entity<Booking>()
-                .HasKey(u => new { u.GuestId, u.RoomId });
 
             // Seeding
             modelBuilder.Entity<RoomGroup>().HasData(
