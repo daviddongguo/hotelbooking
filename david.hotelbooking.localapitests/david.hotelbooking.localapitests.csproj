@@ -14,6 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\david.hotelbooking.api\david.hotelbooking.api.csproj" />
     <ProjectReference Include="..\david.hotelbooking.domain\david.hotelbooking.domain.csproj" />
   </ItemGroup>
 

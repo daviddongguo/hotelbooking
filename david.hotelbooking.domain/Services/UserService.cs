@@ -196,10 +196,10 @@ namespace david.hotelbooking.domain.Services
                 return null;
             }
 
-            var oldUserRolesList = _context.UserRoles.Where(u => u.UserId == dbUser.Id).ToListAsync().GetAwaiter().GetResult();
+            var oldDbUserRolesList = _context.UserRoles.Where(u => u.UserId == dbUser.Id).ToListAsync().GetAwaiter().GetResult();
             if (toAddOrUpdateRoleIds == null) // do nothing, just show existed info.
             {
-                return oldUserRolesList;
+                return oldDbUserRolesList;
             }
 
             var newUserRolesList = new List<UserRole>();
@@ -220,29 +220,11 @@ namespace david.hotelbooking.domain.Services
             }
 
 
-            _context.UserRoles.RemoveRange(oldUserRolesList);
+            _context.UserRoles.RemoveRange(oldDbUserRolesList);
             _context.UserRoles.AddRange(newUserRolesList);
             await _context.SaveChangesAsync();
 
             return newUserRolesList;
-
-            // var toRemoveList = _context.UserRoles.Where(u => u.UserId == dbUser.Id);
-            // using (var transaction = _context.Database.BeginTransaction())
-            // {
-            //     try
-            //     {
-            //         _context.UserRoles.RemoveRange(toRemoveList);
-            //         await _context.SaveChangesAsync();
-            //         _context.UserRoles.AddRange(resultList);
-            //         await _context.SaveChangesAsync();
-
-            //         transaction.Commit();
-            //     }
-            //     catch (Exception)
-            //     {
-            //         return null;
-            //     }
-            // };
         }
 
         public async Task<Permission> GetSinglePermission(int permissionId)
