@@ -19,6 +19,7 @@ namespace david.hotelbooking.domain.Entities.Hotel
         [ForeignKey("RoomId")]
         [JsonIgnore]
         public virtual Room Room { get; set; }
+
         private DateTime _fromDate = DateTime.Now.Date + new TimeSpan(14, 0, 0);
         private DateTime _toDate = DateTime.Now.AddDays(1).Date + new TimeSpan(10, 0, 0);
 

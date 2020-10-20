@@ -169,7 +169,9 @@ namespace david.hotelbooking.domain.Services
             }
             try
             {
-                toAddBooking.Id = 0;
+                //toAddBooking.Id = 0;
+                toAddBooking.Room = roomDb;
+                toAddBooking.Guest = guestDb;
                 await _context.Bookings.AddAsync(toAddBooking);
                 await _context.SaveChangesAsync();
                 return toAddBooking;

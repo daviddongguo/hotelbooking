@@ -1,5 +1,7 @@
 ﻿using david.hotelbooking.api.SchedulerModels;
 using david.hotelbooking.domain;
+using david.hotelbooking.domain.Entities;
+using david.hotelbooking.domain.Entities.Hotel;
 using NUnit.Framework;
 using RestSharp;
 using RestSharp.Serialization.Json;
@@ -11,6 +13,8 @@ namespace david.hotelbooking.ApiTests
     {
         private RestClient _client;
         private readonly string baseUrl = "https://davidwuhotelbooking.azurewebsites.net/";
+        private readonly JsonDeserializer _serializer = new JsonDeserializer();
+
         [OneTimeSetUp]
         public void SetUp()
         {
@@ -70,28 +74,5 @@ namespace david.hotelbooking.ApiTests
 
         }
 
-        [TestCase("1", "Alice@ho.t", "2020-1-1", "2020-1-2", 201)]
-        public void AddBooking(string roomId, string guestEmail, string fromDateStr, string toDateStr, int expectedstatusCode)
-        {
-            var ev = new BookingEvent
-            {
-                Id = roomId,
-                Text = guestEmail,
-                Start = fromDateStr,
-                End = toDateStr,
-            };
-
-            // Arrange
-            var request = new RestRequest("api/bookings", Method.POST);
-
-
-            // Act
-
-            // Assert
-
-            Assert.That(true);
-
-
-        }
-    }
+           }
 }

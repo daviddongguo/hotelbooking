@@ -70,8 +70,9 @@ namespace david.hotelbooking.api.Controllers
 
         // POST api/<BookingsController>
         [HttpPost]
-        public async Task<string> AddBooking([FromBody] BookingEvent toAddEvent)
+        public async Task<ServiceResponse<Booking>> AddBooking([FromBody] BookingEvent toAddEvent)
         {
+            var response = new ServiceResponse<Booking>();
             Int32.TryParse(toAddEvent.Resource, out int roomId);
             DateTime.TryParse(toAddEvent.Start, out DateTime fromDate);
             DateTime.TryParse(toAddEvent.End, out DateTime toDate);
@@ -87,13 +88,16 @@ namespace david.hotelbooking.api.Controllers
                     ToDate = toDate
                 };
                 var dbBooking = await _service.AddBooking(booking);
-                return $"{dbBooking.Guest.Email} has booked a room successfully";
+                response.Data = booking;
 
             }
             catch (Exception e)
             {
-                return e.Message;
+                response.Success = false;
+                response.Message = e.Message;
             }
+
+            return response;
         }
 
         // PUT api/<BookingsController>/5

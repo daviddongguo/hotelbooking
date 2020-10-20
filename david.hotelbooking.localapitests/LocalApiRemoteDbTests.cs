@@ -1,4 +1,7 @@
-﻿using david.hotelbooking.domain;
+﻿using david.hotelbooking.api.SchedulerModels;
+using david.hotelbooking.domain;
+using david.hotelbooking.domain.Entities;
+using david.hotelbooking.domain.Entities.Hotel;
 using NUnit.Framework;
 using RestSharp;
 using RestSharp.Serialization.Json;
@@ -10,6 +13,8 @@ namespace david.hotelbooking.UnitTests.Apis
     {
         private RestClient _client;
         private readonly string baseUrl = "http://localhost:5000/";
+        private readonly JsonDeserializer _serializer = new JsonDeserializer();
+
         [OneTimeSetUp]
         public void SetUp()
         {
@@ -73,6 +78,38 @@ namespace david.hotelbooking.UnitTests.Apis
             Utilities.PrintOut(response.Content);
             Assert.That(response.Content, Is.Not.Null);
         }
+
+        [TestCase("1", "Alice@ho.t", "2020-1-1", "2020-1-2", true)]
+        public void AddBooking(string roomId, string guestEmail, string fromDateStr, string toDateStr, bool expected)
+        {
+            // Arrange
+            var request = new RestRequest("api/bookings", Method.POST);
+            request.AddJsonBody(new BookingEvent
+            {
+                Text = guestEmail,
+                Start = fromDateStr,
+                End = toDateStr,
+                Resource = roomId,
+            });
+
+            // Action
+            var response = _client.ExecuteAsync(request).GetAwaiter().GetResult();
+
+            // Assert
+            var result = _serializer.Deserialize<ServiceResponse<Booking>>(response);
+            Utilities.PrintOut(result);
+
+
+            Assert.That(result.Success);
+            Assert.That(result.Data.Id > 1);
+            var id = result.Data.Id;
+
+            // Delete
+            request = new RestRequest($"api/bookings/{id}", Method.DELETE);
+            response = _client.ExecuteAsync(request).GetAwaiter().GetResult();
+            Utilities.PrintOut(response.Content);
+        }
+
     }
 
 }
