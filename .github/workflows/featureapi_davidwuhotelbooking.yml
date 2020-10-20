@@ -22,7 +22,6 @@ jobs:
         dotnet-version: '3.1.102'
         
     - name: Hello World Action
-    - shell: bash
       env: 
         SUPER_SECRET: ${{ secrets.SuperSecret }}
       run: echo "$SUPER_SECRET"  
