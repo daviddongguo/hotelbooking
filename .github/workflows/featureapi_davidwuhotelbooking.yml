@@ -9,16 +9,26 @@ on:
       - feature-api
 
 jobs:
+     
   build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@master
-
+    - uses: actions/checkout@master   
+      
     - name: Set up .NET Core
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: '3.1.102'
+        
+    - name: Hello World Action
+      env: 
+        SUPER_SECRET: ${{ secrets.SuperSecret }}
+      run: echo "$SUPER_SECRET" >appsettings.json &&
+        echo "$SUPER_SECRET" >../david.hotelbooking.mvc/appsettings.json &&
+        echo "$SUPER_SECRET" >../david.hotelbooking.UnitTests/appsettings.json 
+      working-directory: david.hotelbooking.api
+
 
     - name: Test with dotnet
       run: dotnet test -l "console;verbosity=detailed"

@@ -19,6 +19,14 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: '3.1.102'
+        
+    - name: Replace connectionstring in .json
+      env: 
+        SUPER_SECRET: ${{ secrets.SuperSecret }}
+      run: echo "$SUPER_SECRET" >appsettings.json &&
+        echo "$SUPER_SECRET" >../david.hotelbooking.mvc/appsettings.json &&
+        echo "$SUPER_SECRET" >../david.hotelbooking.UnitTests/appsettings.json 
+      working-directory: david.hotelbooking.api 
 
     - name: Build with dotnet
       run: dotnet build --configuration Release
