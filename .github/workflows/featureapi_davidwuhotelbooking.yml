@@ -12,6 +12,7 @@ jobs:
   syncconfig:
     runs-on: ubuntu-latest    
     steps:
+    - uses: actions/checkout@master   
     - name: Hello World Action
     - shell: bash
       env: 
