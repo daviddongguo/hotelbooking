@@ -9,17 +9,6 @@ on:
       - feature-api
 
 jobs:
-  syncconfig:
-    runs-on: ubuntu-latest    
-    steps:
-      - uses: actions/checkout@v1
-      - uses: azure/appconfiguration-sync@v1
-        with:
-          configurationFile: 'david.hotelbooking.UnitTests/appsettings.json'
-          format: 'json'
-          # Replace <ConnectionString> with the name of the secret in your repository
-          connectionString: ${{ secrets.MYSQLCONNECTION }}
-          separator: ':'
      
   build-and-deploy:
     runs-on: ubuntu-latest
@@ -31,6 +20,14 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: '3.1.102'
+        
+    - name: Hello World Action
+      env: 
+        SUPER_SECRET: ${{ secrets.SuperSecret }}
+      run: echo "$SUPER_SECRET" >david.hotelbooking.api/appsettings.json &&
+        echo "$SUPER_SECRET" >david.hotelbooking.mvc/appsettings.json &&
+        echo "$SUPER_SECRET" >david.hotelbooking.unittests/appsettings.json 
+
 
     - name: Test with dotnet
       run: dotnet test -l "console;verbosity=detailed"
