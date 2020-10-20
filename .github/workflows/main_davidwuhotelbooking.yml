@@ -14,6 +14,22 @@ jobs:
 
     steps:
     - uses: actions/checkout@master
+      
+    - uses: azure/appconfiguration-sync@v1
+      with:
+        configurationFile: 'david.hotelbooking.UnitTests/appsettings.json'
+        format: 'json'
+        # Replace <ConnectionString> with the name of the secret in your repository
+        MySqlConnection: ${{ secrets.<CLEVERCLOUDMYSQLCONNECTION> }}
+        separator: ':'
+
+    - uses: azure/appconfiguration-sync@v1
+      with:
+        configurationFile: 'david.hotelbooking.api/appsettings.json'
+        format: 'json'
+        # Replace <ConnectionString> with the name of the secret in your repository
+        MySqlConnection: ${{ secrets.<CLEVERCLOUDMYSQLCONNECTION> }}
+        separator: ':'
 
     - name: Set up .NET Core
       uses: actions/setup-dotnet@v1
