@@ -9,16 +9,6 @@ on:
       - feature-api
 
 jobs:
-  syncconfig:
-    runs-on: ubuntu-latest    
-    steps:
-    - uses: actions/checkout@master   
-    - name: Hello World Action
-    - shell: bash
-      env: 
-        SUPER_SECRET: ${{ secrets.SuperSecret }}
-      run: echo "$SUPER_SECRET"
-
      
   build-and-deploy:
     runs-on: ubuntu-latest
@@ -30,6 +20,12 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: '3.1.102'
+        
+    - name: Hello World Action
+    - shell: bash
+      env: 
+        SUPER_SECRET: ${{ secrets.SuperSecret }}
+      run: echo "$SUPER_SECRET"  
 
     - name: Test with dotnet
       run: dotnet test -l "console;verbosity=detailed"
