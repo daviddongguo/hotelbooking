@@ -18,7 +18,7 @@ namespace david.hotelbooking.UnitTests.Apis
         //private readonly string baseUrl = "https://davidwuhotelbooking.azurewebsites.net/";
         private readonly JsonDeserializer _serializer = new JsonDeserializer();
 
-        [OneTimeSetUp]
+        [SetUp]
         public void SetUp()
         {
             _client = new RestClient(baseUrl);
@@ -40,7 +40,8 @@ namespace david.hotelbooking.UnitTests.Apis
             Assert.That((int)response.StatusCode == expectedstatusCode);
             System.Console.WriteLine(response.ResponseUri);
             System.Console.WriteLine(response.StatusCode);
-            var result = _serializer.Deserialize<ServiceResponse<List<User>>>(response);
+
+            var result = _serializer.Deserialize<ServiceResponse<List<BookingEvent>>>(response);
             Utilities.PrintOut(result);
         }
 
@@ -52,7 +53,7 @@ namespace david.hotelbooking.UnitTests.Apis
 
 
             // Act
-            var response = _client.ExecuteAsync(request).GetAwaiter().GetResult();
+            var response = _client.ExecuteGetAsync(request).GetAwaiter().GetResult();
 
             // Assert
 
@@ -60,8 +61,9 @@ namespace david.hotelbooking.UnitTests.Apis
             System.Console.WriteLine(response.ResponseUri);
             System.Console.WriteLine(response.StatusCode);
 
-            var result = _serializer.Deserialize<ServiceResponse<List<Resource>>>(response);
+            var result = _serializer.Deserialize<ServiceResponse<List<BookingEvent>>>(response);
             Utilities.PrintOut(result);
+
         }
 
         [TestCase(200), Timeout(2000)]
