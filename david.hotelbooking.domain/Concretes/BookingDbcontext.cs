@@ -73,9 +73,5 @@ namespace david.hotelbooking.domain.Concretes
 
         }
 
-        internal void changeSaveAsync()
-        {
-            throw new NotImplementedException();
-        }
     }
 }

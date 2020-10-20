@@ -2,6 +2,7 @@
 using david.hotelbooking.domain;
 using david.hotelbooking.domain.Entities;
 using david.hotelbooking.domain.Entities.Hotel;
+using david.hotelbooking.domain.Entities.RBAC;
 using NUnit.Framework;
 using RestSharp;
 using RestSharp.Serialization.Json;
@@ -14,6 +15,7 @@ namespace david.hotelbooking.UnitTests.Apis
     {
         private RestClient _client;
         private readonly string baseUrl = "http://localhost:5000/";
+        //private readonly string baseUrl = "https://davidwuhotelbooking.azurewebsites.net/";
         private readonly JsonDeserializer _serializer = new JsonDeserializer();
 
         [OneTimeSetUp]
@@ -38,8 +40,8 @@ namespace david.hotelbooking.UnitTests.Apis
             Assert.That((int)response.StatusCode == expectedstatusCode);
             System.Console.WriteLine(response.ResponseUri);
             System.Console.WriteLine(response.StatusCode);
-            Utilities.PrintOut(response.Content);
-            Assert.That(response.Content, Is.Not.Null);
+            var result = _serializer.Deserialize<ServiceResponse<List<User>>>(response);
+            Utilities.PrintOut(result);
         }
 
         [TestCase(200), Timeout(2000)]
@@ -50,19 +52,20 @@ namespace david.hotelbooking.UnitTests.Apis
 
 
             // Act
-            var response = _client.ExecuteGetAsync(request).GetAwaiter().GetResult();
+            var response = _client.ExecuteAsync(request).GetAwaiter().GetResult();
 
             // Assert
 
             Assert.That((int)response.StatusCode == expectedstatusCode);
             System.Console.WriteLine(response.ResponseUri);
             System.Console.WriteLine(response.StatusCode);
-            Utilities.PrintOut(response.Content);
-            Assert.That(response.Content, Is.Not.Null);
+
+            var result = _serializer.Deserialize<ServiceResponse<List<Resource>>>(response);
+            Utilities.PrintOut(result);
         }
 
         [TestCase(200), Timeout(2000)]
-        public void GetAllBookinsApi_ReturnsAllBookings(int expectedstatusCode)
+        public void GetAllBookinsApi_ReturnsAllEvents(int expectedstatusCode)
         {
             // Arrange
             var request = new RestRequest("api/bookings", Method.GET);
@@ -76,9 +79,9 @@ namespace david.hotelbooking.UnitTests.Apis
             Assert.That((int)response.StatusCode == expectedstatusCode);
             System.Console.WriteLine(response.ResponseUri);
             System.Console.WriteLine(response.StatusCode);
-            var result = _serializer.Deserialize<ServiceResponse<List<Booking>>>(response);
+
+            var result = _serializer.Deserialize<ServiceResponse<List<BookingEvent>>>(response);
             Utilities.PrintOut(result);
-            Assert.That(response.Content, Is.Not.Null);
         }
 
         [TestCase("1", "Alice@ho.t", "2020-1-1", "2020-1-2", true)]
@@ -102,7 +105,7 @@ namespace david.hotelbooking.UnitTests.Apis
             Utilities.PrintOut(result);
 
 
-            Assert.That(result.Success);
+            Assert.That(result.Success == expected);
             Assert.That(result.Data.Id > 1);
             var id = result.Data.Id;
 
@@ -116,7 +119,7 @@ namespace david.hotelbooking.UnitTests.Apis
 
 
             Assert.That(result02.Success);
-            Assert.That(result02.Data  == id);
+            Assert.That(result02.Data == id);
         }
 
     }

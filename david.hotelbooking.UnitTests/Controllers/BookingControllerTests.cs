@@ -6,6 +6,7 @@ using david.hotelbooking.domain.Entities.Hotel;
 using david.hotelbooking.domain.Services;
 using Moq;
 using NUnit.Framework;
+using RestSharp.Serialization.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,6 +22,7 @@ namespace Tests
         private IQueryable<Booking> _bookingsList;
         private Booking _firstBooking;
         private Booking _secondBooking;
+        private readonly JsonDeserializer _serializer = new JsonDeserializer();
 
 
         [SetUp]
@@ -79,8 +81,8 @@ namespace Tests
         public void AddBooking(string roomId, string guestEmail, string fromDateStr, string toDateStr)
         {
             var ev = new BookingEvent
-            {
-                Id = roomId,
+            {                
+                Resource= roomId,
                 Text = guestEmail,
                 Start = fromDateStr,
                 End = toDateStr,
@@ -92,8 +94,9 @@ namespace Tests
 
             var response = _controller.AddBooking(ev).GetAwaiter().GetResult();
 
-            Assert.That(response, Does.Contain(guestEmail));
-            Utilities.PrintOut(response);
+            var resultRoomId = response.Data.RoomId;
+            Assert.That(response.Data.RoomId.ToString(), Is.EqualTo(roomId));
+
         }
     }
 

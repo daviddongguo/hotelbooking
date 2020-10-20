@@ -187,15 +187,14 @@ namespace david.hotelbooking.UnitTests.Services
             Assert.That(res?.Email == email, Is.EqualTo(expectedResult));
         }
 
-        [TestCase(1, 2, 1, "2019-11-18", "2019-11-28", true)]
-        [TestCase(1, 2, 1, "2019-11-18", "2019-11-8", false)]
-        [TestCase(1, -2, 1, "2019-11-18", "2019-11-28", false)]
-        [TestCase(1, 2, -1, "2019-11-18", "2019-11-28", false)]
-        public void AddBooking(int id, int roomId, int guestId, string fromDateStr, string toDateStr, bool expected)
+        [TestCase(2, 1, "2019-11-18", "2019-11-28", true)]
+        [TestCase(2, 1, "2019-11-18", "2019-11-8", false)]
+        [TestCase(-2, 1, "2019-11-18", "2019-11-28", false)]
+        [TestCase(2, -1, "2019-11-18", "2019-11-28", false)]
+        public void AddBooking(int roomId, int guestId, string fromDateStr, string toDateStr, bool expected)
         {
             var booking = new Booking
             {
-                Id = id,
                 RoomId = roomId,
                 GuestId = guestId,
                 FromDate = DateTime.Parse(fromDateStr),
@@ -228,11 +227,11 @@ namespace david.hotelbooking.UnitTests.Services
             Assert.That(res != null, Is.EqualTo(expected));
         }
 
-        [TestCase(1, 2, 2, true)]
-        [TestCase(1, 2, 929, false)]
-        [TestCase(1, 2, -2, false)]
-        [TestCase(-1, 2, 2, false)]
-        public void WhenRoomNeedToChange_UpdateBookingRoom(int bookingId, int guestId, int roomId, bool expected)
+        [TestCase(1, 2, true)]
+        [TestCase(1, 929, false)]
+        [TestCase(1, -2, false)]
+        [TestCase(-1, 2, false)]
+        public void WhenRoomNeedToChange_UpdateBookingRoom(int bookingId, int roomId, bool expected)
         {
             var booking = new Booking
             {
