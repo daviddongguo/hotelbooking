@@ -24,9 +24,10 @@ jobs:
     - name: Hello World Action
       env: 
         SUPER_SECRET: ${{ secrets.SuperSecret }}
-      run: echo "$SUPER_SECRET" >./david.hotelbooking.api/appsettings.json &&
-        echo "$SUPER_SECRET" >./david.hotelbooking.mvc/appsettings.json &&
-        echo "$SUPER_SECRET" >./david.hotelbooking.unittests/appsettings.json 
+      run: echo "$SUPER_SECRET" >david.hotelbooking.api/appsettings.json &&
+        echo "$SUPER_SECRET" >david.hotelbooking.mvc/appsettings.json &&
+        echo "$SUPER_SECRET" >david.hotelbooking.unittests/appsettings.json 
+      working-directory: /
 
 
     - name: Test with dotnet
