@@ -7,7 +7,7 @@ namespace david.hotelbooking.domain.Services
     public interface IBookingService
     {
         Task<Booking> AddBooking(Booking toAddBooking);
-        Task DeleteBooking(int id);
+        Task<int> DeleteBooking(int id);
         Task<Guest> AddGuest(Guest toAddGuest);
         Task<bool> DoesOverlap(Booking booking);
         Task<IQueryable<Booking>> GetAllBookings();

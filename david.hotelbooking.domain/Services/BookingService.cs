@@ -135,16 +135,16 @@ namespace david.hotelbooking.domain.Services
             }
         }
 
-        public async Task DeleteBooking(int bookId){
+        public async Task<int> DeleteBooking(int bookId){
             var dbBooking = await _context.Bookings.FirstOrDefaultAsync(b => b.Id == bookId);
             if(dbBooking == null){
-                return;
+                return 0;
             }
             try
             {
                 _context.Bookings.Remove(dbBooking);
                 await _context.SaveChangesAsync();
-                return;
+                return bookId;
             }
             catch (System.Exception)
             {
@@ -170,8 +170,8 @@ namespace david.hotelbooking.domain.Services
             try
             {
                 //toAddBooking.Id = 0;
-                toAddBooking.Room = roomDb;
-                toAddBooking.Guest = guestDb;
+                //toAddBooking.Room = roomDb;
+                //toAddBooking.Guest = guestDb;
                 await _context.Bookings.AddAsync(toAddBooking);
                 await _context.SaveChangesAsync();
                 return toAddBooking;

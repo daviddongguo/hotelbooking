@@ -5,6 +5,7 @@ using david.hotelbooking.domain.Entities.Hotel;
 using NUnit.Framework;
 using RestSharp;
 using RestSharp.Serialization.Json;
+using System.Collections.Generic;
 
 namespace david.hotelbooking.UnitTests.Apis
 {
@@ -75,7 +76,8 @@ namespace david.hotelbooking.UnitTests.Apis
             Assert.That((int)response.StatusCode == expectedstatusCode);
             System.Console.WriteLine(response.ResponseUri);
             System.Console.WriteLine(response.StatusCode);
-            Utilities.PrintOut(response.Content);
+            var result = _serializer.Deserialize<ServiceResponse<List<Booking>>>(response);
+            Utilities.PrintOut(result);
             Assert.That(response.Content, Is.Not.Null);
         }
 
@@ -107,7 +109,14 @@ namespace david.hotelbooking.UnitTests.Apis
             // Delete
             request = new RestRequest($"api/bookings/{id}", Method.DELETE);
             response = _client.ExecuteAsync(request).GetAwaiter().GetResult();
-            Utilities.PrintOut(response.Content);
+
+            // Assert
+            var result02 = _serializer.Deserialize<ServiceResponse<int>>(response);
+            Utilities.PrintOut(result02);
+
+
+            Assert.That(result02.Success);
+            Assert.That(result02.Data  == id);
         }
 
     }

@@ -109,10 +109,19 @@ namespace david.hotelbooking.api.Controllers
 
         // DELETE api/<BookingsController>/5
         [HttpDelete("{id}")]
-        public async Task Delete(int id)
+        public async Task<ServiceResponse<int>> Delete(int id)
         {
-            await _service.DeleteBooking(id);
-            return;
+            var response = new ServiceResponse<int>();
+            try
+            {
+                response.Data = await _service.DeleteBooking(id);
+            }
+            catch (System.Exception e)
+            {
+                response.Success = false;
+                response.Message = e.Message;
+            }
+            return response;
         }
 
 
