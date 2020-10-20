@@ -20,6 +20,9 @@ namespace david.hotelbooking.api
             builder.RegisterType<UserRepository>()
                 .As<IUserRepository>()
                 .InstancePerLifetimeScope();
+            builder.RegisterType<BookingService>()
+                .As<IBookingService>()
+                .InstancePerLifetimeScope();
         }
     }
 }

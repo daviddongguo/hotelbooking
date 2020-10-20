@@ -37,7 +37,7 @@ namespace david.hotelbooking.domain.Services.Tests
                 })
             });
             // Assert
-            System.Console.WriteLine(Utilities.PrettyJson(JsonSerializer.Serialize(userResults)));
+            Utilities.PrintOut(userResults);
             Assert.That(result.LastOrDefault().Id >= 2);
             Assert.That(result.FirstOrDefault()
                 .UserRoles.FirstOrDefault()
