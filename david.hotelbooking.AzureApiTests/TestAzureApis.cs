@@ -5,6 +5,7 @@ using david.hotelbooking.domain.Entities.Hotel;
 using NUnit.Framework;
 using RestSharp;
 using RestSharp.Serialization.Json;
+using System.Collections.Generic;
 
 namespace david.hotelbooking.ApiTests
 {
