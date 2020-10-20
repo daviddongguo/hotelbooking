@@ -2,7 +2,10 @@ language: csharp
 dist: bionic
 mono: none
 dotnet: 3.1.302
+env:
+  - APPSETTING=appsettings
 script:
+  - echo APPSETTING >david.hotelbooking.UnitTests/appsettings.json
   - dotnet restore
   - dotnet build
   - dotnet test -l "console;verbosity=detailed" david.hotelbooking.UnitTests/david.hotelbooking.UnitTests.csproj
