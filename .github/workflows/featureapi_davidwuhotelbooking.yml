@@ -26,7 +26,7 @@ jobs:
         SUPER_SECRET: ${{ secrets.SuperSecret }}
       run: echo "$SUPER_SECRET" >appsettings.json &&
         echo "$SUPER_SECRET" >../david.hotelbooking.mvc/appsettings.json &&
-        echo "$SUPER_SECRET" >../david.hotelbooking.unittests/appsettings.json 
+        echo "$SUPER_SECRET" >../david.hotelbooking.UnitTests/appsettings.json 
       working-directory: david.hotelbooking.api
 
 
