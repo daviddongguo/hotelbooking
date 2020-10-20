@@ -12,11 +12,11 @@ jobs:
   syncconfig:
     runs-on: ubuntu-latest    
     steps:
-      - name: Hello World Action
-      - shell: bash
-        env: 
-            SUPER_SECRET: ${{ secrets.SuperSecret }}
-        run: echo "$SUPER_SECRET"
+    - name: Hello World Action
+    - shell: bash
+      env: 
+        SUPER_SECRET: ${{ secrets.SuperSecret }}
+      run: echo "$SUPER_SECRET"
 
      
   build-and-deploy:
