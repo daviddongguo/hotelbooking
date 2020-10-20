@@ -9,28 +9,24 @@ on:
       - feature-api
 
 jobs:
+  syncconfig:
+    runs-on: ubuntu-latest    
+    steps:
+      - uses: actions/checkout@v1
+      - uses: azure/appconfiguration-sync@v1
+        with:
+          configurationFile: 'david.hotelbooking.UnitTests/appsettings.json'
+          format: 'json'
+          # Replace <ConnectionString> with the name of the secret in your repository
+          connectionString: ${{ secrets.CLEVERCLOUDMYSQLCONNECTION }}
+          separator: ':'
+     
   build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@master
+    - uses: actions/checkout@master   
       
-    - uses: azure/appconfiguration-sync@v1
-      with:
-        configurationFile: 'david.hotelbooking.UnitTests/appsettings.json'
-        format: 'json'
-        # Replace <ConnectionString> with the name of the secret in your repository
-        connectionString: ${{ secrets.CLEVERCLOUDMYSQLCONNECTION }}
-        separator: ':'
-
-    - uses: azure/appconfiguration-sync@v1
-      with:
-        configurationFile: 'david.hotelbooking.api/appsettings.json'
-        format: 'json'
-        # Replace <ConnectionString> with the name of the secret in your repository
-        connectionString: ${{ secrets.CLEVERCLOUDMYSQLCONNECTION }}
-        separator: ':'
-
     - name: Set up .NET Core
       uses: actions/setup-dotnet@v1
       with:
