@@ -7,7 +7,7 @@ using JsonSerializer = System.Text.Json.JsonSerializer;
 namespace david.hotelbooking.domain.Services.Tests
 {
     [TestFixture()]
-    public class UserServiceRemoteDbTests
+    public class RemoteDbUserServiceTests
     {
         private UserService _service;
 

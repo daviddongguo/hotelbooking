@@ -1,12 +1,12 @@
-﻿using david.hotelbooking.UnitTests.Services;
+﻿using david.hotelbooking.UnitTests;
+using david.hotelbooking.UnitTests.Services;
 using NUnit.Framework;
-using System;
-using System.Text.Json;
+using System.Configuration;
 
 namespace david.hotelbooking.domain.Services.Tests
 {
     [TestFixture()]
-    public class RoomserviceTests
+    public class RemoteDbRoomserviceTests
     {
         private BookingService _service;
 
