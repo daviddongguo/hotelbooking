@@ -14,10 +14,9 @@ jobs:
     steps:
       - name: Hello World Action
       - shell: bash
-        env:
-          SUPER_SECRET: ${{ secrets.SuperSecret }}
-        run: |
-          echo "$SUPER_SECRET"
+        env: 
+            SUPER_SECRET: ${{ secrets.SuperSecret }}
+        run: echo "$SUPER_SECRET"
 
      
   build-and-deploy:
