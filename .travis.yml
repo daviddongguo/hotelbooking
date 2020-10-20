@@ -6,6 +6,7 @@ env:
   - APPSETTING=appsettings
 script:
   - echo APPSETTING >david.hotelbooking.UnitTests/appsettings.json
+  - cat david.hotelbooking.UnitTests/appsettings.json
   - dotnet restore
   - dotnet build
   - dotnet test -l "console;verbosity=detailed" david.hotelbooking.UnitTests/david.hotelbooking.UnitTests.csproj
