@@ -10,6 +10,7 @@
     <PackageReference Include="RestSharp" Version="106.11.5" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\david.hotelbooking.api\david.hotelbooking.api.csproj" />
     <ProjectReference Include="..\david.hotelbooking.domain\david.hotelbooking.domain.csproj" />
   </ItemGroup>
 </Project>

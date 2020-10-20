@@ -8,11 +8,15 @@ namespace david.hotelbooking.domain.Entities.Hotel
     public class Room
     {
         [Key]
-        public int Id { get; set; }
+        public int Id { get; set; } = 0;
+        public string RoomNumber { get; set; }
         public int RoomTypeId { get; set; }
         [ForeignKey("RoomTypeId")]
-        public virtual Room RoomType { get; set; }
+        public virtual RoomType RoomType { get; set; }
+        public int RoomGroupId { get; set; }
+        [ForeignKey("RoomGroupId")]
+        public virtual RoomGroup RoomGroup { get; set; }
         [JsonIgnore]
-        public virtual ICollection<RoomBooked>   RoomBookeds { get; set; }
+        public virtual ICollection<Booking> Bookings { get; set; }
     }
 }
