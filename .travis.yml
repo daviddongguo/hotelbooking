@@ -6,7 +6,7 @@ env:
   - string=TRAVIS_STRING
 script:
   - cat david.hotelbooking.UnitTests/appsettings.json
-  - echo string >david.hotelbooking.UnitTests/appsettings.json
+  - echo {string} >david.hotelbooking.UnitTests/appsettings.json
   - cat david.hotelbooking.UnitTests/appsettings.json
   - dotnet restore
   - dotnet build
