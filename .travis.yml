@@ -3,13 +3,12 @@ dist: bionic
 mono: none
 dotnet: 3.1.302
 env:
-  matrix:
-  - string=TRAVIS_STRING
   global:
     secure: hGKyN16/ZdMKRANTYdWqNmp/16+mRX/TXiJ12lgl0U8qtWISLvAz7Bi9YqKyIewHpgUh4vBoWhyMRTDA2h55uZ+LLljpmUkNTMdoi5eAtSimN9MRZC0//95YvctTp0zOK3hU+D9JkiEJIpFvR1g+MRuVVheSjSac7MxnCH/IreRW7TD0JZ6Y445PaxC4yHynrMgcT234IjaqvtJGONte4itS/3uwmE2dQmt7VxPvmtviIXeKtxKOt0PGyNIjU/6dGT7D6i4BV6tl6AE6kn7F+hkQZVVdDsGhhdDpc0risxihRH58wHHMmJZd2SbEl0AHwMPVuHB7fiOgQ1o38fl+nyI2IPBx6wgONgbfkmDvaLT4sCdYfJQqsKwfQU3kvmqmcx2E1m2GHu85Nt7p3STMzBuELcKljoVNudy8OP2Jzsl5q0+O6piipiUFostLmbjduOxVV1qjcv/KACtZvEFFjqZqVLAEVZkVOwHus+gGt7d5EsnLlKNkNAsFoFEld1RPgjszYPm1oCfmBZlDLcIILcolGCDwt4C/JNKDIrFUT14HJbsxV3VFzBQnAug0X++sj+nsNr5a4Q8q/fSu1VGbdl7vgFyyHKpsuYvek7V8LvgNccxNHlwG6HXcm1gTaYdZL9YPk8cKJ1KPqnYX2pAIDRnbJkEegS3rVPVnaDmlCxo=
 script:
 - cat david.hotelbooking.UnitTests/appsettings.json
-- echo ${secure} >david.hotelbooking.UnitTests/appsettings.json
+- echo ${TRAVIS_STRING} >david.hotelbooking.UnitTests/appsettings.json
+- echo $connectionstring
 - cat david.hotelbooking.UnitTests/appsettings.json
 - dotnet restore
 - dotnet build
