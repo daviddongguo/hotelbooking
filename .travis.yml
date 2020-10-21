@@ -3,9 +3,10 @@ dist: bionic
 mono: none
 dotnet: 3.1.302
 env:
-  - echo TRAVIS_STRING >david.hotelbooking.UnitTests/appsettings.json
+  - string=TRAVIS_STRING
 script:
-  - echo TRAVIS_STRING >david.hotelbooking.UnitTests/appsettings.json
+  - cat david.hotelbooking.UnitTests/appsettings.json
+  - echo string >david.hotelbooking.UnitTests/appsettings.json
   - cat david.hotelbooking.UnitTests/appsettings.json
   - dotnet restore
   - dotnet build
