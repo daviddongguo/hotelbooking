@@ -2,6 +2,7 @@
 using david.hotelbooking.domain.Entities;
 using david.hotelbooking.domain.Entities.Hotel;
 using david.hotelbooking.domain.Services;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,7 +24,9 @@ namespace david.hotelbooking.api.Controllers
         }
         // GET: api/<RoomsController>
         [HttpGet]
-        public async Task<ServiceResponse<List<Resource>>> GetAllRooms()
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<ServiceResponse<List<Resource>>>> GetAllRooms()
         {
 
             var response = new ServiceResponse<List<Resource>>();
@@ -66,9 +69,10 @@ namespace david.hotelbooking.api.Controllers
             catch (System.Exception ex)
             {
                 response.Message = ex.Message;
+                return NotFound(response);
             }
 
-            return response;
+            return Ok(response);
         }
 
         // GET api/<RoomsController>/5

@@ -106,8 +106,8 @@ namespace david.hotelbooking.ApiTests
             Utilities.PrintOut(result);
 
 
-            Assert.That(result.Data.Id > 1);
             var id = result.Data.Id;
+
 
             // Delete
             request = new RestRequest($"api/bookings/{id}", Method.DELETE);
