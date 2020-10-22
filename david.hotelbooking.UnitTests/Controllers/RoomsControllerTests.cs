@@ -64,6 +64,26 @@ namespace Tests
             Assert.That(output.Data.Count == 1);
         }
 
+        [Test]
+        public void GetAllRooms_ReturnNotFound()
+        {
+            _mockService.Setup(s => s.GetAllRooms()).Returns(Task.FromResult((new List<Room>
+                { new Room
+                    {
+                        RoomGroupId = 1,
+                        // RoomGroup = new RoomGroup { Id = 1, Name = "test"}
+                    }
+                }).AsQueryable()));
+            var response = _controller.GetAllRooms().GetAwaiter().GetResult();
+            var result = response.Result as NotFoundObjectResult;
+
+            Utilities.PrintOut(result);
+            Assert.That(response, Is.InstanceOf(typeof(ActionResult<ServiceResponse<List<Resource>>>)));
+            Assert.That(result.StatusCode == 404);
+            var output = result.Value as ServiceResponse<List<Resource>>;
+            Assert.That(output.Data, Is.Null);
+            Assert.That(output.Message.Length >= 1);
+        }
     }
 
 }
