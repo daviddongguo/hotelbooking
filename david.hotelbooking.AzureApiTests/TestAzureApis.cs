@@ -53,6 +53,7 @@ namespace david.hotelbooking.ApiTests
 
             // Assert
             Assert.That((int)response.StatusCode == expectedstatusCode);
+            Assert.That(response.Content.Contains("children"));
             System.Console.WriteLine(response.ResponseUri);
             System.Console.WriteLine(response.StatusCode);
             System.Console.WriteLine(response.Content);
@@ -105,13 +106,11 @@ namespace david.hotelbooking.ApiTests
 
             // Delete
             request = new RestRequest($"api/bookings/{id}", Method.DELETE);
-            var responseo2 = _client.ExecuteAsync(request).GetAwaiter().GetResult();
-
+            var response2 = _client.ExecuteAsync<ServiceResponse<int>>(request).GetAwaiter().GetResult();
             // Assert
-            var result02 = _serializer.Deserialize<ServiceResponse<int>>(responseo2);
-            Utilities.PrintOut(result02);
+            System.Console.WriteLine(response2.Content);
 
-            //Assert.That(result02.Data == id);
+            Assert.That(response2.Data.Data == id);
         }
     }
 }
