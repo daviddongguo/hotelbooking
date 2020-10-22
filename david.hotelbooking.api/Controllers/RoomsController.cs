@@ -65,7 +65,6 @@ namespace david.hotelbooking.api.Controllers
             }
             catch (System.Exception ex)
             {
-                response.Success = false;
                 response.Message = ex.Message;
             }
 
