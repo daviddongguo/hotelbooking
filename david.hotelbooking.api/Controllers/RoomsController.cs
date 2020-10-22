@@ -1,6 +1,5 @@
 ﻿using david.hotelbooking.api.SchedulerModels;
 using david.hotelbooking.domain.Entities;
-using david.hotelbooking.domain.Entities.Hotel;
 using david.hotelbooking.domain.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

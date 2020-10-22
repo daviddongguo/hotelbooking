@@ -7,7 +7,7 @@ namespace david.hotelbooking.UnitTests.Entities
     [TestFixture]
     public class BookingTests
     {
-        
+
         [SetUp]
         public void Setup()
         {

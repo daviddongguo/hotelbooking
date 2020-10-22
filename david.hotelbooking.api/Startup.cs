@@ -43,13 +43,10 @@ namespace david.hotelbooking.api
                                                           "https://proud-stone-0f1f1d00f.azurestaticapps.net");
                                   });
             });
-            // services.AddDbContext<EFDbContext>( x => x.UseSqlite(Configuration.GetConnectionString("SqliteConnection"),
-            //     b => b.MigrationsAssembly("david.hotelbooking.api")));
             services.AddDbContext<UserDbContext>(x => x.UseMySql(Configuration.GetConnectionString("MySqlConnection"),
                b => b.MigrationsAssembly("david.hotelbooking.api")));
             services.AddDbContext<BookingDbContext>(x => x.UseMySql(Configuration.GetConnectionString("MySqlConnection"),
                b => b.MigrationsAssembly("david.hotelbooking.api")));
-            //services.AddControllers();
 
             services.AddControllers()
                 .AddJsonOptions(options => options.JsonSerializerOptions.WriteIndented = true);
@@ -68,7 +65,7 @@ namespace david.hotelbooking.api
         {
             if (env.IsDevelopment())
             {
-                 app.UseExceptionHandler("/error-local-development");
+                app.UseExceptionHandler("/error-local-development");
             }
             else
             {

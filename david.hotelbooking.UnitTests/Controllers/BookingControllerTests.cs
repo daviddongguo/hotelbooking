@@ -1,7 +1,6 @@
 using david.hotelbooking.api.Controllers;
 using david.hotelbooking.api.SchedulerModels;
 using david.hotelbooking.domain;
-using david.hotelbooking.domain.Entities;
 using david.hotelbooking.domain.Entities.Hotel;
 using david.hotelbooking.domain.Services;
 using Moq;
@@ -81,8 +80,8 @@ namespace Tests
         public void AddBooking(string roomId, string guestEmail, string fromDateStr, string toDateStr)
         {
             var ev = new BookingEvent
-            {                
-                Resource= roomId,
+            {
+                Resource = roomId,
                 Text = guestEmail,
                 Start = fromDateStr,
                 End = toDateStr,

@@ -1,22 +1,20 @@
 ﻿using david.hotelbooking.domain.Entities.RBAC;
 using david.hotelbooking.UnitTests.Services;
 using NUnit.Framework;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace david.hotelbooking.domain.Services.Tests
 {
     [TestFixture]
-    public class UserServiceLocalDbTest
+    public class LocalDbUserserviceTest
     {
         private UserService _service;
 
         [SetUp]
         public void SetUp()
         {
-            _service = new UserService(new InMemoryDbContextFactory().GetUserContext());
+            _service = new UserService(new LocalInMemoryDbContextFactory().GetUserContext());
         }
 
         [Test]

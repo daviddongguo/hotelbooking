@@ -1,7 +1,6 @@
-﻿using david.hotelbooking.UnitTests;
-using david.hotelbooking.UnitTests.Services;
+﻿using david.hotelbooking.UnitTests.Services;
 using NUnit.Framework;
-using System.Configuration;
+using System.Linq;
 
 namespace david.hotelbooking.domain.Services.Tests
 {
@@ -24,8 +23,7 @@ namespace david.hotelbooking.domain.Services.Tests
             // Assert
             Utilities.PrintOut(result);
             Assert.That(result, Is.Not.Empty);
+            Assert.That(result.LastOrDefault().Id >= 1);
         }
-
-
     }
 }

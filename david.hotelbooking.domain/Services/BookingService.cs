@@ -36,8 +36,8 @@ namespace david.hotelbooking.domain.Services
         public async Task<IQueryable<Booking>> GetAllBookings()
         {
             var result = await _context.Bookings
-            .Include(b=> b.Guest)
-            .Include(b=> b.Room)
+            .Include(b => b.Guest)
+            .Include(b => b.Room)
             .ToListAsync();
 
             return result.AsQueryable();
@@ -135,9 +135,11 @@ namespace david.hotelbooking.domain.Services
             }
         }
 
-        public async Task<int> DeleteBooking(int bookId){
+        public async Task<int> DeleteBooking(int bookId)
+        {
             var dbBooking = await _context.Bookings.FirstOrDefaultAsync(b => b.Id == bookId);
-            if(dbBooking == null){
+            if (dbBooking == null)
+            {
                 return 0;
             }
             try

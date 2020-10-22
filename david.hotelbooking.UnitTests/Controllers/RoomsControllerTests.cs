@@ -7,11 +7,9 @@ using david.hotelbooking.domain.Services;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using NUnit.Framework;
-using RestSharp.Serialization.Json;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Web.Mvc;
 
 namespace Tests
 {
@@ -20,7 +18,7 @@ namespace Tests
     {
         private RoomsController _controller;
         private Mock<IBookingService> _mockService;
-        private readonly JsonDeserializer _serializer = new JsonDeserializer();
+        //private readonly JsonDeserializer _serializer = new JsonDeserializer();
 
         [SetUp]
         public void Setup()
@@ -30,23 +28,29 @@ namespace Tests
         }
 
 
-        [Test]
-        public void GetAllRooms_WhenDatabaseIsEmpty_ReturnEmpty()
+        [TestCase(200)]
+        public void GetAllRooms_WhenDatabaseIsEmpty_ReturnEmpty(int expectedStatusCode)
         {
+            // Arrange
             _mockService.Setup(s => s.GetAllRooms()).Returns(Task.FromResult((new List<Room>()).AsQueryable()));
-            var response = _controller.GetAllRooms().GetAwaiter().GetResult();
-            var result = response.Result as OkObjectResult;
 
-            Utilities.PrintOut(result);
+            // Action
+            var response = _controller.GetAllRooms().GetAwaiter().GetResult();
+            var result = response.Result as ObjectResult;
+
+            // Assert
+            Assert.That(result.StatusCode == expectedStatusCode);
             Assert.That(response, Is.InstanceOf(typeof(ActionResult<ServiceResponse<List<Resource>>>)));
-            Assert.That(result.StatusCode == 200);
-            var output = result.Value as ServiceResponse<List<Resource>>;
-            Assert.That(output.Data.Count == 0);
+            var resultValue = result.Value as ServiceResponse<List<Resource>>;
+            Assert.That(resultValue.Message, Is.Null);
+            Assert.That(resultValue.Data.Count == 0);
+            Utilities.PrintOut(result);
         }
 
-        [Test]
-        public void GetAllRooms_ReturnResource()
+        [TestCase(200, 1)]
+        public void GetAllRooms_ReturnResource(int expectedStatusCode, int expectedDataCount)
         {
+            // Arrange
             _mockService.Setup(s => s.GetAllRooms()).Returns(Task.FromResult((new List<Room>
                 { new Room
                     {
@@ -54,18 +58,22 @@ namespace Tests
                         RoomGroup = new RoomGroup { Id = 1, Name = "test"}
                     }
                 }).AsQueryable()));
-            var response = _controller.GetAllRooms().GetAwaiter().GetResult();
-            var result = response.Result as OkObjectResult;
 
-            Utilities.PrintOut(result);
+            // Action
+            var response = _controller.GetAllRooms().GetAwaiter().GetResult();
+
+            // Assert
             Assert.That(response, Is.InstanceOf(typeof(ActionResult<ServiceResponse<List<Resource>>>)));
-            Assert.That(result.StatusCode == 200);
-            var output = result.Value as ServiceResponse<List<Resource>>;
-            Assert.That(output.Data.Count == 1);
+            var result = response.Result as ObjectResult;
+            Assert.That(result.StatusCode == expectedStatusCode);
+            var resultValue = result.Value as ServiceResponse<List<Resource>>;
+            Assert.That(resultValue.Message, Is.Null);
+            Assert.That(resultValue.Data.Count == expectedDataCount);
+            Utilities.PrintOut(result);
         }
 
-        [Test]
-        public void GetAllRooms_ReturnNotFound()
+        [TestCase(404)]
+        public void GetAllRooms_ReturnNotFound(int expectedStatusCode)
         {
             _mockService.Setup(s => s.GetAllRooms()).Returns(Task.FromResult((new List<Room>
                 { new Room
@@ -75,14 +83,13 @@ namespace Tests
                     }
                 }).AsQueryable()));
             var response = _controller.GetAllRooms().GetAwaiter().GetResult();
-            var result = response.Result as NotFoundObjectResult;
 
+            // Assert
+            var result = response.Result as ObjectResult;
+            Assert.That(result.StatusCode == expectedStatusCode);
+            var resultValue = result.Value as ServiceResponse<List<Resource>>;
+            Assert.That(resultValue.Message, Is.Not.Null);
             Utilities.PrintOut(result);
-            Assert.That(response, Is.InstanceOf(typeof(ActionResult<ServiceResponse<List<Resource>>>)));
-            Assert.That(result.StatusCode == 404);
-            var output = result.Value as ServiceResponse<List<Resource>>;
-            Assert.That(output.Data, Is.Null);
-            Assert.That(output.Message.Length >= 1);
         }
     }
 

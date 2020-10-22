@@ -348,8 +348,8 @@ MigrationBackup/
 
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
-david.hotelbooking.api/hotelbooking.db-shm
-david.hotelbooking.api/hotelbooking.db-wal
+
+# Local files
 david.hotelbooking.api/Migrations/
 david.hotelbooking.mvc/Migrations/
 david.hotelbooking.UnitTests/appsettings.json
