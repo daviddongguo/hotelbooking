@@ -13,8 +13,9 @@ namespace david.hotelbooking.ApiTests
     public class LocalApiRemoteDbTests
     {
         private RestClient _client;
-        private readonly string baseUrl = "http://localhost:5000/";
-        //private readonly string baseUrl = "https://davidwuhotelbooking.azurewebsites.net/";
+        // TODO: use environment to automatic select url
+        //private readonly string baseUrl = "http://localhost:5000/";
+        private readonly string baseUrl = "https://davidwuhotelbooking.azurewebsites.net/";
         private readonly JsonDeserializer _serializer = new JsonDeserializer();
 
         [SetUp]
