@@ -11,7 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Tests
+namespace david.hotelbooking.UnitTests.Controllers
 {
     [TestFixture]
     public class BookingControllerTests

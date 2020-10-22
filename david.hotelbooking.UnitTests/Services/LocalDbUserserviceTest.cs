@@ -1,10 +1,11 @@
 ﻿using david.hotelbooking.domain.Entities.RBAC;
+using david.hotelbooking.domain.Services;
 using david.hotelbooking.UnitTests.Services;
 using NUnit.Framework;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace david.hotelbooking.domain.Services.Tests
+namespace david.hotelbooking.UnitTests.Services
 {
     [TestFixture]
     public class LocalDbUserserviceTest

@@ -10,7 +10,7 @@ using System.Collections.Generic;
 namespace david.hotelbooking.ApiTests
 {
     [TestFixture]
-    public class LocalApiRemoteDbTests
+    public class ApiWithRemoteDbTests
     {
         private RestClient _client;
         // TODO: use environment to automatic select url
