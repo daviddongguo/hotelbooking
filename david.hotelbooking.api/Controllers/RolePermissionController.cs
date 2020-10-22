@@ -33,7 +33,6 @@ namespace david.hotelbooking.api.Controllers
             }
             catch (System.Exception ex)
             {
-                response.Success = false;
                 response.Message = ex.Message;
             }
 
@@ -57,14 +56,12 @@ namespace david.hotelbooking.api.Controllers
                 var role = await _service.GetSingleRole(newRolePermission.RoleId);
                 if (role == null)
                 {
-                    response.Success = false;
                     response.Message = $"Role(id={newRolePermission.RoleId}) not found.";
                     NotFound(response);
                 }
                 var permission = await _service.GetSinglePermission(newRolePermission.PermissionId);
                 if (permission == null)
                 {
-                    response.Success = false;
                     response.Message = $"Permission(id={newRolePermission.PermissionId}) not found.";
                     NotFound(response);
                 }
@@ -79,7 +76,6 @@ namespace david.hotelbooking.api.Controllers
             }
             catch (Exception ex)
             {
-                response.Success = false;
                 response.Message = ex.Message;
             }
 

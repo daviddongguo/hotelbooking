@@ -41,7 +41,6 @@ namespace david.hotelbooking.api.Controllers
             }
             catch (System.Exception ex)
             {
-                response.Success = false;
                 response.Message = ex.Message;
             }
 
@@ -61,7 +60,6 @@ namespace david.hotelbooking.api.Controllers
             }
             catch (System.Exception ex)
             {
-                response.Success = false;
                 response.Message = ex.Message;
             }
 
@@ -93,7 +91,6 @@ namespace david.hotelbooking.api.Controllers
             }
             catch (Exception e)
             {
-                response.Success = false;
                 response.Message = e.Message;
             }
 
@@ -118,7 +115,6 @@ namespace david.hotelbooking.api.Controllers
             }
             catch (System.Exception e)
             {
-                response.Success = false;
                 response.Message = e.Message;
             }
             return response;
