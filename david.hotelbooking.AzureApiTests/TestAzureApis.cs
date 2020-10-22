@@ -1,6 +1,7 @@
 ﻿using david.hotelbooking.api.SchedulerModels;
 using david.hotelbooking.domain;
 using david.hotelbooking.domain.Entities;
+using david.hotelbooking.domain.Entities.Hotel;
 using Newtonsoft.Json;
 using NUnit.Framework;
 using RestSharp;
@@ -88,7 +89,8 @@ namespace david.hotelbooking.ApiTests
             });
 
             // Action
-            var response = _client.ExecuteAsync<Dictionary<string, string>>(request).GetAwaiter().GetResult();
+            //var response = _client.ExecuteAsync<Dictionary<string, string>>(request).GetAwaiter().GetResult();
+            var response = _client.ExecuteAsync<ServiceResponse<Booking>>(request).GetAwaiter().GetResult();
 
             // Assert
             Assert.That((int)response.StatusCode == expectedStatusCode);
@@ -96,9 +98,11 @@ namespace david.hotelbooking.ApiTests
             System.Console.WriteLine(response.StatusCode);
             System.Console.WriteLine(response.Content);
 
-            var data = response.Data["data"];
-            var obj = JsonConvert.DeserializeObject<Dictionary<string, string>>(data); ;
-            var id = obj["id"];
+            //var data = response.Data["data"];
+            //var obj = JsonConvert.DeserializeObject<Dictionary<string, string>>(data); ;
+            //var id = obj["id"];
+            var id = response.Data.Data.Id;
+
             // Delete
             request = new RestRequest($"api/bookings/{id}", Method.DELETE);
             var responseo2 = _client.ExecuteAsync(request).GetAwaiter().GetResult();
