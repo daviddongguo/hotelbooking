@@ -22,7 +22,7 @@ namespace david.hotelbooking.api.Controllers
         }
         // GET: api/<UsersController>
         [HttpGet]
-        public async Task<ServiceResponse<List<User>>> GetAllUsers()
+        public async Task<ActionResult<ServiceResponse<List<User>>>> GetAllUsers()
         {
             var response = new ServiceResponse<List<User>>();
             try
@@ -33,9 +33,10 @@ namespace david.hotelbooking.api.Controllers
             catch (System.Exception ex)
             {
                 response.Message = ex.Message;
+                return NotFound(response);
             }
 
-            return response;
+            return Ok(response);
 
         }
 

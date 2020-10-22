@@ -1,6 +1,7 @@
 {
-    "cSpell.words": [
-      "dd't'hh",
-      "rbac"
-    ]
+  "cSpell.words": [
+    "dd't'hh",
+    "rbac"
+  ],
+  "dotnet-test-explorer.testProjectPath": "david.hotelbooking.UnitTests"
 }
