@@ -44,27 +44,49 @@ namespace david.hotelbooking.UnitTests.Controllers
         }
 
 
-        [Test]
-        public void GetAllBookings_WhenDatabaseIsEmpty_ReturnEmpty()
+        [TestCase(200)]
+        public void GetAllBookings_WhenDatabaseIsEmpty_ReturnEmpty(int expectedStatusCode)
         {
             _mockService.Setup(s => s.GetAllBookings()).Returns(Task.FromResult(new List<Booking>().AsQueryable()));
             var response = _controller.GetAllBookings().GetAwaiter().GetResult();
 
-            Assert.That(response.Data.Count == 0);
+            // Assert
+            var result = response.Result as ObjectResult;
+            Assert.That(result.StatusCode == expectedStatusCode);
             Utilities.PrintOut(response);
         }
 
-        [TestCase(3)]
-        [TestCase(9999)]
-        public void GetAllBookings_ReturnTrue(int roomId)
+        [TestCase(404)]
+        public void GetAllBookings_WhenDatabaseError_ReturnNotFound(int expectedStatusCode)
+        {
+            _mockService.Setup(s => s.GetAllBookings()).Throws(new Exception());
+            var response = _controller.GetAllBookings().GetAwaiter().GetResult();
+
+            // Assert
+            var result = response.Result as ObjectResult;
+            Assert.That(result.StatusCode == expectedStatusCode);
+            var resultValue = result.Value as ServiceResponse<List<BookingEvent>>;
+            Assert.That(resultValue.Message, Is.Not.Null);
+            Assert.That(resultValue.Data, Is.Null);
+            Utilities.PrintOut(response);
+        }
+
+        [TestCase(3, 200)]
+        [TestCase(9999, 200)]
+        public void GetAllBookings_ReturnTrue(int roomId, int expectedStatusCode)
         {
             _bookingsList.ToList()[0].RoomId = roomId;
             _mockService.Setup(s => s.GetAllBookings()).Returns(Task.FromResult(_bookingsList));
             var response = _controller.GetAllBookings().GetAwaiter().GetResult();
 
-            Assert.That(response.Data.Count >= 1);
-            Assert.That(response.Data.FirstOrDefault().Resource, Is.EqualTo(roomId.ToString()));
-            Utilities.PrintOut(response);
+            // Assert
+            var result = response.Result as ObjectResult;
+            Assert.That(result.StatusCode == expectedStatusCode);
+            var resultValue = result.Value as ServiceResponse<List<BookingEvent>>;
+            Assert.That(resultValue.Message, Is.Null);
+            Assert.That(resultValue.Data.Count >= 1);
+            Assert.That(resultValue.Data.FirstOrDefault().Resource.Equals(roomId.ToString()));
+            Utilities.PrintOut(result);
         }
 
         [TestCase(1, 200)]

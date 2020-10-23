@@ -8,15 +8,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-
 namespace david.hotelbooking.api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
     public class BookingsController : ControllerBase
     {
-
         private readonly IBookingService _service;
 
         public BookingsController(IBookingService service)
@@ -25,9 +22,8 @@ namespace david.hotelbooking.api.Controllers
         }
         // GET: api/<BookingsController>
         [HttpGet]
-        public async Task<ServiceResponse<List<BookingEvent>>> GetAllBookings()
+        public async Task<ActionResult<ServiceResponse<List<BookingEvent>>>> GetAllBookings()
         {
-
             var response = new ServiceResponse<List<BookingEvent>>();
             try
             {
@@ -42,12 +38,11 @@ namespace david.hotelbooking.api.Controllers
             catch (System.Exception ex)
             {
                 response.Message = ex.Message;
+                return NotFound(response);
             }
 
-            return response;
+            return Ok(response);
         }
-
-
 
         // GET api/<BookingsController>/5
         [HttpGet("{id}")]
@@ -127,7 +122,6 @@ namespace david.hotelbooking.api.Controllers
             }
             return response;
         }
-
 
         private BookingEvent CreateEvent(Booking booking)
         {
