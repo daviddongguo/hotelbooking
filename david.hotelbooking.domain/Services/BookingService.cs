@@ -135,18 +135,21 @@ namespace david.hotelbooking.domain.Services
             }
         }
 
-        public async Task<int> DeleteBooking(int bookId)
+        public async Task DeleteBooking(int? bookId)
         {
+            if(bookId == null){
+                return ;
+            }
             var dbBooking = await _context.Bookings.FirstOrDefaultAsync(b => b.Id == bookId);
             if (dbBooking == null)
             {
-                return 0;
+                return ;
             }
             try
             {
                 _context.Bookings.Remove(dbBooking);
                 await _context.SaveChangesAsync();
-                return bookId;
+                return ;
             }
             catch (System.Exception)
             {

@@ -73,7 +73,7 @@ namespace david.hotelbooking.UnitTests.Controllers
 
         [TestCase(3, 200)]
         [TestCase(9999, 200)]
-        public void GetAllBookings_ReturnTrue(int roomId, int expectedStatusCode)
+        public void GetAllBookings_ReturnBookings(int roomId, int expectedStatusCode)
         {
             _bookingsList.ToList()[0].RoomId = roomId;
             _mockService.Setup(s => s.GetAllBookings()).Returns(Task.FromResult(_bookingsList));
@@ -117,8 +117,8 @@ namespace david.hotelbooking.UnitTests.Controllers
             Utilities.PrintOut(result);
         }
 
-        [TestCase("1", "Alice@ho.t", "2020-1-1", "2020-1-2")]
-        public void AddBooking(string roomId, string guestEmail, string fromDateStr, string toDateStr)
+        [TestCase("1991", "Alice@ho.t", "2020-1-1", "2020-1-2", 201)]
+        public void AddBooking(string roomId, string guestEmail, string fromDateStr, string toDateStr, int expectedStatusCode)
         {
             var ev = new BookingEvent
             {
@@ -134,10 +134,50 @@ namespace david.hotelbooking.UnitTests.Controllers
 
             var response = _controller.AddBooking(ev).GetAwaiter().GetResult();
 
-            var resultRoomId = response.Data.RoomId;
-            Assert.That(response.Data.RoomId.ToString(), Is.EqualTo(roomId));
-
+            // Assert
+            var result = response.Result as ObjectResult;
+            Assert.That(result.StatusCode == expectedStatusCode);
+            var resultValue = result.Value as ServiceResponse<Booking>;
+            Assert.That(resultValue.Data.RoomId.ToString(), Is.EqualTo(roomId));
         }
-    }
 
+        [TestCase(404)]
+        public void DeleteBooking_WhenNoBooking_ReturnNotFound(int expectedStatusCode)
+        {
+            _mockService.Setup(s => s.GetBookingById(1)).Returns(Task.FromResult((Booking)null));
+
+            var response = _controller.DeleteBooking(1).GetAwaiter().GetResult();
+
+            // Assert
+            var result = response as NotFoundResult;
+            Assert.That(result.StatusCode == expectedStatusCode);
+        }
+
+        [TestCase(204)]
+        public void DeleteBookin(int expectedStatusCode)
+        {
+            _mockService.Setup(s => s.GetBookingById(It.IsAny<int>())).Returns(Task.FromResult(new Booking()));
+            _mockService.Setup(s => s.DeleteBooking(1)).Returns(Task.CompletedTask);
+
+            var response = _controller.DeleteBooking(1).GetAwaiter().GetResult();
+
+            // Assert
+            var result = response as NoContentResult;
+            Assert.That(result.StatusCode == expectedStatusCode);
+        }
+
+        [TestCase(500)]
+        public void DeleteBooking_WhenDBError_Returns500(int expectedStatusCode)
+        {
+            _mockService.Setup(s => s.GetBookingById(It.IsAny<int>())).Returns(Task.FromResult(new Booking()));
+            _mockService.Setup(s => s.DeleteBooking(It.IsAny<int>())).Throws(new Exception());
+
+            var response = _controller.DeleteBooking(1).GetAwaiter().GetResult();
+
+            // Assert
+            var result = response as ObjectResult;
+            Assert.That(result.StatusCode == expectedStatusCode);
+        }
+
+    }
 }

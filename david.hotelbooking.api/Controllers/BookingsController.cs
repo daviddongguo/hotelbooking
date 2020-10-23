@@ -2,10 +2,12 @@
 using david.hotelbooking.domain.Entities;
 using david.hotelbooking.domain.Entities.Hotel;
 using david.hotelbooking.domain.Services;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Mime;
 using System.Threading.Tasks;
 
 namespace david.hotelbooking.api.Controllers
@@ -52,7 +54,7 @@ namespace david.hotelbooking.api.Controllers
             try
             {
                 var booking = await _service.GetBookingById(id);
-                if(booking == null)
+                if (booking == null)
                 {
                     response.Message = $"No Booking(id = {id})";
                     return NotFound(response);
@@ -71,7 +73,10 @@ namespace david.hotelbooking.api.Controllers
 
         // POST api/<BookingsController>
         [HttpPost]
-        public async Task<ServiceResponse<Booking>> AddBooking([FromBody] BookingEvent toAddEvent)
+        [Consumes(MediaTypeNames.Application.Json)]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<ServiceResponse<Booking>>> AddBooking([FromBody] BookingEvent toAddEvent)
         {
             var response = new ServiceResponse<Booking>();
             Int32.TryParse(toAddEvent.Resource, out int roomId);
@@ -90,14 +95,14 @@ namespace david.hotelbooking.api.Controllers
                 };
                 var dbBooking = await _service.AddBooking(booking);
                 response.Data = booking;
+                return CreatedAtAction(nameof(GetBookingById), new { id = booking.Id }, response);
 
             }
             catch (Exception e)
             {
                 response.Message = e.Message;
+                return BadRequest(response);
             }
-
-            return response;
         }
 
         // PUT api/<BookingsController>/5
@@ -109,18 +114,28 @@ namespace david.hotelbooking.api.Controllers
 
         // DELETE api/<BookingsController>/5
         [HttpDelete("{id}")]
-        public async Task<ServiceResponse<int>> Delete(int id)
+        public async Task<ActionResult> DeleteBooking(int id)
         {
-            var response = new ServiceResponse<int>();
+            //if (id == null)
+            //{
+            //    return NotFound();
+            //}
+            var toDateDbBooking = await _service.GetBookingById(id);
+            if (toDateDbBooking == null)
+            {
+                return NotFound();
+            }
+
             try
             {
-                response.Data = await _service.DeleteBooking(id);
+                await _service.DeleteBooking(id);
+                return NoContent();
             }
             catch (System.Exception e)
             {
-                response.Message = e.Message;
+                //TODO: Hide Internal server error when deployed.
+                return StatusCode(500, e.Message);
             }
-            return response;
         }
 
         private BookingEvent CreateEvent(Booking booking)
