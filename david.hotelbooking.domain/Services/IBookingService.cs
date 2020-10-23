@@ -7,6 +7,7 @@ namespace david.hotelbooking.domain.Services
     public interface IBookingService
     {
         Task<Booking> AddBooking(Booking toAddBooking);
+        Task<Guest> AddGuest(string email, string name);
         Task DeleteBooking(int? id);
         Task<Guest> AddGuest(Guest toAddGuest);
         Task<bool> DoesOverlap(Booking booking);

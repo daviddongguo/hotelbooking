@@ -86,7 +86,14 @@ namespace david.hotelbooking.api.Controllers
             DateTime.TryParse(toAddEvent.End, out DateTime toDate);
             var guest = (await _service.GetGuestByEmail(toAddEvent.Text));
             if(guest == null){
-                return NotFound("Guest(email={toAddEvent.Text}) does not exist.");
+                try
+                {
+                   guest = await _service.AddGuest(toAddEvent.Text, "");
+                }
+                catch (System.Exception e)
+                {
+                    return StatusCode(500, e.Message);
+                }
             }
 
             try
