@@ -85,10 +85,11 @@ namespace david.hotelbooking.api.Controllers
             DateTime.TryParse(toAddEvent.Start, out DateTime fromDate);
             DateTime.TryParse(toAddEvent.End, out DateTime toDate);
             var guest = (await _service.GetGuestByEmail(toAddEvent.Text));
-            if(guest == null){
+            if (guest == null)
+            {
                 try
                 {
-                   guest = await _service.AddGuest(toAddEvent.Text, "");
+                    guest = await _service.AddGuest(toAddEvent.Text, "");
                 }
                 catch (System.Exception e)
                 {
@@ -118,10 +119,35 @@ namespace david.hotelbooking.api.Controllers
         }
 
         // PUT api/<BookingsController>/5
-        [HttpPatch("{id}")]
-        public async Task<string> UpdateBookingDate(int bookingId, [FromBody] BookingEvent toUpdatevalue)
+        [HttpPatch("{bookingId}")]
+        public async Task<ActionResult<ServiceResponse<BookingEvent>>> UpdateBooking(int bookingId, [FromBody] BookingEvent toUpdateBooking)
         {
-            return await Task.FromResult("Update success");
+            var dbBooking = await _service.GetBookingById(bookingId);
+            if (dbBooking == null || !dbBooking.Id.ToString().Equals(toUpdateBooking.Id))
+            {
+                return BadRequest();
+            }
+            DateTime.TryParse(toUpdateBooking.Start, out DateTime fromDate);
+            DateTime.TryParse(toUpdateBooking.End, out DateTime toDate);
+            int.TryParse(toUpdateBooking.Resource, out int toUpdateRoomId);
+            var booking = new Booking
+            {
+                Id = dbBooking.Id,
+                RoomId = toUpdateRoomId,
+                FromDate = fromDate,
+                ToDate = toDate,
+            };
+
+            if (dbBooking.RoomId == toUpdateRoomId)
+            {
+                await _service.UpdateBookingDate(booking);
+                return Ok();
+            }
+            else
+            {
+                await _service.UpdateBookingRoom(booking);
+                return Ok();
+            }
         }
 
         // DELETE api/<BookingsController>/5
