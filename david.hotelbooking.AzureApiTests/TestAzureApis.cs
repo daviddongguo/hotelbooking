@@ -76,7 +76,7 @@ namespace david.hotelbooking.ApiTests
             System.Console.WriteLine(response.Content);
         }
 
-        [TestCase("1", "Alice@ho.t", "2020-1-1", "2020-1-2", 200)]
+        [TestCase("1", "Alice@ho.t", "2020-1-1", "2020-1-2", 201)]
         public void AddBooking(string roomId, string guestEmail, string fromDateStr, string toDateStr, int expectedStatusCode)
         {
             // Arrange
