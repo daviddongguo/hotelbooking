@@ -1,8 +1,10 @@
 using david.hotelbooking.api.Controllers;
 using david.hotelbooking.api.SchedulerModels;
 using david.hotelbooking.domain;
+using david.hotelbooking.domain.Entities;
 using david.hotelbooking.domain.Entities.Hotel;
 using david.hotelbooking.domain.Services;
+using Microsoft.AspNetCore.Mvc;
 using Moq;
 using NUnit.Framework;
 using RestSharp.Serialization.Json;
@@ -65,15 +67,32 @@ namespace david.hotelbooking.UnitTests.Controllers
             Utilities.PrintOut(response);
         }
 
-        [TestCase(1, true)]
-        [TestCase(3, false)]
-        public void GetBookingById_(int bookingId, bool expected)
+        [TestCase(1, 200)]
+        [TestCase(3, 404)]
+        public void GetBookingById_(int bookingId, int expectedStatusCode)
         {
             _mockService.Setup(s => s.GetBookingById(1)).Returns(Task.FromResult(_bookingsList.ToList()[0]));
             var response = _controller.GetBookingById(bookingId).GetAwaiter().GetResult();
 
-            Assert.That(response.Data != null, Is.EqualTo(expected));
-            Utilities.PrintOut(response);
+            Assert.That(response, Is.InstanceOf(typeof(ActionResult<ServiceResponse<BookingEvent>>)));
+            var result = response.Result as ObjectResult;
+            Assert.That(result.StatusCode == expectedStatusCode);
+            var resultValue = result.Value as ServiceResponse<BookingEvent>;
+            Utilities.PrintOut(result);
+        }
+
+
+        [TestCase(1, 404)]
+        public void GetBookingById_WhenDatabaseThrowsException(int bookingId, int expectedStatusCode)
+        {
+            _mockService.Setup(s => s.GetBookingById(1)).Throws<Exception>();
+            var response = _controller.GetBookingById(bookingId).GetAwaiter().GetResult();
+
+            Assert.That(response, Is.InstanceOf(typeof(ActionResult<ServiceResponse<BookingEvent>>)));
+            var result = response.Result as ObjectResult;
+            Assert.That(result.StatusCode == expectedStatusCode);
+            var resultValue = result.Value as ServiceResponse<BookingEvent>;
+            Utilities.PrintOut(result);
         }
 
         [TestCase("1", "Alice@ho.t", "2020-1-1", "2020-1-2")]

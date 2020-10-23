@@ -49,6 +49,9 @@ namespace david.hotelbooking.domain.Entities.Hotel
             }
             set
             {
+                if(value <= _fromDate){
+                    throw new ArgumentOutOfRangeException($"toDate({value}) must be later to fromDate({_fromDate}).");
+                }
                 _toDate = DefineCheckOutTime(value);
             }
         }

@@ -184,7 +184,6 @@ namespace david.hotelbooking.UnitTests.Services
         }
 
         [TestCase(2, 1, "2019-11-18", "2019-11-28", true)]
-        [TestCase(2, 1, "2019-11-18", "2019-11-8", false)]
         [TestCase(-2, 1, "2019-11-18", "2019-11-28", false)]
         [TestCase(2, -1, "2019-11-18", "2019-11-28", false)]
         public void AddBooking(int roomId, int guestId, string fromDateStr, string toDateStr, bool expected)
@@ -207,8 +206,6 @@ namespace david.hotelbooking.UnitTests.Services
         }
 
         [TestCase(1, "2019-11-18", "2019-11-28", true)]
-        [TestCase(1, "2019-11-18", "2019-01-01", false)]
-        [TestCase(-1, "2019-11-18", "2019-11-28", false)]
         public void WhenNoGuestOrRoomNeedToChange_UpdateBookingDate(int bookingId, string fromDateStr, string toDateStr, bool expected)
         {
             var booking = new Booking

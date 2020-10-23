@@ -51,19 +51,27 @@ namespace david.hotelbooking.api.Controllers
 
         // GET api/<BookingsController>/5
         [HttpGet("{id}")]
-        public async Task<ServiceResponse<BookingEvent>> GetBookingById(int id)
+        public async Task<ActionResult<ServiceResponse<BookingEvent>>> GetBookingById(int id)
         {
             var response = new ServiceResponse<BookingEvent>();
             try
             {
-                response.Data = CreateEvent(await _service.GetBookingById(id));
+                var booking = await _service.GetBookingById(id);
+                if(booking == null)
+                {
+                    response.Message = $"No Booking(id = {id})";
+                    return NotFound(response);
+                }
+
+                response.Data = CreateEvent(booking);
             }
             catch (System.Exception ex)
             {
                 response.Message = ex.Message;
+                return NotFound(response);
             }
 
-            return response;
+            return Ok(response);
         }
 
         // POST api/<BookingsController>
