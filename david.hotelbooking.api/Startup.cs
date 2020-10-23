@@ -40,7 +40,7 @@ namespace david.hotelbooking.api
                                   builder =>
                                   {
                                       builder.WithOrigins("http://localhost:3000",
-                                                          "https://proud-stone-0f1f1d00f.azurestaticapps.net");
+                                                          "https://proud-stone-0f1f1d00f.azurestaticapps.net").AllowAnyMethod().AllowAnyHeader();
                                   });
             });
             services.AddDbContext<UserDbContext>(x => x.UseMySql(Configuration.GetConnectionString("MySqlConnection"),
@@ -76,7 +76,7 @@ namespace david.hotelbooking.api
 
             app.UseRouting();
 
-            app.UseCors();
+            app.UseCors(MyAllowSpecificOrigins);
 
             app.UseAuthorization();
 

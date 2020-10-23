@@ -22,6 +22,8 @@ namespace david.hotelbooking.api.Controllers
         {
             _service = service;
         }
+
+
         // GET: api/<BookingsController>
         [HttpGet]
         public async Task<ActionResult<ServiceResponse<List<BookingEvent>>>> GetAllBookings()
@@ -82,14 +84,17 @@ namespace david.hotelbooking.api.Controllers
             Int32.TryParse(toAddEvent.Resource, out int roomId);
             DateTime.TryParse(toAddEvent.Start, out DateTime fromDate);
             DateTime.TryParse(toAddEvent.End, out DateTime toDate);
-            var guestId = (await _service.GetGuestByEmail(toAddEvent.Text)).Id;
+            var guest = (await _service.GetGuestByEmail(toAddEvent.Text));
+            if(guest == null){
+                return NotFound("Guest(email={toAddEvent.Text}) does not exist.");
+            }
 
             try
             {
                 var booking = new Booking
                 {
                     RoomId = roomId,
-                    GuestId = guestId,
+                    GuestId = guest.Id,
                     FromDate = fromDate,
                     ToDate = toDate
                 };
