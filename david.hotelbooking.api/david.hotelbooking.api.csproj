@@ -17,6 +17,7 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="3.1.9"/>
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="3.2.0"/>
     <PackageReference Include="Microsoft.AspNetCore.Cors" Version="2.1.0-rc1-final"/>
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3"/>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\david.hotelbooking.domain\david.hotelbooking.domain.csproj"/>

@@ -7,6 +7,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System;
+using System.Reflection;
+using System.IO;
+using Microsoft.OpenApi.Models;
 
 namespace david.hotelbooking.api
 {
@@ -50,6 +54,29 @@ namespace david.hotelbooking.api
 
             services.AddControllers()
                 .AddJsonOptions(options => options.JsonSerializerOptions.WriteIndented = true);
+            // services.AddSwaggerGen();
+            // Register the Swagger generator, defining 1 or more Swagger documents
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo
+                {
+                    Version = "v1",
+                    Title = "Hotel Booking API",
+                    Description = "A simple example ASP.NET Core Web API",
+                    TermsOfService = new Uri("https://daviddongguo.github.io"),
+                    Contact = new OpenApiContact
+                    {
+                        Name = "David WU",
+                        Email = "david.dong.guo@gmail.com",
+                        Url = new Uri("https://daviddongguo.github.io"),
+                    },
+                    License = new OpenApiLicense
+                    {
+                        Name = "Use under MIT",
+                        Url = new Uri("https://github.com/daviddongguo/hotelbooking/blob/feature-api/LICENSE"),
+                    }
+                });
+            });
             //services.AddControllers()
             //    .AddNewtonsoftJson(options =>
             //    {
@@ -71,6 +98,19 @@ namespace david.hotelbooking.api
             {
                 app.UseExceptionHandler("/error");
             }
+
+            app.UseDeveloperExceptionPage();
+
+
+            // Enable middleware to serve generated Swagger as a JSON endpoint.
+            app.UseSwagger(c =>
+            {
+                    c.SerializeAsV2 = true;
+            });
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+            }); ;
 
             app.UseHttpsRedirection();
 
