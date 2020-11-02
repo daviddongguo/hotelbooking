@@ -1,10 +1,10 @@
-﻿using david.hotelbooking.UnitTests;
+﻿using david.hotelbooking.domain;
+using david.hotelbooking.domain.Services;
 using david.hotelbooking.UnitTests.Services;
 using NUnit.Framework;
 using System.Linq;
-using JsonSerializer = System.Text.Json.JsonSerializer;
 
-namespace david.hotelbooking.domain.Services.Tests
+namespace david.hotelbooking.UnitTests.Services
 {
     [TestFixture()]
     public class RemoteDbUserServiceTests
@@ -14,7 +14,6 @@ namespace david.hotelbooking.domain.Services.Tests
         [SetUp]
         public void SetUp()
         {
-            //_service = new UserService(new InMemoryDbContextFactory().GetUserContext());
             _service = new UserService(new RemoteMySqlDbcontextFactory().GetUserContext());
         }
 
@@ -37,12 +36,12 @@ namespace david.hotelbooking.domain.Services.Tests
                 })
             });
             // Assert
-            Utilities.PrintOut(userResults);
             Assert.That(result.LastOrDefault().Id >= 2);
             Assert.That(result.FirstOrDefault()
                 .UserRoles.FirstOrDefault()
                 .Role.RolePermissions.FirstOrDefault()
                 .Permission.Name, Is.Not.Empty);
+            Utilities.PrintOut(userResults);
         }
 
     }

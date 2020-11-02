@@ -21,8 +21,6 @@ namespace david.hotelbooking.mvc
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            //services.AddDbContext<EFDbContext>(x => x.UseMySql(Configuration.GetConnectionString("SqliteConnection"),
-            //   b => b.MigrationsAssembly("david.hotelbooking.api")));
             services.AddDbContext<UserDbContext>(x => x.UseMySql(Configuration.GetConnectionString("MySqlConnection"),
                 b => b.MigrationsAssembly("david.hotelbooking.mvc")));
             services.AddDbContext<BookingDbContext>(x => x.UseMySql(Configuration.GetConnectionString("MySqlConnection"),

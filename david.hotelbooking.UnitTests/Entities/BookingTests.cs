@@ -7,7 +7,7 @@ namespace david.hotelbooking.UnitTests.Entities
     [TestFixture]
     public class BookingTests
     {
-        
+
         [SetUp]
         public void Setup()
         {
@@ -16,7 +16,7 @@ namespace david.hotelbooking.UnitTests.Entities
         [Test]
         public void WhenCalledDefaultFromDate_ReturnNow14()
         {
-            // 
+            //
             var booking = new Booking();
 
             // Assert
@@ -50,7 +50,8 @@ namespace david.hotelbooking.UnitTests.Entities
             var dateTime = DateTime.Parse(dateStr);
             var booking = new Booking
             {
-                ToDate = dateTime
+                FromDate = dateTime.AddDays(-1),
+                ToDate = dateTime,
             };
 
             // Assert
@@ -59,24 +60,23 @@ namespace david.hotelbooking.UnitTests.Entities
             Assert.That(fromdate.Hour == 10);
         }
 
-        [Ignore("It does not work")]
         [TestCase("2020.01.10", "2020.01,01")]
         public void WhenSetWrongToDate_ReturnError(string fromDateStr, string toDateStr)
         {
             // Arrange
             var fromDate = DateTime.Parse(fromDateStr);
             var toDate = DateTime.Parse(toDateStr);
-            var booking = new Booking
-            {
-                FromDate = fromDate,
-
-                // Action
-                ToDate = toDate
-            };
 
             // Assert
-            Console.WriteLine($"{booking.ToDate} is not {toDateStr}");
-            Assert.That(booking.ToDate != toDate);
+            Assert.Throws<ArgumentOutOfRangeException>(() =>
+                {
+                    var booking = new Booking
+                    {
+                        FromDate = fromDate,
+                        ToDate = toDate
+                    };
+                });
+
         }
 
     }

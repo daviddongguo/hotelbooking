@@ -36,8 +36,8 @@ namespace david.hotelbooking.domain.Services
         public async Task<IQueryable<Booking>> GetAllBookings()
         {
             var result = await _context.Bookings
-            .Include(b=> b.Guest)
-            .Include(b=> b.Room)
+            .Include(b => b.Guest)
+            .Include(b => b.Room)
             .ToListAsync();
 
             return result.AsQueryable();
@@ -135,16 +135,22 @@ namespace david.hotelbooking.domain.Services
             }
         }
 
-        public async Task<int> DeleteBooking(int bookId){
+        public async Task DeleteBooking(int? bookId)
+        {
+            if (bookId == null)
+            {
+                return;
+            }
             var dbBooking = await _context.Bookings.FirstOrDefaultAsync(b => b.Id == bookId);
-            if(dbBooking == null){
-                return 0;
+            if (dbBooking == null)
+            {
+                return;
             }
             try
             {
                 _context.Bookings.Remove(dbBooking);
                 await _context.SaveChangesAsync();
-                return bookId;
+                return;
             }
             catch (System.Exception)
             {
@@ -247,14 +253,36 @@ namespace david.hotelbooking.domain.Services
             return newBooking;
         }
 
-        public Task<Booking> GetBookingById(int bookId)
+        public async Task<Booking> GetBookingById(int bookId)
         {
-            return _context.Bookings.Include(r => r.Room).FirstOrDefaultAsync(r => r.Id == bookId); ;
+            return await _context.Bookings.Include(r => r.Room).FirstOrDefaultAsync(r => r.Id == bookId); ;
         }
 
-        public Task<Room> GetRoomById(int roomId)
+        public async Task<Room> GetRoomById(int roomId)
         {
-            return _context.Rooms.FirstOrDefaultAsync(r => r.Id == roomId);
+            return await _context.Rooms.FirstOrDefaultAsync(r => r.Id == roomId);
+        }
+
+        public async Task<Guest> AddGuest(string email, string name = "")
+        {
+            if (email == null || await IsEmailExisted(email))
+            {
+                return null;
+            }
+            try
+            {
+                Guest guest = new Guest{
+                    Email = email,
+                    Name = name,
+                };
+                await _context.AddAsync(guest);
+                await _context.SaveChangesAsync();
+                return guest;
+            }
+            catch (System.Exception)
+            {
+                throw;
+            }
         }
     }
 }
