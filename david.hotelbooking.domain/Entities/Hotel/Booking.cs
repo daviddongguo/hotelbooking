@@ -32,20 +32,26 @@ namespace david.hotelbooking.domain.Entities.Hotel
             {
                 return _fromDate;
             }
-            set {
-                _fromDate = DefineCheckInTime(value);            
+            set
+            {
+                _fromDate = DefineCheckInTime(value);
             }
         }
 
         [Required(ErrorMessage = "Date is required")]
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:yyyy-MMM-dd}", ApplyFormatInEditMode = true)]
-        public DateTime ToDate {
+        public DateTime ToDate
+        {
             get
             {
-                return _toDate;                
+                return _toDate;
             }
-            set {
+            set
+            {
+                if(value <= _fromDate){
+                    throw new ArgumentOutOfRangeException($"toDate({value}) must be later to fromDate({_fromDate}).");
+                }
                 _toDate = DefineCheckOutTime(value);
             }
         }

@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using david.hotelbooking.domain.Entities;
+﻿using david.hotelbooking.domain.Entities;
 using david.hotelbooking.domain.Entities.RBAC;
 using david.hotelbooking.domain.Services;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -23,7 +22,7 @@ namespace david.hotelbooking.api.Controllers
         }
         // GET: api/<UsersController>
         [HttpGet]
-        public async Task<ServiceResponse<List<User>>> GetAllUsers()
+        public async Task<ActionResult<ServiceResponse<List<User>>>> GetAllUsers()
         {
             var response = new ServiceResponse<List<User>>();
             try
@@ -33,11 +32,11 @@ namespace david.hotelbooking.api.Controllers
             }
             catch (System.Exception ex)
             {
-                response.Success = false;
                 response.Message = ex.Message;
+                return NotFound(response);
             }
 
-            return response;
+            return Ok(response);
 
         }
 

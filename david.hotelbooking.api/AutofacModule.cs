@@ -2,7 +2,6 @@
 using david.hotelbooking.domain.Abstract;
 using david.hotelbooking.domain.Concretes;
 using david.hotelbooking.domain.Services;
-using Microsoft.Extensions.Logging;
 
 namespace david.hotelbooking.api
 {

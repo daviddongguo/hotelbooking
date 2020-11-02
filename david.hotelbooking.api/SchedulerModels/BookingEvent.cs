@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace david.hotelbooking.api.SchedulerModels
+﻿namespace david.hotelbooking.api.SchedulerModels
 {
     public class BookingEvent
     {

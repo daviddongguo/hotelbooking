@@ -7,6 +7,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System;
+using System.Reflection;
+using System.IO;
+using Microsoft.OpenApi.Models;
 
 namespace david.hotelbooking.api
 {
@@ -40,19 +44,39 @@ namespace david.hotelbooking.api
                                   builder =>
                                   {
                                       builder.WithOrigins("http://localhost:3000",
-                                                          "https://proud-stone-0f1f1d00f.azurestaticapps.net");
+                                                          "https://proud-stone-0f1f1d00f.azurestaticapps.net").AllowAnyMethod().AllowAnyHeader();
                                   });
             });
-            // services.AddDbContext<EFDbContext>( x => x.UseSqlite(Configuration.GetConnectionString("SqliteConnection"),
-            //     b => b.MigrationsAssembly("david.hotelbooking.api")));
             services.AddDbContext<UserDbContext>(x => x.UseMySql(Configuration.GetConnectionString("MySqlConnection"),
                b => b.MigrationsAssembly("david.hotelbooking.api")));
             services.AddDbContext<BookingDbContext>(x => x.UseMySql(Configuration.GetConnectionString("MySqlConnection"),
                b => b.MigrationsAssembly("david.hotelbooking.api")));
-            //services.AddControllers();
 
             services.AddControllers()
                 .AddJsonOptions(options => options.JsonSerializerOptions.WriteIndented = true);
+            // services.AddSwaggerGen();
+            // Register the Swagger generator, defining 1 or more Swagger documents
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo
+                {
+                    Version = "v1",
+                    Title = "Hotel Booking API",
+                    Description = "A simple example ASP.NET Core Web API",
+                    TermsOfService = new Uri("https://daviddongguo.github.io"),
+                    Contact = new OpenApiContact
+                    {
+                        Name = "David WU",
+                        Email = "david.dong.guo@gmail.com",
+                        Url = new Uri("https://daviddongguo.github.io"),
+                    },
+                    License = new OpenApiLicense
+                    {
+                        Name = "Use under MIT",
+                        Url = new Uri("https://github.com/daviddongguo/hotelbooking/blob/feature-api/LICENSE"),
+                    }
+                });
+            });
             //services.AddControllers()
             //    .AddNewtonsoftJson(options =>
             //    {
@@ -68,14 +92,31 @@ namespace david.hotelbooking.api
         {
             if (env.IsDevelopment())
             {
-                app.UseDeveloperExceptionPage();
+                app.UseExceptionHandler("/error-local-development");
             }
+            else
+            {
+                app.UseExceptionHandler("/error");
+            }
+
+            app.UseDeveloperExceptionPage();
+
+
+            // Enable middleware to serve generated Swagger as a JSON endpoint.
+            app.UseSwagger(c =>
+            {
+                    c.SerializeAsV2 = true;
+            });
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+            }); ;
 
             app.UseHttpsRedirection();
 
             app.UseRouting();
 
-            app.UseCors();
+            app.UseCors(MyAllowSpecificOrigins);
 
             app.UseAuthorization();
 

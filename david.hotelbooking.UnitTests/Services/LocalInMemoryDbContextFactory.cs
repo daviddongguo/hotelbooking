@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 namespace david.hotelbooking.UnitTests.Services
 {
-    public class InMemoryDbContextFactory
+    public class LocalInMemoryDbContextFactory
     {
         public UserDbContext GetUserContext()
         {

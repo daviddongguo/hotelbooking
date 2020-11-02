@@ -8,8 +8,8 @@ namespace david.hotelbooking.domain
         public static void PrintOut(Object obj, int len = 600)
         {
             var str = PrettyJson(JsonSerializer.Serialize(obj));
-            str = str.Length > len ? str.Substring(0, len) : str ;
-            System.Console.WriteLine(str) ;
+            str = str.Length > len ? str.Substring(0, len) : str;
+            System.Console.WriteLine(str);
         }
 
 

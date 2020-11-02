@@ -10,13 +10,13 @@ using System.Linq;
 namespace david.hotelbooking.UnitTests.Services
 {
     [TestFixture]
-    public class BookingServiceLocalDbTest
+    public class LocalDbBookingServiceTest
     {
         private BookingService _service;
         [SetUp]
         public void SetUp()
         {
-            _service = new BookingService(new InMemoryDbContextFactory().GetBookingContext());
+            _service = new BookingService(new LocalInMemoryDbContextFactory().GetBookingContext());
         }
 
         [Test]
@@ -129,7 +129,6 @@ namespace david.hotelbooking.UnitTests.Services
             Console.WriteLine(res?.Count());
             Utilities.PrintOut(res);
             Assert.That(res?.Count() >= 1, Is.EqualTo(expectedResult));
-
         }
 
         [TestCase("Alice@ho.t", true)]
@@ -143,7 +142,6 @@ namespace david.hotelbooking.UnitTests.Services
             // Assert
             Utilities.PrintOut(res);
             Assert.That(res != null, Is.EqualTo(expectedResult));
-
         }
 
         [TestCase(1, true)]
@@ -159,7 +157,6 @@ namespace david.hotelbooking.UnitTests.Services
             Console.WriteLine(res);
             Utilities.PrintOut(res);
             Assert.That(res?.Id == id, Is.EqualTo(expectedResult));
-
         }
 
         [TestCase("", false)]
@@ -172,7 +169,6 @@ namespace david.hotelbooking.UnitTests.Services
 
             // Assert
             Assert.That(res, Is.EqualTo(expectedResult));
-
         }
 
         [TestCase("", false)]
@@ -188,7 +184,6 @@ namespace david.hotelbooking.UnitTests.Services
         }
 
         [TestCase(2, 1, "2019-11-18", "2019-11-28", true)]
-        [TestCase(2, 1, "2019-11-18", "2019-11-8", false)]
         [TestCase(-2, 1, "2019-11-18", "2019-11-28", false)]
         [TestCase(2, -1, "2019-11-18", "2019-11-28", false)]
         public void AddBooking(int roomId, int guestId, string fromDateStr, string toDateStr, bool expected)
@@ -211,8 +206,6 @@ namespace david.hotelbooking.UnitTests.Services
         }
 
         [TestCase(1, "2019-11-18", "2019-11-28", true)]
-        [TestCase(1, "2019-11-18", "2019-01-01", false)]
-        [TestCase(-1, "2019-11-18", "2019-11-28", false)]
         public void WhenNoGuestOrRoomNeedToChange_UpdateBookingDate(int bookingId, string fromDateStr, string toDateStr, bool expected)
         {
             var booking = new Booking

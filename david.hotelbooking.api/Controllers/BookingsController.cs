@@ -2,13 +2,13 @@
 using david.hotelbooking.domain.Entities;
 using david.hotelbooking.domain.Entities.Hotel;
 using david.hotelbooking.domain.Services;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Mime;
 using System.Threading.Tasks;
-
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace david.hotelbooking.api.Controllers
 {
@@ -16,18 +16,18 @@ namespace david.hotelbooking.api.Controllers
     [ApiController]
     public class BookingsController : ControllerBase
     {
-
         private readonly IBookingService _service;
 
         public BookingsController(IBookingService service)
         {
             _service = service;
         }
+
+
         // GET: api/<BookingsController>
         [HttpGet]
-        public async Task<ServiceResponse<List<BookingEvent>>> GetAllBookings()
+        public async Task<ActionResult<ServiceResponse<List<BookingEvent>>>> GetAllBookings()
         {
-
             var response = new ServiceResponse<List<BookingEvent>>();
             try
             {
@@ -41,89 +41,140 @@ namespace david.hotelbooking.api.Controllers
             }
             catch (System.Exception ex)
             {
-                response.Success = false;
                 response.Message = ex.Message;
+                return NotFound(response);
             }
 
-            return response;
+            return Ok(response);
         }
-
-
 
         // GET api/<BookingsController>/5
         [HttpGet("{id}")]
-        public async Task<ServiceResponse<BookingEvent>> GetBookingById(int id)
+        public async Task<ActionResult<ServiceResponse<BookingEvent>>> GetBookingById(int id)
         {
             var response = new ServiceResponse<BookingEvent>();
             try
             {
-                response.Data = CreateEvent(await _service.GetBookingById(id));
+                var booking = await _service.GetBookingById(id);
+                if (booking == null)
+                {
+                    response.Message = $"No Booking(id = {id})";
+                    return NotFound(response);
+                }
+
+                response.Data = CreateEvent(booking);
             }
             catch (System.Exception ex)
             {
-                response.Success = false;
                 response.Message = ex.Message;
+                return NotFound(response);
             }
 
-            return response;
+            return Ok(response);
         }
 
         // POST api/<BookingsController>
         [HttpPost]
-        public async Task<ServiceResponse<Booking>> AddBooking([FromBody] BookingEvent toAddEvent)
+        [Consumes(MediaTypeNames.Application.Json)]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<ServiceResponse<Booking>>> AddBooking([FromBody] BookingEvent toAddEvent)
         {
             var response = new ServiceResponse<Booking>();
             Int32.TryParse(toAddEvent.Resource, out int roomId);
             DateTime.TryParse(toAddEvent.Start, out DateTime fromDate);
             DateTime.TryParse(toAddEvent.End, out DateTime toDate);
-            var guestId = (await _service.GetGuestByEmail(toAddEvent.Text)).Id;
+            var guest = (await _service.GetGuestByEmail(toAddEvent.Text));
+            if (guest == null)
+            {
+                try
+                {
+                    guest = await _service.AddGuest(toAddEvent.Text, "");
+                }
+                catch (System.Exception e)
+                {
+                    return StatusCode(500, e.Message);
+                }
+            }
 
             try
             {
                 var booking = new Booking
                 {
                     RoomId = roomId,
-                    GuestId = guestId,
+                    GuestId = guest.Id,
                     FromDate = fromDate,
                     ToDate = toDate
                 };
                 var dbBooking = await _service.AddBooking(booking);
                 response.Data = booking;
+                return CreatedAtAction(nameof(GetBookingById), new { id = booking.Id }, response);
 
             }
             catch (Exception e)
             {
-                response.Success = false;
                 response.Message = e.Message;
+                return BadRequest(response);
             }
-
-            return response;
         }
 
         // PUT api/<BookingsController>/5
-        [HttpPatch("{id}")]
-        public async Task<string> UpdateBookingDate(int bookingId, [FromBody] BookingEvent toUpdatevalue)
+        [HttpPatch("{bookingId}")]
+        public async Task<ActionResult<ServiceResponse<BookingEvent>>> UpdateBooking(int bookingId, [FromBody] BookingEvent toUpdateBooking)
         {
-            return await Task.FromResult("Update success");
+            var dbBooking = await _service.GetBookingById(bookingId);
+            if (dbBooking == null || !dbBooking.Id.ToString().Equals(toUpdateBooking.Id))
+            {
+                return BadRequest();
+            }
+            DateTime.TryParse(toUpdateBooking.Start, out DateTime fromDate);
+            DateTime.TryParse(toUpdateBooking.End, out DateTime toDate);
+            int.TryParse(toUpdateBooking.Resource, out int toUpdateRoomId);
+            var booking = new Booking
+            {
+                Id = dbBooking.Id,
+                RoomId = toUpdateRoomId,
+                FromDate = fromDate,
+                ToDate = toDate,
+            };
+
+            if (dbBooking.RoomId == toUpdateRoomId)
+            {
+                await _service.UpdateBookingDate(booking);
+                return Ok();
+            }
+            else
+            {
+                await _service.UpdateBookingRoom(booking);
+                return Ok();
+            }
         }
 
         // DELETE api/<BookingsController>/5
         [HttpDelete("{id}")]
-        public async Task<ServiceResponse<int>> Delete(int id)
+        public async Task<ActionResult> DeleteBooking(int id)
         {
-            var response = new ServiceResponse<int>();
+            //if (id == null)
+            //{
+            //    return NotFound();
+            //}
+            var toDateDbBooking = await _service.GetBookingById(id);
+            if (toDateDbBooking == null)
+            {
+                return NotFound();
+            }
+
             try
             {
-                response.Data = await _service.DeleteBooking(id);
+                await _service.DeleteBooking(id);
+                return NoContent();
             }
             catch (System.Exception e)
             {
-                response.Success = false;
-                response.Message = e.Message;
+                //TODO: Hide Internal server error when deployed.
+                return StatusCode(500, e.Message);
             }
-            return response;
         }
-
 
         private BookingEvent CreateEvent(Booking booking)
         {

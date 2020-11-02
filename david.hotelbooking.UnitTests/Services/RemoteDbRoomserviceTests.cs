@@ -1,12 +1,13 @@
-﻿using david.hotelbooking.UnitTests.Services;
+﻿using david.hotelbooking.domain;
+using david.hotelbooking.domain.Services;
+using david.hotelbooking.UnitTests.Services;
 using NUnit.Framework;
-using System;
-using System.Text.Json;
+using System.Linq;
 
-namespace david.hotelbooking.domain.Services.Tests
+namespace david.hotelbooking.UnitTests.Services
 {
     [TestFixture()]
-    public class RoomserviceTests
+    public class RemoteDbRoomserviceTests
     {
         private BookingService _service;
 
@@ -24,8 +25,7 @@ namespace david.hotelbooking.domain.Services.Tests
             // Assert
             Utilities.PrintOut(result);
             Assert.That(result, Is.Not.Empty);
+            Assert.That(result.LastOrDefault().Id >= 1);
         }
-
-
     }
 }

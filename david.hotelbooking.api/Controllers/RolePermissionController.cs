@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using david.hotelbooking.domain.Entities;
+﻿using david.hotelbooking.domain.Entities;
 using david.hotelbooking.domain.Entities.RBAC;
 using david.hotelbooking.domain.Services;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -33,7 +33,6 @@ namespace david.hotelbooking.api.Controllers
             }
             catch (System.Exception ex)
             {
-                response.Success = false;
                 response.Message = ex.Message;
             }
 
@@ -57,14 +56,12 @@ namespace david.hotelbooking.api.Controllers
                 var role = await _service.GetSingleRole(newRolePermission.RoleId);
                 if (role == null)
                 {
-                    response.Success = false;
                     response.Message = $"Role(id={newRolePermission.RoleId}) not found.";
                     NotFound(response);
                 }
                 var permission = await _service.GetSinglePermission(newRolePermission.PermissionId);
                 if (permission == null)
                 {
-                    response.Success = false;
                     response.Message = $"Permission(id={newRolePermission.PermissionId}) not found.";
                     NotFound(response);
                 }
@@ -79,7 +76,6 @@ namespace david.hotelbooking.api.Controllers
             }
             catch (Exception ex)
             {
-                response.Success = false;
                 response.Message = ex.Message;
             }
 
