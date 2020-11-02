@@ -6,5 +6,4 @@ script:
 - echo $appsettingsfile >david.hotelbooking.UnitTests/appsettings.json
 - dotnet restore
 - dotnet build
-- dotnet test -l "console;verbosity=detailed" david.hotelbooking.UnitTests/david.hotelbooking.UnitTests.csproj
 - dotnet test -l "console;verbosity=detailed" david.hotelbooking.AzureApiTests/david.hotelbooking.AzureApiTests.csproj
