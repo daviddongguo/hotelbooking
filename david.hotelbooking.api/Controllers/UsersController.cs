@@ -22,9 +22,9 @@ namespace david.hotelbooking.api.Controllers
         }
         // GET: api/<UsersController>
         [HttpGet]
-        public async Task<ActionResult<ServiceResponse<List<User>>>> GetAllUsers()
+        public async Task<ActionResult<ServiceResponse<List<RBAC_User>>>> GetAllUsers()
         {
-            var response = new ServiceResponse<List<User>>();
+            var response = new ServiceResponse<List<RBAC_User>>();
             try
             {
                 response.Data = (await _service.GetAllUsers()).ToList();

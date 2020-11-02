@@ -7,15 +7,15 @@ namespace david.hotelbooking.domain.Services
 {
     public interface IUserService
     {
-        Task<User> AddOrUpdateUser(User inputUser);
+        Task<RBAC_User> AddOrUpdateUser(RBAC_User inputUser);
         Task<bool> DeleteUser(int? id);
         Task<IQueryable<Role>> GetAllRoles();
-        Task<IQueryable<User>> GetAllUsers();
+        Task<IQueryable<RBAC_User>> GetAllUsers();
         Task<IQueryable<Permission>> GetAllPermissions();
         Task<Role> GetSingleRole(int? id);
         Task<Role> GetSingleRole(string roleName);
-        Task<User> GetSingleUser(int? id);
-        Task<User> GetSingleUser(string email);
+        Task<RBAC_User> GetSingleUser(int? id);
+        Task<RBAC_User> GetSingleUser(string email);
         Task<bool> IsEmailExisted(string email);
         Task<Role> UpdateRole(Role toUpdateRole);
         Task<List<RolePermission>> UpdateRolePermissions(int toUpdateRoleId, List<int> toUpdatePermissionIds);

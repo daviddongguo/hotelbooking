@@ -28,10 +28,10 @@ namespace david.hotelbooking.UnitTests.Services
             //dbContext.Database.EnsureCreated();
 
 
-            var userAdmin = new User { Email = "Admin@hotel.com", Password = "aaa" };
-            var userAdminn = new User { Email = "nn@hotel.com", Password = "aaa" };
-            var userAdminnn = new User { Email = "nnn@hotel.com", Password = "aaa" };
-            var userSis = new User { Email = "Sis@s.s", Password = "aaa" };
+            var userAdmin = new RBAC_User { Email = "Admin@hotel.com", Password = "aaa" };
+            var userAdminn = new RBAC_User { Email = "nn@hotel.com", Password = "aaa" };
+            var userAdminnn = new RBAC_User { Email = "nnn@hotel.com", Password = "aaa" };
+            var userSis = new RBAC_User { Email = "Sis@s.s", Password = "aaa" };
             dbContext.Users.Add(userAdmin);
             dbContext.Users.Add(userAdminn);
             dbContext.Users.Add(userAdminnn);

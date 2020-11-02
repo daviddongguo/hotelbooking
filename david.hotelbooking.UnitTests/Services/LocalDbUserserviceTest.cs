@@ -70,8 +70,8 @@ namespace david.hotelbooking.UnitTests.Services
         {
             // Arrange
             // Act
-            var result = _service.AddOrUpdateUser(new User { Email = emailStr }).GetAwaiter().GetResult();
-            var repeat = _service.AddOrUpdateUser(new User { Email = emailStr }).GetAwaiter().GetResult();
+            var result = _service.AddOrUpdateUser(new RBAC_User { Email = emailStr }).GetAwaiter().GetResult();
+            var repeat = _service.AddOrUpdateUser(new RBAC_User { Email = emailStr }).GetAwaiter().GetResult();
 
             // Assert
             System.Console.WriteLine($"{result.Id} : {result.Email }");
@@ -84,7 +84,7 @@ namespace david.hotelbooking.UnitTests.Services
         public void AddUser_WhenNameIsUnique_ReturnAddedUser(string emailstr)
         {
             // Act
-            var result = _service.AddOrUpdateUser(new User { Email = emailstr }).GetAwaiter().GetResult();
+            var result = _service.AddOrUpdateUser(new RBAC_User { Email = emailstr }).GetAwaiter().GetResult();
 
             // Assert
             System.Console.WriteLine($"{result.Id} : {result.Email }");
@@ -186,7 +186,7 @@ namespace david.hotelbooking.UnitTests.Services
 
 
 
-        private void PrintOutUsers(IQueryable<User> users)
+        private void PrintOutUsers(IQueryable<RBAC_User> users)
         {
             var userInfo = users.Select(r => new
             {

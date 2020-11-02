@@ -22,8 +22,8 @@ namespace david.hotelbooking.UnitTests.Controllers
         private Mock<IBookingService> _mockService;
         private IQueryable<Booking> _bookingsList;
         private Booking _firstBooking;
-        private Booking _secondBooking;
-        private readonly JsonDeserializer _serializer = new JsonDeserializer();
+        //private Booking _secondBooking;
+        //private readonly JsonDeserializer _serializer = new JsonDeserializer();
 
 
         [SetUp]
@@ -33,8 +33,8 @@ namespace david.hotelbooking.UnitTests.Controllers
             DateTime firstDay = DateTime.Now.Date + new TimeSpan(14, 0, 0);
             _firstBooking =
                 new Booking { Id = 1, GuestId = 1, Guest = new Guest { Id = 1, Name = "Alice" }, RoomId = 1, Room = new Room { Id = 1, RoomNumber = "801" }, FromDate = firstDay.AddDays(0), ToDate = firstDay.AddDays(1).Date + new TimeSpan(10, 0, 0) };
-            _secondBooking =
-                new Booking { Id = 0, GuestId = 2, Guest = new Guest { Id = 2, Name = "Alex" }, RoomId = 2, Room = new Room { Id = 2, RoomNumber = "222" }, FromDate = firstDay.AddDays(0), ToDate = firstDay.AddDays(1).Date + new TimeSpan(10, 0, 0) };
+            //_secondBooking =
+                //new Booking { Id = 0, GuestId = 2, Guest = new Guest { Id = 2, Name = "Alex" }, RoomId = 2, Room = new Room { Id = 2, RoomNumber = "222" }, FromDate = firstDay.AddDays(0), ToDate = firstDay.AddDays(1).Date + new TimeSpan(10, 0, 0) };
 
             _bookingsList = new List<Booking>
             {

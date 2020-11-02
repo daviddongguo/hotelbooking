@@ -16,7 +16,7 @@ namespace david.hotelbooking.domain.Services
             _context = context;
         }
 
-        public async Task<IQueryable<User>> GetAllUsers()
+        public async Task<IQueryable<RBAC_User>> GetAllUsers()
         {
             return (await _context.Users
             .Include(u => u.UserRoles)
@@ -40,7 +40,7 @@ namespace david.hotelbooking.domain.Services
         }
 
 
-        public async Task<User> GetSingleUser(string email)
+        public async Task<RBAC_User> GetSingleUser(string email)
         {
             return await _context.Users.FirstOrDefaultAsync(u =>
                email.ToLower().Equals(u.Email.ToLower())
@@ -66,7 +66,7 @@ namespace david.hotelbooking.domain.Services
                roleName.ToLower().Equals(u.Name.ToLower())
             );
         }
-        public async Task<User> GetSingleUser(int? id)
+        public async Task<RBAC_User> GetSingleUser(int? id)
         {
             return await _context.Users
                 .Include(u => u.UserRoles)
@@ -76,7 +76,7 @@ namespace david.hotelbooking.domain.Services
                 .FirstOrDefaultAsync(u => id == u.Id);
         }
 
-        public async Task<User> AddOrUpdateUser(User inputUser)
+        public async Task<RBAC_User> AddOrUpdateUser(RBAC_User inputUser)
         {
             if (inputUser == null)
             {
@@ -91,7 +91,7 @@ namespace david.hotelbooking.domain.Services
                     return null;
                 }
 
-                var newUser = new User
+                var newUser = new RBAC_User
                 {
                     Email = inputUser.Email,
                     Password = inputUser.Password

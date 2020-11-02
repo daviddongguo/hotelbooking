@@ -20,7 +20,7 @@ namespace david.hotelbooking.domain.Concretes
                 .Include(u => u.User)
                 .Include(u => u.Role).AsQueryable();
         }
-        public IQueryable<User> GetAllUsers()
+        public IQueryable<RBAC_User> GetAllUsers()
         {
             return _context.Users
             .Include(u => u.UserRoles)

@@ -13,7 +13,7 @@ namespace david.hotelbooking.domain.Concretes
         {
         }
 
-        public virtual DbSet<User> Users { get; set; }
+        public virtual DbSet<RBAC_User> Users { get; set; }
         public virtual DbSet<UserRole> UserRoles { get; set; }
         public virtual DbSet<Role> Roles { get; set; }
         public virtual DbSet<RolePermission> RolePermissions { get; set; }
@@ -33,9 +33,9 @@ namespace david.hotelbooking.domain.Concretes
                 .HasKey(g => new { g.GroupId, g.RoleId });
 
             // Seeding
-            modelBuilder.Entity<User>().HasData(
-                new User { Id = 1, Email = "Admin@hotel.com", Password = "aaa" },
-                new User { Id = 2, Email = "Sis@hotel.com", Password = "aaa" }
+            modelBuilder.Entity<RBAC_User>().HasData(
+                new RBAC_User { Id = 1, Email = "Admin@hotel.com", Password = "aaa" },
+                new RBAC_User { Id = 2, Email = "Sis@hotel.com", Password = "aaa" }
                 );
             modelBuilder.Entity<UserRole>().HasData(
                 new UserRole { UserId = 1, RoleId = 1 },

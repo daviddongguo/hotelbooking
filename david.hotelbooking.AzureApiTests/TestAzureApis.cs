@@ -16,7 +16,7 @@ namespace david.hotelbooking.ApiTests
         private RestClient _client;
         //private readonly string baseUrl = "http://localhost:5000/";
         private readonly string baseUrl = "https://davidwuhotelbooking.azurewebsites.net/";
-        private readonly JsonDeserializer _serializer = new JsonDeserializer();
+        //private readonly JsonDeserializer _serializer = new JsonDeserializer();
 
         [SetUp]
         public void SetUp()
