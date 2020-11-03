@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace david.hotelbooking.domain.Entities.RBAC
 {
-    public class RBAC_User
+    public class User
     {
         [Key]
         public int Id { get; set; }

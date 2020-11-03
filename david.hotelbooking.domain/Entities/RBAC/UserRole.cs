@@ -13,7 +13,7 @@ namespace david.hotelbooking.domain.Entities.RBAC
 
         [ForeignKey("UserId")]
         [JsonIgnore]
-        public virtual RBAC_User User { get; set; }
+        public virtual User User { get; set; }
         [ForeignKey("RoleId")]
         [JsonIgnore]
         public virtual Role Role { get; set; }

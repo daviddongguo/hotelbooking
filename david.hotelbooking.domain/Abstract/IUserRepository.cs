@@ -6,6 +6,6 @@ namespace david.hotelbooking.domain.Abstract
     public interface IUserRepository
     {
         IQueryable<UserRole> GetAll();
-        IQueryable<RBAC_User> GetAllUsers();
+        IQueryable<User> GetAllUsers();
     }
 }
