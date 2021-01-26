@@ -1,7 +1,5 @@
 # hotelbooking
 
-<<<<<<< HEAD
-
 A hotel reservation application that uses React on the frontend and .net core apis on the backend
 
 Front lives on [Azure](https://proud-stone-0f1f1d00f.azurestaticapps.net/)
@@ -23,8 +21,3 @@ backend: <https://github.com/daviddongguo/hotelbooking>
 - [BookingsController](https://github.com/daviddongguo/hotelbooking/blob/feature-api/david.hotelbooking.api/Controllers/BookingsController.cs) && [Tests](https://github.com/daviddongguo/hotelbooking/blob/feature-api/david.hotelbooking.UnitTests/Controllers/BookingControllerTests.cs) by using **Moq**
 
 - Use [RestSharp](https://github.com/daviddongguo/hotelbooking/blob/feature-api/david.hotelbooking.localapitests/LocalApiRemoteDbTests.cs) to test apis
-=======
-a demo web application for booking hotel
-
-live on [https://proud-stone-0f1f1d00f.azurestaticapps.net/](https://proud-stone-0f1f1d00f.azurestaticapps.net/)
->>>>>>> 46c8314469094cd24495a9dcf26d5970ff7c4772
